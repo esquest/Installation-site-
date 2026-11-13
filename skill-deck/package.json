@@ -1,0 +1,13 @@
+{
+  "name": "esquest-skill-deck",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "node build.mjs" },
+  "dependencies": {
+    "three": "0.160.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "lucide-react": "0.468.0"
+  },
+  "devDependencies": { "esbuild": "0.24.0", "@types/three": "0.160.0" }
+}
