@@ -1,5 +1,6 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Esquest Eats</title>
+<script>(function () { var k = "nn"; try { var v = localStorage.getItem("ee-skin"); if (v === "rc" || v === "gr") k = v; } catch (e) {} document.documentElement.setAttribute("data-skin", k); })();</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Fast high-protein dinners plus recipes from Roy Choi, Gordon Ramsay and your Notion kitchen, with cook-along videos and full recipes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -832,6 +833,98 @@ html[data-skin="nn"] .protip b { color: var(--accent); }
 html[data-skin="nn"] .protip span { background: linear-gradient(transparent 12%, #f3e3a0 12%, #f3e3a0 88%, transparent 88%); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: 0 3px; }
 html[data-skin="nn"] .tip { background: #e8ebe1; border: 1px solid #cfd6c4; border-radius: 2px; } html[data-skin="nn"] .tip b { color: var(--moss); }
 html[data-skin="nn"] .poster, html[data-skin="nn"] .player { border-radius: 2px; }
+
+/* ===== Story viewer: JS-driven progress so it works everywhere ===== */
+.story { touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.story-bars .sbar { flex: 1; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, .35); overflow: hidden; }
+.story-bars .sbar u { display: block; height: 100%; background: #fff; text-decoration: none; transform: scaleX(0); transform-origin: left center; }
+
+/* ===== Search at the top ===== */
+.topsearch { position: relative; z-index: 15; padding-block: clamp(28px, 6vw, 72px) 0; display: grid; justify-items: center; gap: 14px; }
+.ts-wrap { position: relative; width: min(760px, 100%); }
+.ts-box { position: relative; display: flex; align-items: center; }
+.ts-box .ico { position: absolute; left: 22px; width: 21px; height: 21px; color: var(--muted); pointer-events: none; }
+.ts-box input { width: 100%; height: 62px; padding: 0 58px 0 56px; font: inherit; font-size: 17px; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 999px; box-shadow: 0 14px 40px rgba(60, 45, 25, .07); -webkit-appearance: none; appearance: none; }
+.ts-box input::placeholder { color: var(--muted); opacity: .8; }
+.ts-box input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent), 0 14px 40px rgba(60, 45, 25, .07); }
+.ts-box kbd { position: absolute; right: 20px; font: inherit; font-size: 12px; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 6px; padding: 1px 7px; }
+.ts-results { position: absolute; left: 0; right: 0; top: calc(100% + 10px); background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 30px 70px rgba(40, 30, 20, .16); padding: 8px; display: grid; gap: 2px; max-height: min(70vh, 560px); overflow-y: auto; animation: rise .25s var(--ease); }
+.ts-hit { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 14px; align-items: center; text-align: left; border: 0; background: none; color: var(--ink); padding: 8px; border-radius: 12px; }
+.ts-hit:hover, .ts-hit:focus-visible { background: color-mix(in srgb, var(--ink) 6%, transparent); outline: none; }
+.ts-hit img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; }
+.ts-hit b { display: block; font-size: 16px; font-weight: 500; }
+.ts-hit small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+.ts-all { display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-top: 1px solid var(--line); background: none; color: var(--accent-ink); font: inherit; font-size: 14px; font-weight: 600; padding: 14px 8px 8px; margin-top: 4px; }
+.ts-all .ico { width: 16px; height: 16px; }
+.ts-none { margin: 0; padding: 16px; color: var(--muted); }
+.ts-hints { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 6px 16px; font-size: 14px; color: var(--muted); }
+.ts-hints button { border: 0; background: none; padding: 0; font: inherit; color: var(--ink); border-bottom: 1px solid var(--line-strong); }
+.ts-hints button:hover { color: var(--accent-ink); border-color: currentColor; }
+@media (max-width: 560px) { .ts-box input { height: 54px; font-size: 16px; } .ts-box kbd { display: none; } }
+html[data-skin="rc"] .ts-box input { border: 2px solid var(--ink); border-radius: 12px; box-shadow: 4px 4px 0 var(--ink); }
+html[data-skin="gr"] .ts-box input { border-radius: 0; box-shadow: none; border-color: var(--line-strong); }
+html[data-skin="gr"] .ts-results { border-radius: 0; }
+
+/* ===== Quiet library ===== */
+.library-head { gap: 22px; grid-template-columns: minmax(0, 1fr); }
+.library-head > * { min-width: 0; }
+.lib-bar { display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--line); }
+.course-tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+.course-tabs::-webkit-scrollbar { display: none; }
+html .course-tabs .chip { position: relative; border: 0; background: none; border-radius: 0; box-shadow: none; padding: 12px 12px 14px; color: var(--muted); font-family: inherit; font-weight: 500; font-size: 15px; letter-spacing: .01em; text-transform: none; transform: none; }
+html .course-tabs .chip:hover { background: none; color: var(--ink); }
+html .course-tabs .chip[aria-pressed="true"] { background: none; color: var(--ink); }
+html .course-tabs .chip[aria-pressed="true"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2px; background: var(--accent); }
+.course-tabs .num, .filter-panel .chip .num { display: none; }
+.filter-toggle { flex-shrink: 0; margin-bottom: 6px; }
+.filter-toggle .count { margin-left: 4px; }
+.filter-panel { display: grid; gap: 16px; padding: 4px 0 8px; animation: rise .3s var(--ease); }
+.filter-panel .filter-row { align-items: center; }
+.filter-end { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.card .macros, .card .nomacros { display: none; }
+.card-meta { flex-wrap: wrap; }
+html[data-skin="gr"] .lib-bar, html[data-skin="nn"] .lib-bar { border-color: var(--line); }
+
+/* ===== Interludes: garden, bonsai, pond ===== */
+.interlude { position: relative; height: clamp(380px, 72vh, 720px); margin-block: clamp(40px, 8vw, 130px); overflow: hidden; isolation: isolate; }
+.interlude canvas, .interlude > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.interlude > img { object-fit: cover; object-position: 20% 70%; }
+.il-garden { background: #e6ddcc; } .il-garden canvas { touch-action: pan-y; cursor: crosshair; }
+.il-pond { background: #1c3634; } .il-pond canvas { cursor: pointer; }
+.il-cap { position: absolute; right: clamp(20px, 7vw, 110px); bottom: clamp(24px, 6vw, 84px); display: flex; gap: 20px; align-items: flex-start; max-width: 380px; color: #2b2824; pointer-events: none; }
+.il-jp { writing-mode: vertical-rl; font-family: "Shippori Mincho", serif; font-weight: 500; font-size: clamp(26px, 3vw, 36px); letter-spacing: .22em; line-height: 1; }
+.il-cap b { display: block; font-family: "Jost", sans-serif; font-weight: 400; letter-spacing: .26em; text-transform: uppercase; font-size: 12px; color: #9a4320; }
+.il-cap p { margin: 12px 0 14px; font-size: 15px; line-height: 1.75; color: #4a453e; }
+.il-btn { pointer-events: auto; border: 0; border-bottom: 1px solid currentColor; background: none; padding: 2px 0; font-family: "Jost", sans-serif; letter-spacing: .16em; text-transform: uppercase; font-size: 11px; color: inherit; }
+.il-credit { display: block; margin-top: 10px; font-size: 11px; opacity: .65; pointer-events: auto; }
+.il-credit a { color: inherit; }
+.il-bonsai .il-cap { top: 50%; bottom: auto; transform: translateY(-50%); right: clamp(20px, 9vw, 150px); }
+.il-pond .il-cap { color: #eef2ec; left: clamp(20px, 7vw, 110px); right: auto; background: rgba(10, 28, 26, .58); padding: 20px 24px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.il-pond .il-cap b { color: #f1b48f; } .il-pond .il-cap p { color: rgba(238, 242, 236, .82); }
+@media (max-width: 700px) {
+  .il-cap { left: 16px; right: 16px; bottom: 16px; max-width: none; background: rgba(244, 239, 230, .86); padding: 16px 18px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .il-bonsai .il-cap { top: auto; bottom: 16px; transform: none; }
+  .il-pond .il-cap { left: 16px; right: 16px; background: rgba(12, 30, 28, .6); }
+  .il-cap p { font-size: 14px; margin: 8px 0 10px; }
+  .interlude > img { object-position: 15% 70%; }
+}
+
+/* ===== Ensō brush circle (Japanese style) ===== */
+.hero-copy { position: relative; }
+.enso { display: none; }
+html[data-skin="nn"] .enso { display: block; position: absolute; left: -46px; top: -70px; width: clamp(220px, 30vw, 380px); height: auto; z-index: -1; opacity: .13; pointer-events: none; }
+html[data-skin="nn"] .enso circle { stroke-dasharray: 470 600; stroke-dashoffset: 470; animation: ensoDraw 2.4s .3s var(--ease) forwards; }
+@keyframes ensoDraw { to { stroke-dashoffset: 0; } }
+
+/* ===== More negative space in the Japanese style (the default) ===== */
+html[data-skin="nn"] main > section.wrap:not(.hero):not(.topsearch) { padding-block: clamp(80px, 11vw, 160px); }
+html[data-skin="nn"] .hero { padding-top: clamp(40px, 7vw, 110px); padding-bottom: clamp(56px, 9vw, 130px); }
+html[data-skin="nn"] .band::before { border-block: 0; }
+html[data-skin="nn"] .grid { gap: clamp(44px, 5vw, 72px) clamp(24px, 3vw, 44px); }
+html[data-skin="nn"] .chefs-head p, html[data-skin="nn"] .stories-copy p, html[data-skin="nn"] .swipe-head p, html[data-skin="nn"] .feature p { line-height: 1.8; }
+html[data-skin="nn"] .chef-cards { gap: clamp(16px, 2vw, 28px); }
+html[data-skin="nn"] footer { padding-block: 80px; }
+.deck-count { margin: 6px 0 0; font-size: 13px; color: var(--muted); letter-spacing: .04em; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
@@ -854,8 +947,17 @@ html[data-skin="nn"] .poster, html[data-skin="nn"] .player { border-radius: 2px;
 </header>
 
 <main id="top">
+  <section class="wrap topsearch" aria-label="Search recipes">
+    <div class="ts-wrap">
+      <div class="ts-box"><span class="ico" data-icon="magnifying-glass"></span><input id="search" type="search" placeholder="Search recipes, chefs or ingredients" autocomplete="off" enterkeyhint="search" aria-label="Search recipes" aria-controls="ts-results" aria-expanded="false"><kbd>/</kbd></div>
+      <div class="ts-results" id="ts-results" role="listbox" aria-label="Matching recipes" hidden></div>
+    </div>
+    <div class="ts-hints"><span>Try</span><button type="button" data-q="kimchi">kimchi</button><button type="button" data-q="salmon">salmon</button><button type="button" data-q="tacos">tacos</button><button type="button" data-q="dashi">dashi</button><button type="button" data-q="dumplings">dumplings</button></div>
+  </section>
+
   <section class="wrap hero" aria-labelledby="hero-title">
     <div class="hero-copy">
+      <svg class="enso" viewBox="0 0 200 200" aria-hidden="true"><filter id="brush"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter><circle cx="100" cy="100" r="78" fill="none" stroke="#2b2824" stroke-width="15" stroke-linecap="round" transform="rotate(-70 100 100)" filter="url(#brush)"/></svg>
       <h1 id="hero-title">Fast dinners that hit your <em>protein</em>.</h1>
       <span class="tape pink">Esquest Eats kitchen</span>
       <p>Fast high-protein dinners, plus Roy Choi, Gordon Ramsay, Niki Nakayama and your own Notion recipes. Flip through, then cook.</p>
@@ -878,10 +980,10 @@ html[data-skin="nn"] .poster, html[data-skin="nn"] .player { border-radius: 2px;
   <section class="wrap stories-sec band pink rv" id="tonight" aria-labelledby="stories-title">
     <div class="stories-copy">
       <h2 id="stories-title">Your protein, one dish at a time</h2>
-      <p>Tap the right side to skip ahead, the left side to go back, or the middle to open the recipe. Hold to pause.</p>
+      <p>Tap the right side to skip ahead, the left side to go back, or the middle to open the recipe. Swipe works too, and holding pauses it.</p>
       <ul class="stories-legend" aria-hidden="true"><li><i style="background:#9be3a4"></i>Protein</li><li><i style="background:#f3cf7e"></i>Calories</li><li><i style="background:#b7d6f0"></i>Minutes</li></ul>
     </div>
-    <div class="story paused" id="story" role="group" aria-roledescription="carousel" aria-label="Dinner stories">
+    <div class="story" id="story" role="group" aria-roledescription="carousel" aria-label="Dinner stories">
       <div class="story-bars" id="story-bars" aria-hidden="true"></div>
       <img class="story-img" id="story-img" alt="">
       <div class="story-shade"></div>
@@ -890,6 +992,11 @@ html[data-skin="nn"] .poster, html[data-skin="nn"] .player { border-radius: 2px;
       <button class="story-zone z-open" type="button" id="story-open" aria-label="Open this recipe"></button>
       <button class="story-zone z-next" type="button" id="story-next" aria-label="Next dish"></button>
     </div>
+  </section>
+
+  <section class="interlude il-garden" aria-label="A raked sand garden">
+    <canvas id="garden" aria-hidden="true"></canvas>
+    <div class="il-cap"><span class="il-jp" lang="ja">枯山水</span><div><b>Karesansui</b><p>A dry garden of raked gravel and stone. Drag across the sand to rake your own lines.</p><button class="il-btn" type="button" id="garden-reset">Smooth the sand</button></div></div>
   </section>
 
   <section class="wrap chefs band yellow" id="chefs" aria-labelledby="chefs-title">
@@ -914,6 +1021,11 @@ html[data-skin="nn"] .poster, html[data-skin="nn"] .player { border-radius: 2px;
     <div class="guide-shelf" id="guide-shelf"></div>
   </section>
 
+  <section class="interlude il-bonsai" aria-label="A bonsai tree">
+    <img src="img/bonsai.jpg" alt="A small bonsai tree in a shallow clay pot against a pale wall" loading="lazy">
+    <div class="il-cap"><span class="il-jp" lang="ja">盆栽</span><div><b>Bonsai</b><p>Patience, pruning and restraint. A good dinner works the same way: take things away until only what matters is left.</p><span class="il-credit">Photo by <a href="https://unsplash.com/photos/aVVAI7z0WoY" target="_blank" rel="noopener">Todd Trapani</a> on Unsplash</span></div></div>
+  </section>
+
   <section class="wrap rv" aria-labelledby="target-title">
     <div class="target">
       <div>
@@ -935,7 +1047,8 @@ html[data-skin="nn"] .poster, html[data-skin="nn"] .player { border-radius: 2px;
   <section class="wrap swipe-sec rv" aria-labelledby="swipe-title">
     <div class="swipe-head">
       <h2 id="swipe-title">Swipe to build a shortlist</h2>
-      <p>Right saves a dish, left skips it. Saved dishes collect under the cards.</p>
+      <p>Right saves a dish, left skips it. Every recipe is in the deck, shuffled. Saved dishes collect under the cards.</p>
+      <p class="deck-count" id="deck-count" aria-live="polite"></p>
     </div>
     <div class="deck-wrap" id="deck-wrap">
       <div class="deck" id="deck" tabindex="0" aria-label="Recipe cards. Left arrow skips, right arrow saves, Enter opens the recipe."></div>
@@ -959,23 +1072,31 @@ html[data-skin="nn"] .poster, html[data-skin="nn"] .player { border-radius: 2px;
     </div>
   </section>
 
+  <section class="interlude il-pond" aria-label="A koi pond">
+    <canvas id="pond" aria-hidden="true"></canvas>
+    <div class="il-cap"><span class="il-jp" lang="ja">池</span><div><b>Koi pond</b><p>Slow water and patient fish. Tap the water to feed them.</p></div></div>
+  </section>
+
   <section class="wrap library" id="recipes" aria-labelledby="lib-title">
     <div class="library-head">
       <h2 id="lib-title">All recipes</h2>
-      <div class="filters">
-        <div class="filter-row"><span class="filter-label">Course</span><div class="chips" role="group" aria-label="Course" id="course-chips"></div></div>
+      <div class="lib-bar">
+        <div class="course-tabs" role="group" aria-label="Course" id="course-chips"></div>
+        <button class="btn btn-sm filter-toggle" type="button" id="filter-toggle" aria-expanded="false" aria-controls="filter-panel">Filters<span class="count" id="filter-count" hidden>0</span></button>
+      </div>
+      <div class="filter-panel" id="filter-panel" hidden>
         <div class="filter-row"><span class="filter-label">Cuisine</span><div class="chips" role="group" aria-label="Cuisine" id="region-chips"></div></div>
         <div class="filter-row"><span class="filter-label">Chef</span><div class="chips" role="group" aria-label="Chef" id="chef-chips"></div></div>
         <div class="filter-row"><span class="filter-label">Quick</span><div class="chips" role="group" aria-label="Quick filters" id="flag-chips"></div></div>
-        <div class="filters-end">
-          <div class="search"><span class="ico" data-icon="magnifying-glass"></span><input id="search" type="search" placeholder="Search salmon, tacos, rice" aria-label="Search recipes"></div>
+        <div class="filter-row"><span class="filter-label">Sort</span><div class="filter-end">
           <select class="sort" id="sort" aria-label="Sort recipes">
             <option value="fit">Best for my target</option>
             <option value="protein">Most protein</option>
             <option value="cal">Fewest calories</option>
             <option value="time">Fastest</option>
           </select>
-        </div>
+          <button class="btn btn-sm" type="button" data-action="clear">Clear filters</button>
+        </div></div>
       </div>
       <p class="result-line" id="result-line"></p>
     </div>
@@ -4712,7 +4833,7 @@ function cardHTML(r, i) {
   return '<article class="card" data-id="' + r.id + '" style="--i:' + Math.min(i, 12) + '">' +
     '<button class="card-photo" type="button" data-open="' + r.id + '" aria-label="Open ' + esc(r.name) + '"><img src="' + img(r.id) + '" alt="' + esc(r.name) + '" loading="lazy" width="800" height="600" referrerpolicy="no-referrer"></button>' +
     '<div class="card-body">' +
-      '<div class="card-meta"><span>' + esc(cuisineLabel(r)) + '</span>' + (r.time != null ? '<span class="sep"></span>' + ic("clock") + '<span class="num">' + r.time + ' min</span>' : "") +
+      '<div class="card-meta"><span>' + esc(cuisineLabel(r)) + '</span>' + (r.time != null ? '<span class="sep"></span>' + ic("clock") + '<span class="num">' + r.time + ' min</span>' : "") + (hasMacros(r) ? '<span class="sep"></span><span class="num">' + r.pro + 'g protein</span>' : "") +
         (r.spice ? '<span class="sep"></span><span class="spice" title="Spicy">' + ic("fire").repeat(r.spice) + '</span>' : "") + '</div>' +
       '<h3><button class="card-title" type="button" data-open="' + r.id + '">' + esc(r.name) + '</button></h3>' +
       (r.chef ? '<div><span class="chef-tag ' + chefCls(r.chef) + '">' + esc(r.chef) + '</span></div>' : "") +
@@ -4724,6 +4845,7 @@ function cardHTML(r, i) {
 }
 let gridRenders = 0;
 function renderGrid() {
+  updateFilterCount();
   const list = filtered();
   const grid = $("#grid");
   const before = new Map();
@@ -4740,7 +4862,7 @@ function renderGrid() {
     });
   }
   gridRenders++;
-  syncDeck(list);
+  if (!deck.order.length) syncDeck(RECIPES);
 }
 function renderTaiwanese() {
   $("#tw-list").innerHTML = RECIPES.filter(r => r.region === "taiwanese").map(r =>
@@ -4966,7 +5088,7 @@ document.addEventListener("click", e => {
   const d = t.dataset;
   if (d.course) { state.course = d.course; renderChips(); renderGrid(); }
   else if (d.region) { state.region = d.region; renderChips(); renderGrid(); }
-  else if (d.chefView) { state.chefView = d.chefView; skinCtx = SKIN_OF[d.chefView] || "house"; renderChefs(true); applySkin(); }
+  else if (d.chefView) { state.chefView = d.chefView; skinCtx = SKIN_OF[d.chefView] || "nn"; renderChefs(true); applySkin(); }
   else if (d.skin) { setSkin(d.skin); closeSkinMenu(); }
   else if (d.guide) { const g = d.guide.split("|"); openGuide(g[0], Number(g[1]) || 1); }
   else if (d.mode) setMode(d.mode);
@@ -4986,7 +5108,9 @@ document.addEventListener("click", e => {
   else if (d.tab) { mediaTab = d.tab; openRecipe(openId, true); }
   else if (d.play) playInline(d.play);
   else if (d.action === "close") closeRecipe();
-  else if (d.action === "clear") { skinCtx = "house"; applySkin(); state.course = "all"; state.region = "all"; state.chef = "all"; state.flags.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
+  else if (d.action === "see-all") seeAllResults();
+  else if (d.q) { const si = $("#search"); si.value = d.q; state.q = d.q; renderGrid(); si.focus(); renderTopResults(); }
+  else if (d.action === "clear") { skinCtx = "nn"; applySkin(); state.course = "all"; state.region = "all"; state.chef = "all"; state.flags.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
   else if (d.action === "copy") {
     const ta = $("#shop-text"), ok = () => toast("Shopping list copied"), fb = () => { ta.focus(); ta.select(); toast("List selected. Use your copy shortcut."); };
     try { navigator.clipboard.writeText(ta.value).then(ok, fb); } catch (err) { fb(); }
@@ -5060,7 +5184,8 @@ function swipeCardHTML(r, k) {
     '<div class="facts">' + (hasMacros(r) ? '<span><b>' + (r.time != null ? r.time : "?") + '</b>min</span><span><b>' + r.pro + 'g</b>protein</span><span><b>' + r.cal + '</b>cal</span><span><b>' + r.serves + '</b>servings</span>' : '<span>' + esc(r.tags[0] || "Recipe") + '</span>' + (ingOnly(r).length ? '<span><b>' + ingOnly(r).length + '</b>ingredients</span>' : "")) + '</div></div></div>';
 }
 function renderDeck() {
-  const el = $("#deck"), ids = deck.order.slice(deck.idx, deck.idx + 3);
+  const el = $("#deck"), ids = deck.order.slice(deck.idx, deck.idx + 3), dc = $("#deck-count");
+  if (dc) dc.textContent = deck.order.length ? "Card " + Math.min(deck.idx + 1, deck.order.length) + " of " + deck.order.length : "";
   if (!ids.length) {
     el.innerHTML = '<div class="deck-empty"><strong>' + (deck.order.length ? "That's every dish" : "No dishes match your filters") + '</strong><span>' +
       (deck.saved.length ? "You saved " + deck.saved.length + ". Tap one below, or start over." : "Start over, or loosen the filters below.") + '</span>' +
@@ -5269,16 +5394,15 @@ function cfInit() {
 /* =========================================================
    Stories hero: counting macros, progress bars, tap zones
    ========================================================= */
-const story = { i: 0, dur: 6000, raf: 0, held: false, list: shuffle(RECIPES).slice(0, 8) };
-function storyReset() { story.list = shuffle(RECIPES).slice(0, 8); $("#story-bars").innerHTML = story.list.map(() => '<span class="seg"><u></u></span>').join(""); }
+const story = { i: 0, dur: 6000, raf: 0, el: 0, last: 0, inView: false, holding: false, list: shuffle(RECIPES).slice(0, 8) };
+function storyReset() { story.list = shuffle(RECIPES).slice(0, 8); $("#story-bars").innerHTML = story.list.map(() => '<span class="sbar"><u></u></span>').join(""); }
 function storyGo(i) {
   const N = story.list.length;
   if (i >= N) { storyReset(); i = 0; }
   story.i = ((i % N) + N) % N;
   const r = story.list[story.i];
-  const segs = [...document.querySelectorAll("#story-bars .seg")];
-  segs.forEach((s, k) => { s.className = "seg" + (k < story.i ? " done" : ""); });
-  const cur = segs[story.i]; void cur.offsetWidth; cur.className = "seg cur"; cur.style.setProperty("--dur", story.dur + "ms");
+  story.el = 0;
+  document.querySelectorAll("#story-bars .sbar u").forEach((u, k) => { u.style.transform = "scaleX(" + (k < story.i ? 1 : 0) + ")"; });
   const im = $("#story-img"); im.classList.remove("kb"); im.src = img(r.id); im.alt = r.name; void im.offsetWidth; if (!reduceMotion) im.classList.add("kb");
   const st = hasMacros(r) ? [[r.pro, "g protein"], [r.cal, "calories"], [r.time != null ? r.time : r.carb, r.time != null ? "minutes" : "g carbs"]] : [[ingOnly(r).length, "ingredients"], [r.steps.length, "steps"], [typeof r.serves === "number" ? r.serves : (parseInt(r.serves, 10) || 1), "servings"]];
   $("#story-info").innerHTML = '<div><div class="where">' + esc([r.chef, cuisineLabel(r)].filter(Boolean).join(", ")) + '</div><h3>' + esc(r.name) + '</h3></div>' +
@@ -5294,18 +5418,33 @@ function storyInit() {
   storyReset();
   storyGo(0);
   const box = $("#story");
-  const tap = fn => () => { if (story.held) { story.held = false; return; } fn(); };
-  $("#story-prev").addEventListener("click", tap(() => storyGo(story.i - 1)));
-  $("#story-next").addEventListener("click", tap(() => storyGo(story.i + 1)));
-  $("#story-open").addEventListener("click", tap(() => openRecipe(story.list[story.i].id)));
-  box.addEventListener("animationend", e => { if (e.animationName === "segfill") storyGo(story.i + 1); });
-  let hold, inView = false, holding = false;
-  const sync = () => box.classList.toggle("paused", !inView || holding || document.hidden || reduceMotion);
-  box.addEventListener("pointerdown", () => { story.held = false; hold = setTimeout(() => { holding = true; story.held = true; sync(); }, 260); });
-  ["pointerup", "pointerleave", "pointercancel"].forEach(ev => box.addEventListener(ev, () => { clearTimeout(hold); if (holding) { holding = false; sync(); } }));
+  const zone = x => { const b = box.getBoundingClientRect(), f = (x - b.left) / b.width; return f < 0.34 ? -1 : f > 0.66 ? 1 : 0; };
+  const act = z => { if (z) storyGo(story.i + z); else openRecipe(story.list[story.i].id); };
+  ["story-prev", "story-open", "story-next"].forEach((id, k) => $("#" + id).addEventListener("click", e => { if (e.detail === 0) act(k - 1); }));
+  let p0 = null, holdT = 0;
+  const release = () => { clearTimeout(holdT); if (story.holding) { story.holding = false; box.classList.remove("paused"); return true; } return false; };
+  box.addEventListener("pointerdown", e => { p0 = { x: e.clientX, y: e.clientY }; clearTimeout(holdT); holdT = setTimeout(() => { story.holding = true; box.classList.add("paused"); }, 380); });
+  box.addEventListener("pointerup", e => {
+    const held = release(); if (!p0 || held) { p0 = null; return; }
+    const dx = e.clientX - p0.x, dy = e.clientY - p0.y; p0 = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) storyGo(story.i + (dx < 0 ? 1 : -1));
+    else if (Math.abs(dx) < 14 && Math.abs(dy) < 14) act(zone(e.clientX));
+  });
+  box.addEventListener("pointercancel", () => { p0 = null; release(); });
+  box.addEventListener("contextmenu", e => e.preventDefault());
   box.addEventListener("keydown", e => { if (e.key === "ArrowLeft") storyGo(story.i - 1); else if (e.key === "ArrowRight") storyGo(story.i + 1); });
-  document.addEventListener("visibilitychange", sync);
-  if (window.IntersectionObserver) new IntersectionObserver(es => { inView = es[0].isIntersecting; sync(); }, { threshold: 0.35 }).observe(box); else { inView = true; sync(); }
+  if (window.IntersectionObserver) new IntersectionObserver(es => { story.inView = es[0].isIntersecting; }, { threshold: 0.25 }).observe(box); else story.inView = true;
+  const loop = t => {
+    const dt = Math.min(100, t - (story.last || t)); story.last = t;
+    if (story.inView && !story.holding && !document.hidden && $("#sheet-wrap").hidden && $("#reader").hidden) {
+      story.el += dt;
+      const u = document.querySelectorAll("#story-bars .sbar u")[story.i];
+      if (u) u.style.transform = "scaleX(" + Math.min(1, story.el / story.dur) + ")";
+      if (story.el >= story.dur) storyGo(story.i + 1);
+    }
+    requestAnimationFrame(loop);
+  };
+  requestAnimationFrame(loop);
 }
 
 /* =========================================================
@@ -5335,13 +5474,12 @@ $("#shelf-all").addEventListener("click", () => {
    Site styles: each chef's class guide becomes a look for the whole site
    ========================================================= */
 const SKINS = [
-  { id: "auto", label: "Auto", note: "Changes with the chef you pick", sw: ["#c8a274", "#d4148a", "#b8935a"] },
-  { id: "house", label: "House", note: "Kraft paper and stickers", sw: ["#c8a274", "#f6c51c", "#15120d"] },
+  { id: "auto", label: "Auto", note: "Calm Japanese style, or the chef you pick", sw: ["#f4efe6", "#ec3f1f", "#b8935a"] },
   { id: "rc", label: "Roy Choi", note: "Street-guide paper, tape and spray paint", sw: ["#ffffff", "#ec3f1f", "#15120d"] },
   { id: "gr", label: "Gordon Ramsay", note: "Bright white, gold and refined", sw: ["#ffffff", "#b8935a", "#141414"] },
-  { id: "nn", label: "Niki Nakayama", note: "Washi paper, sumi ink and quiet space", sw: ["#f4efe6", "#b5532b", "#5f6f52"] }
+  { id: "nn", label: "Niki Nakayama", note: "Washi paper, sumi ink and quiet space. The default.", sw: ["#f4efe6", "#b5532b", "#5f6f52"] }
 ];
-let skinPref = "auto", skinCtx = "house";
+let skinPref = "auto", skinCtx = "nn";
 function currentSkin() {
   if (skinPref !== "auto") return skinPref;
   if (!$("#reader").hidden && reader.g) return reader.g;
@@ -5448,6 +5586,275 @@ function closeGuide() {
 }
 
 /* =========================================================
+   Search at the top of the page, with instant results
+   ========================================================= */
+function searchHits(q) {
+  q = q.trim().toLowerCase(); if (!q) return [];
+  const words = q.split(/\s+/);
+  return RECIPES.map(r => {
+    const hay = (r.name + " " + (r.chef || "") + " " + r.origin + " " + courseLabel(r) + " " + regionLabel(r) + " " + r.tags.join(" ") + " " + r.ingredients.join(" ")).toLowerCase();
+    if (!words.every(w => hay.indexOf(w) > -1)) return null;
+    const n = r.name.toLowerCase();
+    return { r, s: (n.indexOf(q) === 0 ? 4 : n.indexOf(q) > -1 ? 3 : words.every(w => n.indexOf(w) > -1) ? 2 : 0) + (r.chef && r.chef.toLowerCase().indexOf(q) > -1 ? 1 : 0) };
+  }).filter(Boolean).sort((a, b) => b.s - a.s).map(x => x.r);
+}
+function closeTopResults() { $("#ts-results").hidden = true; $("#search").setAttribute("aria-expanded", "false"); }
+function renderTopResults() {
+  const q = $("#search").value, box = $("#ts-results");
+  if (!q.trim()) { closeTopResults(); return; }
+  const hits = searchHits(q);
+  box.innerHTML = (hits.length
+    ? hits.slice(0, 6).map(r => '<button type="button" class="ts-hit" role="option" data-open="' + r.id + '"><img src="' + img(r.id) + '" alt=""><span><b>' + esc(r.name) + '</b><small>' + esc([r.chef, cuisineLabel(r)].filter(Boolean).join("  ·  ")) + (hasMacros(r) ? "  ·  " + r.pro + "g protein" : "") + '</small></span></button>').join("") +
+      '<button type="button" class="ts-all" data-action="see-all">See all ' + hits.length + ' in the recipe library' + ic("arrow-right") + '</button>'
+    : '<p class="ts-none">Nothing matches yet. Try a dish, a chef or an ingredient.</p>');
+  box.hidden = false; $("#search").setAttribute("aria-expanded", "true");
+}
+function seeAllResults() { closeTopResults(); $("#recipes").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }); }
+function searchInit() {
+  const s = $("#search");
+  s.placeholder = innerWidth < 520 ? "Search " + RECIPES.length + " recipes" : "Search " + RECIPES.length + " recipes, chefs or ingredients";
+  s.addEventListener("input", renderTopResults);
+  s.addEventListener("focus", () => { if (s.value.trim()) renderTopResults(); });
+  s.addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); seeAllResults(); }
+    else if (e.key === "Escape") closeTopResults();
+    else if (e.key === "ArrowDown") { const f = $("#ts-results .ts-hit"); if (f) { e.preventDefault(); f.focus(); } }
+  });
+  $("#ts-results").addEventListener("keydown", e => {
+    const items = Array.from($("#ts-results").querySelectorAll("button")), i = items.indexOf(document.activeElement);
+    if (e.key === "ArrowDown") { e.preventDefault(); if (items[i + 1]) items[i + 1].focus(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); if (i > 0) items[i - 1].focus(); else s.focus(); }
+    else if (e.key === "Escape") { closeTopResults(); s.focus(); }
+  });
+  document.addEventListener("click", e => { if (!e.target.closest(".topsearch") || e.target.closest(".ts-hit")) closeTopResults(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "/" && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) && $("#sheet-wrap").hidden && $("#reader").hidden) { e.preventDefault(); s.focus(); }
+  });
+}
+
+/* =========================================================
+   Quiet library: course tabs up front, everything else behind Filters
+   ========================================================= */
+function updateFilterCount() {
+  const n = (state.region !== "all" ? 1 : 0) + (state.chef !== "all" ? 1 : 0) + state.flags.size, c = $("#filter-count");
+  if (c) { c.textContent = n; c.hidden = !n; }
+}
+function filterInit() {
+  $("#filter-toggle").addEventListener("click", () => {
+    const p = $("#filter-panel"), open = p.hidden; p.hidden = !open;
+    $("#filter-toggle").setAttribute("aria-expanded", String(open));
+  });
+}
+
+/* =========================================================
+   Pauses between the content: a raked sand garden and a koi pond
+   ========================================================= */
+const seeded = s => () => (s = (s * 16807) % 2147483647) / 2147483647;
+function onScreen(el, fn) { if (window.IntersectionObserver) new IntersectionObserver(es => fn(es[0].isIntersecting), { rootMargin: "80px" }).observe(el); else fn(true); }
+function gardenInit() {
+  const cv = $("#garden"); if (!cv) return;
+  const ctx = cv.getContext("2d"), base = document.createElement("canvas"), bctx = base.getContext("2d");
+  const SAND = "#e6ddcc", GAP = 11;
+  let W = 0, H = 0, stones = [], strokes = [], cur = null, queued = false;
+  const zoneR = s => s.r * 2.7;
+  function groove(c, pts) {
+    if (pts.length < 2) return;
+    c.lineJoin = "round"; c.lineCap = "round";
+    c.beginPath(); pts.forEach((p, i) => i ? c.lineTo(p[0], p[1] + 1.1) : c.moveTo(p[0], p[1] + 1.1)); c.strokeStyle = "rgba(255,252,244,.8)"; c.lineWidth = 1.7; c.stroke();
+    c.beginPath(); pts.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.strokeStyle = "rgba(112,94,68,.32)"; c.lineWidth = 1.3; c.stroke();
+  }
+  function stonePath(c, s) {
+    const R = seeded(s.seed * 97 + 13), pts = [];
+    for (let k = 0; k < 16; k++) { const a = k / 16 * Math.PI * 2, rr = s.r * (0.84 + R() * 0.28); pts.push([s.x + Math.cos(a) * rr * 1.3, s.y + Math.sin(a) * rr * 0.82]); }
+    const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    c.beginPath(); let m = mid(pts[pts.length - 1], pts[0]); c.moveTo(m[0], m[1]);
+    pts.forEach((p, i) => { const m2 = mid(p, pts[(i + 1) % pts.length]); c.quadraticCurveTo(p[0], p[1], m2[0], m2[1]); });
+    c.closePath();
+  }
+  function drawStone(c, s) {
+    c.save();
+    stonePath(c, s);
+    c.shadowColor = "rgba(70,55,35,.35)"; c.shadowBlur = s.r * .6; c.shadowOffsetY = s.r * .22;
+    const g = c.createRadialGradient(s.x - s.r * .5, s.y - s.r * .45, s.r * .1, s.x, s.y, s.r * 1.5);
+    g.addColorStop(0, "#a8a39a"); g.addColorStop(.55, "#66625b"); g.addColorStop(1, "#3c3a36");
+    c.fillStyle = g; c.fill();
+    c.shadowColor = "transparent";
+    c.clip();
+    const R = seeded(s.seed * 31 + 5);
+    c.fillStyle = "rgba(96,116,66,.78)";
+    c.beginPath(); c.ellipse(s.x - s.r * .25, s.y - s.r * .62, s.r * 1.05, s.r * .38, -.12, 0, Math.PI * 2); c.fill();
+    for (let i = 0; i < 70; i++) { c.fillStyle = R() < .5 ? "rgba(132,152,92,.55)" : "rgba(60,78,40,.4)"; const a = R() * Math.PI * 2, d = R() * s.r; c.fillRect(s.x - s.r * .25 + Math.cos(a) * d * 1.1, s.y - s.r * .6 + Math.sin(a) * d * .4, 2, 2); }
+    c.restore();
+  }
+  function paintBase() {
+    const c = bctx;
+    c.fillStyle = SAND; c.fillRect(0, 0, W, H);
+    const R = seeded(7);
+    for (let i = 0; i < W * H / 36; i++) { c.fillStyle = R() < .5 ? "rgba(255,253,246,.55)" : "rgba(118,100,74,.14)"; c.fillRect(R() * W, R() * H, 1, 1); }
+    for (let y = GAP / 2; y < H; y += GAP) {
+      let seg = [];
+      for (let x = -6; x <= W + 6; x += 6) {
+        const wob = Math.sin(x * .011 + y * .04) * .9;
+        if (stones.some(s => Math.hypot(x - s.x, y - s.y) < zoneR(s))) { groove(c, seg); seg = []; } else seg.push([x, y + wob]);
+      }
+      groove(c, seg);
+    }
+    stones.forEach(s => {
+      for (let r = s.r * 1.55; r < zoneR(s); r += GAP) {
+        let seg = [];
+        for (let a = 0; a <= Math.PI * 2 + .05; a += .035) {
+          const x = s.x + Math.cos(a) * r, y = s.y + Math.sin(a) * r;
+          const blocked = stones.some(o => o !== s && Math.hypot(x - o.x, y - o.y) < zoneR(o) && Math.hypot(x - o.x, y - o.y) / zoneR(o) < r / zoneR(s));
+          if (blocked) { groove(c, seg); seg = []; } else seg.push([x, y]);
+        }
+        groove(c, seg);
+      }
+    });
+  }
+  function rake(c, pts) {
+    if (pts.length < 2) return;
+    c.lineJoin = "round"; c.lineCap = "round";
+    c.beginPath(); pts.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.strokeStyle = SAND; c.lineWidth = GAP * 4.4; c.stroke();
+    for (let k = -1.5; k <= 1.5; k++) {
+      groove(c, pts.map((p, i) => {
+        const q = pts[Math.min(pts.length - 1, i + 1)], o = pts[Math.max(0, i - 1)], dx = q[0] - o[0], dy = q[1] - o[1], L = Math.hypot(dx, dy) || 1;
+        return [p[0] - dy / L * k * GAP, p[1] + dx / L * k * GAP];
+      }));
+    }
+  }
+  function render() { queued = false; ctx.clearRect(0, 0, W, H); ctx.drawImage(base, 0, 0, W, H); strokes.forEach(st => rake(ctx, st)); stones.forEach(s => drawStone(ctx, s)); }
+  const ask = () => { if (!queued) { queued = true; requestAnimationFrame(render); } };
+  function layout() {
+    const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h || (w === W && h === H)) return;
+    W = w; H = h; const dpr = Math.min(2, window.devicePixelRatio || 1);
+    [cv, base].forEach(c => { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); });
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const s = Math.min(W, H * 1.5);
+    stones = W > 700
+      ? [{ x: W * .22, y: H * .5, r: s * .07, seed: 1 }, { x: W * .5, y: H * .3, r: s * .048, seed: 2 }, { x: W * .58, y: H * .72, r: s * .03, seed: 3 }]
+      : [{ x: W * .3, y: H * .32, r: s * .1, seed: 1 }, { x: W * .74, y: H * .5, r: s * .06, seed: 2 }];
+    strokes = []; paintBase(); render();
+  }
+  const pos = e => { const b = cv.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
+  cv.addEventListener("pointerdown", e => { cur = [pos(e)]; strokes.push(cur); if (strokes.length > 40) strokes.shift(); });
+  cv.addEventListener("pointermove", e => { if (!cur) return; const p = pos(e), l = cur[cur.length - 1]; if (Math.hypot(p[0] - l[0], p[1] - l[1]) > 5) { cur.push(p); ask(); } });
+  ["pointerup", "pointercancel", "pointerleave"].forEach(ev => cv.addEventListener(ev, () => { cur = null; }));
+  $("#garden-reset").addEventListener("click", () => { strokes = []; render(); });
+  if (window.ResizeObserver) new ResizeObserver(() => requestAnimationFrame(layout)).observe(cv); else addEventListener("resize", layout);
+  layout();
+}
+function pondInit() {
+  const cv = $("#pond"); if (!cv) return;
+  const ctx = cv.getContext("2d");
+  const KOI = [["#f2701f", "#fbf3e6"], ["#fbf3e6", "#e1461b"], ["#f3a12a", "#fbf3e6"], ["#fbf3e6", "#262321"], ["#e1461b", "#262321"]];
+  let W = 0, H = 0, fish = [], pads = [], ripples = [], food = null, visible = false, last = 0;
+  const angDiff = (a, b) => Math.atan2(Math.sin(a - b), Math.cos(a - b));
+  function layout() {
+    const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+    const first = !W; W = w; H = h; const dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const R = seeded(11), sz = Math.max(70, Math.min(W, H) * .2);
+    if (first) fish = KOI.slice(0, W > 700 ? 5 : 3).map((c, i) => ({ x: R() * W, y: R() * H, a: R() * 6.28, v: .5 + R() * .35, len: sz * (.75 + R() * .45), c, ph: R() * 100, spots: [R(), R(), R(), R()] }));
+    pads = Array.from({ length: W > 700 ? 7 : 4 }, (_, i) => ({ x: R() * W, y: R() * H, r: sz * (.3 + R() * .32), a: R() * 6.28, flower: i === 1 || i === 4 }));
+  }
+  function update(t, dt) {
+    const k = dt / 16.7 * (reduceMotion ? .45 : 1);
+    fish.forEach(f => {
+      let turn = Math.sin(t * .00035 + f.ph) * .012 + Math.sin(t * .0009 + f.ph * 2) * .006;
+      const m = f.len * .8;
+      if (f.x < m || f.x > W - m || f.y < m || f.y > H - m) turn += angDiff(Math.atan2(H / 2 - f.y, W / 2 - f.x), f.a) * .035;
+      if (food) turn += angDiff(Math.atan2(food.y - f.y, food.x - f.x), f.a) * .05;
+      f.a += turn * k;
+      const sp = f.v * (food && Math.hypot(food.x - f.x, food.y - f.y) > f.len * .4 ? 1.9 : 1) * k;
+      f.x += Math.cos(f.a) * sp; f.y += Math.sin(f.a) * sp;
+    });
+    if (food && t - food.t > 4500) food = null;
+    ripples = ripples.filter(r => t - r.t < 2600);
+    if (Math.random() < .003 * k) ripples.push({ x: Math.random() * W, y: Math.random() * H, t, s: .5 });
+  }
+  function spine(f, t) {
+    const N = 12, seg = f.len / N, pts = []; let x = f.x, y = f.y;
+    for (let i = 0; i <= N; i++) {
+      pts.push([x, y]);
+      const ang = f.a + Math.sin(t * .0055 * (f.v + .4) * 2 - i * .55) * .045 * i;
+      x -= Math.cos(ang) * seg; y -= Math.sin(ang) * seg;
+    }
+    return pts;
+  }
+  function bodyPath(f, pts) {
+    const N = pts.length - 1, L = [], Rt = [];
+    pts.forEach((p, i) => {
+      const u = i / N, q = pts[Math.min(N, i + 1)], o = pts[Math.max(0, i - 1)], dx = o[0] - q[0], dy = o[1] - q[1], d = Math.hypot(dx, dy) || 1;
+      const w = f.len * .125 * (u < .22 ? .62 + u * 1.7 : Math.max(.08, (1 - u) * 1.25));
+      L.push([p[0] - dy / d * w, p[1] + dx / d * w]); Rt.push([p[0] + dy / d * w, p[1] - dx / d * w]);
+    });
+    ctx.beginPath(); ctx.moveTo(L[0][0], L[0][1]);
+    const head = pts[0], hx = head[0] + Math.cos(f.a) * f.len * .06, hy = head[1] + Math.sin(f.a) * f.len * .06;
+    L.forEach(p => ctx.lineTo(p[0], p[1])); Rt.slice().reverse().forEach(p => ctx.lineTo(p[0], p[1]));
+    ctx.quadraticCurveTo(hx, hy, L[0][0], L[0][1]); ctx.closePath();
+  }
+  function drawFish(f, t) {
+    const pts = spine(f, t), N = pts.length - 1, tail = pts[N], pre = pts[N - 2];
+    ctx.save(); ctx.translate(7, 11); ctx.fillStyle = "rgba(4,16,14,.28)"; bodyPath(f, pts); ctx.fill(); ctx.restore();
+    const ta = Math.atan2(tail[1] - pre[1], tail[0] - pre[0]), sway = Math.sin(t * .008 * (f.v + .4)) * .35;
+    ctx.fillStyle = f.c[0] === "#fbf3e6" ? "rgba(250,240,228,.6)" : "rgba(242,120,40,.55)";
+    ctx.beginPath(); ctx.moveTo(tail[0], tail[1]);
+    ctx.quadraticCurveTo(tail[0] + Math.cos(ta + .6 + sway) * f.len * .2, tail[1] + Math.sin(ta + .6 + sway) * f.len * .2, tail[0] + Math.cos(ta + .35 + sway) * f.len * .26, tail[1] + Math.sin(ta + .35 + sway) * f.len * .26);
+    ctx.lineTo(tail[0] + Math.cos(ta - .35 + sway) * f.len * .26, tail[1] + Math.sin(ta - .35 + sway) * f.len * .26);
+    ctx.quadraticCurveTo(tail[0] + Math.cos(ta - .6 + sway) * f.len * .2, tail[1] + Math.sin(ta - .6 + sway) * f.len * .2, tail[0], tail[1]); ctx.fill();
+    const fp = pts[2], fa = Math.atan2(pts[1][1] - pts[3][1], pts[1][0] - pts[3][0]), flap = Math.sin(t * .006 + f.ph) * .25;
+    [-1, 1].forEach(sd => { ctx.beginPath(); ctx.ellipse(fp[0] + Math.cos(fa + sd * 1.9) * f.len * .1, fp[1] + Math.sin(fa + sd * 1.9) * f.len * .1, f.len * .1, f.len * .04, fa + sd * (2.3 + flap), 0, Math.PI * 2); ctx.fill(); });
+    bodyPath(f, pts); ctx.fillStyle = f.c[0]; ctx.fill();
+    ctx.save(); bodyPath(f, pts); ctx.clip(); ctx.fillStyle = f.c[1];
+    f.spots.forEach((s, i) => { const p = pts[Math.min(N - 2, 1 + Math.floor(s * (N - 3)))]; ctx.beginPath(); ctx.ellipse(p[0] + (i % 2 ? 1 : -1) * f.len * .04, p[1], f.len * (.07 + s * .06), f.len * (.06 + s * .05), f.a, 0, Math.PI * 2); ctx.fill(); });
+    ctx.restore();
+    ctx.fillStyle = "rgba(255,255,255,.18)"; ctx.beginPath(); ctx.ellipse(pts[3][0], pts[3][1], f.len * .12, f.len * .025, f.a, 0, Math.PI * 2); ctx.fill();
+  }
+  function drawPad(p, i, t) {
+    const r = p.r * (1 + Math.sin(t * .0008 + i) * .012);
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a + Math.sin(t * .0003 + i) * .04);
+    ctx.fillStyle = "rgba(3,14,12,.25)"; ctx.beginPath(); ctx.moveTo(4, 7); ctx.arc(4, 7, r, .24, Math.PI * 2 - .24); ctx.closePath(); ctx.fill();
+    const g = ctx.createRadialGradient(-r * .3, -r * .3, r * .1, 0, 0, r); g.addColorStop(0, "#7fa264"); g.addColorStop(1, "#47703f");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, r, .24, Math.PI * 2 - .24); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "rgba(210,232,180,.22)"; ctx.lineWidth = 1;
+    for (let k = 1; k < 9; k++) { const a = .24 + k * (Math.PI * 2 - .48) / 9; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a) * r * .9, Math.sin(a) * r * .9); ctx.stroke(); }
+    if (p.flower) {
+      for (let k = 0; k < 9; k++) { ctx.save(); ctx.rotate(k / 9 * Math.PI * 2 + t * .00005); ctx.fillStyle = k % 2 ? "#f6d3dc" : "#eaa3b6"; ctx.beginPath(); ctx.ellipse(0, -r * .26, r * .11, r * .26, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+      ctx.fillStyle = "#f2cf5b"; ctx.beginPath(); ctx.arc(0, 0, r * .09, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  }
+  function draw(t) {
+    const g = ctx.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#2f5249"); g.addColorStop(1, "#11262a");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 4; i++) {
+      const x = W * (.2 + .6 * (.5 + .5 * Math.sin(t * .00007 + i * 1.7))), y = H * (.2 + .6 * (.5 + .5 * Math.cos(t * .00009 + i * 2.3))), r = Math.max(W, H) * .32;
+      const c = ctx.createRadialGradient(x, y, 0, x, y, r); c.addColorStop(0, "rgba(150,200,180,.09)"); c.addColorStop(1, "rgba(150,200,180,0)"); ctx.fillStyle = c; ctx.fillRect(0, 0, W, H);
+    }
+    fish.forEach(f => drawFish(f, t));
+    pads.forEach((p, i) => drawPad(p, i, t));
+    ripples.forEach(r => {
+      const age = t - r.t, a = (1 - age / 2600) * .55;
+      [0, 260].forEach(d => { if (age > d) { ctx.strokeStyle = "rgba(225,240,232," + Math.max(0, a - d / 3000) + ")"; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.ellipse(r.x, r.y, (age - d) * .055 * r.s + 2, (age - d) * .045 * r.s + 2, 0, 0, Math.PI * 2); ctx.stroke(); } });
+    });
+    if (food) { ctx.fillStyle = "rgba(240,200,120,.85)"; for (let i = 0; i < 5; i++) { ctx.beginPath(); ctx.arc(food.x + Math.cos(i * 1.3) * 7, food.y + Math.sin(i * 2.1) * 6, 1.8, 0, Math.PI * 2); ctx.fill(); } }
+  }
+  function frame(t) {
+    requestAnimationFrame(frame);
+    const dt = Math.min(50, t - (last || t)); last = t;
+    if (!visible || !W) return;
+    update(t, dt || 16.7); draw(t);
+  }
+  cv.addEventListener("pointerdown", e => {
+    const b = cv.getBoundingClientRect(), x = e.clientX - b.left, y = e.clientY - b.top, t = performance.now();
+    ripples.push({ x, y, t, s: 1 }); food = { x, y, t };
+  });
+  if (window.ResizeObserver) new ResizeObserver(() => requestAnimationFrame(layout)).observe(cv); else addEventListener("resize", layout);
+  onScreen(cv, v => { visible = v; });
+  layout(); requestAnimationFrame(frame);
+}
+
+/* =========================================================
    Boot
    ========================================================= */
 load();
@@ -5456,6 +5863,10 @@ renderTaiwanese();
 renderChefs();
 skinInit();
 guidesInit();
+searchInit();
+filterInit();
+gardenInit();
+pondInit();
 cfInit();
 storyInit();
 renderShortlist();
