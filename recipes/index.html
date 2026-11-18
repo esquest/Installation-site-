@@ -161,6 +161,7 @@ a { color: var(--masa-ink); }
 .card:hover .card-media img { transform: scale(1.05); }
 .media-chip { position: absolute; left: 12px; top: 12px; background: rgba(20,14,26,.78); color: #fff; font-family: var(--font-data); font-size: 12px; padding: 4px 9px; border-radius: 999px; display: inline-flex; gap: 6px; align-items: center; }
 .media-chip.right { left: auto; right: 12px; }
+.media-chip.bottom { top: auto; bottom: 12px; background: var(--masa); color: var(--on-masa); font-family: var(--font-body); font-weight: 700; }
 .card-body { padding: 16px 18px 18px; display: grid; gap: 10px; flex: 1; align-content: start; }
 .kicker { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 .card-title { all: unset; cursor: pointer; font-size: 20px; font-weight: 700; line-height: 1.2; }
@@ -313,13 +314,13 @@ footer p { margin: 0; max-width: 80ch; }
     <div class="hero-copy">
       <span class="label">Asian · Mexican · Fusion · high protein</span>
       <h1 id="hero-title">Dinner in <em>20 minutes</em>, protein on point.</h1>
-      <p>Twelve fast weeknight dinners built around lean protein. Each one has a cook-along video with the full recipe right underneath, so you never have to hunt for the amounts.</p>
+      <p>Sixteen fast weeknight dinners built around lean protein, including picks from Roy Choi and Gordon Ramsay. Each one has a cook-along video with the full recipe right underneath, so you never have to hunt for the amounts.</p>
       <div class="hero-cta">
         <button class="btn btn-primary" id="pick-btn" type="button">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>
           Pick tonight's dinner
         </button>
-        <a class="btn" href="#recipes" id="browse-btn">Browse all 12</a>
+        <a class="btn" href="#recipes" id="browse-btn">Browse all 16</a>
       </div>
       <div class="hero-facts" id="hero-facts"></div>
     </div>
@@ -350,6 +351,7 @@ footer p { margin: 0; max-width: 80ch; }
     <div class="filters">
       <div class="chips" role="group" aria-label="Cuisine" id="cuisine-chips"></div>
       <div class="chips" role="group" aria-label="Quick filters" id="flag-chips"></div>
+      <div class="chips" role="group" aria-label="Chef picks" id="chef-chips"></div>
       <div class="filters-right">
         <label class="sr" for="search" hidden>Search recipes</label>
         <input class="search" id="search" type="search" placeholder="Search: salmon, tacos, rice…" aria-label="Search recipes">
@@ -722,6 +724,123 @@ const RECIPES = [
       { t: "Flake the fish into warm tortillas with cabbage, crema, onion and cilantro." }
     ],
     tip: "Cod is one of the leanest proteins around. Make it 3 tacos if your target is 40 g or more."
+  },
+  {
+    id: "roy-choi-kogi-steak-tacos", name: "Kogi-Style Steak Tacos", chef: "Roy Choi", origin: "Korean-Mexican, L.A. food truck", cuisine: ["fusion"],
+    time: 35, serves: 4, cal: 430, pro: 36, carb: 32, fat: 15, spice: 1, tags: ["tacos"],
+    colors: ["#e8c98a", "#5a2e1c", "#8fd05a", "#3a2a3f"],
+    video: { id: "bvyPxYphjTE", title: "Roy Choi | Steak Tacos", channel: "Ooni", len: "12:16" },
+    credit: "Video: Roy Choi making steak tacos for Ooni. The marinade, cilantro-onion relish and scallion slaw follow his Kogi short-rib taco recipe as published by MasterClass, made here with leaner flank steak and less sugar. He cooks in a pizza oven in the video; a smoking-hot cast-iron pan works just as well.",
+    ingredients: [
+      "1¼ lb flank steak",
+      "Marinade: ½ small onion, 2 cloves garlic, 1 tsp ginger",
+      "¼ cup orange juice",
+      "¼ cup apple juice",
+      "¼ cup low-sodium soy sauce",
+      "1 tbsp toasted sesame oil",
+      "1 tbsp gochujang",
+      "1 tbsp honey (Choi's original uses ¼ cup sugar)",
+      "Relish: ½ white onion, finely chopped, ¼ cup cilantro, juice of ½ lime",
+      "Slaw: 6 green onions sliced on an angle, ½ cup shredded green cabbage, ½ cup sliced romaine",
+      "1 tbsp rice vinegar plus a squeeze of lime for the slaw",
+      "8 small corn tortillas",
+      "Salsa verde (store-bought is fine) and lime wedges"
+    ],
+    steps: [
+      { t: "Blend the onion, garlic, ginger, both juices, soy sauce, sesame oil, gochujang and honey until smooth. Pour it over the steak. Choi marinates for 6 to 12 hours; 20 minutes still gives good flavor.", min: 20 },
+      { t: "Mix the relish ingredients with salt and pepper. Toss the slaw with the vinegar, lime, salt and pepper." },
+      { t: "Sear the steak in a smoking-hot, lightly oiled cast-iron pan until charred, turning once.", min: 8 },
+      { t: "Rest the steak, then chop it into small bite-size pieces.", min: 5 },
+      { t: "Right before serving, toss the chopped meat back into the hot pan for a minute so the edges crisp. That second sear is the Kogi move.", min: 1 },
+      { t: "Warm the tortillas in a lightly oiled pan about 30 seconds a side. Top with steak, salsa verde, relish and slaw, and serve with lime." }
+    ],
+    tip: "Choi stacks two tortillas per taco. Using one per taco saves about 55 calories each, and the macros above assume one."
+  },
+  {
+    id: "roy-choi-kimchi-fried-rice", name: "Kimchi Fried Rice", chef: "Roy Choi", origin: "Korean", cuisine: ["asian"],
+    time: 20, serves: 2, cal: 575, pro: 47, carb: 52, fat: 18, spice: 1, tags: ["rice", "leftovers"],
+    colors: ["#f2a27a", "#c4402b", "#6cbf45", "#4a2a2a"],
+    video: { id: "oTg0EvSz_XA", title: "How to Make Kimchi Fried Rice with Roy Choi (class preview)", channel: "MasterClass", len: "9:04" },
+    credit: "Video: a preview of Roy Choi's MasterClass kimchi fried rice lesson. His key moves are here: toast day-old rice on its own, caramelize the kimchi, let a crust form, and finish with a sunny-side-up egg. The quantities and the added chicken are ours, for a higher-protein plate.",
+    ingredients: [
+      "2 cups day-old cooked rice",
+      "1 cup cabbage kimchi, chopped, plus 2 tbsp of its juice",
+      "½ onion, diced",
+      "8 oz cooked chicken breast, diced",
+      "1 tbsp gochujang",
+      "1 tbsp neutral oil",
+      "1 tsp toasted sesame oil",
+      "2 eggs",
+      "2 green onions, sliced",
+      "Toasted sesame seeds and roasted seaweed strips (optional)"
+    ],
+    steps: [
+      { t: "Heat a lightly oiled pan over medium-high and toast the rice on its own until some grains turn crisp. Move it to a plate.", min: 4 },
+      { t: "Add the oil, onion and kimchi to the pan. Cook until the kimchi caramelizes and browns at the edges.", min: 5 },
+      { t: "Stir in the gochujang, kimchi juice and chicken until everything is hot." },
+      { t: "Add the rice back and toss it all together. Press it flat and leave it alone so a crust forms on the bottom.", min: 3 },
+      { t: "While the crust forms, fry the eggs sunny-side up in a second pan.", min: 3 },
+      { t: "Drizzle with sesame oil, top with the eggs, green onions, sesame and seaweed. Scrape up the crust as you serve." }
+    ],
+    tip: "Day-old rice is the secret, since fresh rice turns mushy. Cook a big pot of rice on Sunday and this takes 15 minutes any night."
+  },
+  {
+    id: "ramsay-egg-fried-noodles", name: "Egg-Fried Rice Noodles with Chicken", chef: "Gordon Ramsay", origin: "Asian stir-fry", cuisine: ["asian"],
+    time: 25, serves: 4, cal: 530, pro: 40, carb: 49, fat: 15, spice: 0, tags: ["noodles", "stir-fry"],
+    colors: ["#f1e6cf", "#e2b77a", "#3e8f3e", "#2f3d4a"],
+    video: { id: "X1mE2IWeamI", title: "Egg-Fried Rice Noodles with Chicken", channel: "Gordon Ramsay", len: "4:58" },
+    credit: "Video: Gordon Ramsay, from his Ultimate Cookery Course. The recipe below follows his method, with quantities from a published adaptation of that episode.",
+    ingredients: [
+      "8 oz dried wide flat rice noodles",
+      "1¼ lb boneless skinless chicken breast",
+      "1 tsp cornstarch (optional)",
+      "3 tbsp soy sauce, divided",
+      "3 tbsp plus 1 tsp neutral oil, divided",
+      "4 cloves garlic, thinly sliced",
+      "8 oz broccolini, trimmed and halved lengthwise",
+      "2 large eggs, beaten",
+      "½ tsp black pepper",
+      "1 lime, in wedges"
+    ],
+    steps: [
+      { t: "Pour just-boiled water over the noodles and soak until pliable but still a little firm. Drain, rinse in cold water, and toss with 1 tsp oil.", min: 10 },
+      { t: "While they soak, butterfly the chicken and pound it to ½ inch thick, then slice into thin strips. Toss with the cornstarch and 1 tsp soy sauce." },
+      { t: "Get a wok or large pan very hot. Sear half the chicken in 1 tbsp oil without moving it for a minute, then stir-fry until golden and cooked. Repeat with the second batch.", min: 3 },
+      { t: "Lower the heat to medium. Fry the garlic in the leftover oil until light golden, add the broccolini and a splash of water, and stir-fry until bright green.", min: 2 },
+      { t: "Return the chicken with 1 tbsp soy sauce, toss, and move everything to a plate." },
+      { t: "Wipe the pan, add 1 tbsp oil, and pour in the eggs. Let them barely set, put the noodles on top and toss so the egg breaks up through them.", min: 2 },
+      { t: "Add the chicken and broccolini back with the rest of the soy sauce and the pepper. Toss for a minute and serve with lime." }
+    ],
+    tip: "Pounding the chicken thin is Ramsay's trick. It cooks in about 3 minutes and stays juicy, which is what makes this a weeknight dish."
+  },
+  {
+    id: "ramsay-wasabi-beef-tacos", name: "Beef Tacos with Wasabi Mayo", chef: "Gordon Ramsay", origin: "Japanese-Mexican twist", cuisine: ["fusion"],
+    time: 20, serves: 4, cal: 410, pro: 35, carb: 26, fat: 18, spice: 1, tags: ["tacos"],
+    colors: ["#e8c98a", "#8a3b2a", "#b07ad6", "#2e4a3a"],
+    video: { id: "fETZCWvzkWM", title: "Beef Tacos with Wasabi Mayonnaise", channel: "Gordon Ramsay", len: "5:04" },
+    credit: "Video: Gordon Ramsay, from his Ultimate Cookery Course. Our version uses half Greek yogurt in the wasabi mayo to lighten it; the wasabi kick is the same.",
+    ingredients: [
+      "1¼ lb sirloin steak, trimmed",
+      "1 tbsp oil, salt and black pepper",
+      "2 tbsp mayonnaise plus 3 tbsp plain Greek yogurt",
+      "½ to 1 tsp wasabi paste, to taste",
+      "1 cup shredded green cabbage",
+      "1 cup shredded red cabbage",
+      "1 red chili, thinly sliced",
+      "Small bunch of chives, chopped",
+      "1 tsp olive oil and a squeeze of lime for the cabbage",
+      "A few lettuce leaves",
+      "8 small tortillas"
+    ],
+    steps: [
+      { t: "Season the steak well and sear it in a very hot pan with the oil, turning once, for medium-rare.", min: 6 },
+      { t: "Rest the steak on a board.", min: 5 },
+      { t: "Mix the mayo, yogurt and wasabi. Start with a little wasabi and add more, since strength varies a lot by brand." },
+      { t: "Toss both cabbages with the chili, chives, olive oil, lime and a pinch of salt." },
+      { t: "Slice the steak thinly across the grain." },
+      { t: "Spread wasabi mayo on warm tortillas, add lettuce and cabbage, then the steak and a little more mayo. Roll up and eat right away." }
+    ],
+    tip: "Half Greek yogurt in the wasabi mayo cuts about 150 calories across the batch and adds a little protein."
   }
 ];
 
@@ -744,6 +863,7 @@ const FLAGS = [
   { id: "fit", label: "Fits my target", test: r => fitOf(r).ok },
   { id: "saved", label: "Saved", test: r => state.favs.has(r.id) }
 ];
+const CHEFS = ["Roy Choi", "Gordon Ramsay"];
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 /* =========================================================
@@ -751,7 +871,7 @@ const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
    ========================================================= */
 const STORE_KEY = "wok-comal-v1";
 const state = {
-  cuisine: "all", flags: new Set(), q: "", sort: "fit",
+  cuisine: "all", chef: "all", flags: new Set(), q: "", sort: "fit",
   goal: "maintain", cal: 650, pro: 40,
   favs: new Set(), week: Array(7).fill(null), ytOk: false
 };
@@ -825,6 +945,7 @@ function plateHTML(r) {
   }
   return '<div class="plate" aria-hidden="true">' + h + '</div>';
 }
+function kickerText(r) { return (r.chef ? r.chef + " · " : cuisineLabel(r) + " · ") + r.origin; }
 function cuisineLabel(r) {
   return r.cuisine[0] === "fusion" ? "Fusion" : r.cuisine[0] === "asian" ? "Asian" : "Mexican";
 }
@@ -840,9 +961,10 @@ function filtered() {
   const q = state.q.trim().toLowerCase();
   let list = RECIPES.filter(r => {
     if (state.cuisine !== "all" && !r.cuisine.includes(state.cuisine)) return false;
+    if (state.chef !== "all" && r.chef !== state.chef) return false;
     for (const f of FLAGS) if (state.flags.has(f.id) && !f.test(r)) return false;
     if (q) {
-      const hay = (r.name + " " + r.origin + " " + r.tags.join(" ") + " " + r.ingredients.join(" ")).toLowerCase();
+      const hay = (r.name + " " + (r.chef || "") + " " + r.origin + " " + r.tags.join(" ") + " " + r.ingredients.join(" ")).toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -863,6 +985,9 @@ function renderChips() {
   $("#flag-chips").innerHTML = FLAGS.map(f =>
     '<button class="chip" type="button" data-flag="' + f.id + '" aria-pressed="' + state.flags.has(f.id) + '">' + esc(f.label) +
     (f.id === "saved" && state.favs.size ? ' <span class="num">' + state.favs.size + '</span>' : "") + '</button>').join("");
+  $("#chef-chips").innerHTML = '<span class="label" style="align-self:center">Chef picks</span>' + CHEFS.map(c =>
+    '<button class="chip" type="button" data-chef="' + esc(c) + '" aria-pressed="' + (state.chef === c) + '">' + esc(c) +
+    ' <span class="num">' + RECIPES.filter(r => r.chef === c).length + '</span></button>').join("");
 }
 
 function renderTarget() {
@@ -876,7 +1001,7 @@ function renderTarget() {
     '<span style="color:var(--muted)">Most protein per calorie: ' + esc(best.name) + ' (' + best.pro + 'g in ' + best.cal + ' cal).</span>';
   const fastest = Math.min(...RECIPES.map(r => r.time));
   const avgPro = Math.round(RECIPES.reduce((s, r) => s + r.pro, 0) / RECIPES.length);
-  $("#hero-facts").innerHTML = '<span><b>' + fastest + ' min</b> fastest dinner</span><span><b>' + avgPro + 'g</b> average protein</span><span><b>12</b> cook-along videos</span>';
+  $("#hero-facts").innerHTML = '<span><b>' + fastest + ' min</b> fastest dinner</span><span><b>' + avgPro + 'g</b> average protein</span><span><b>' + RECIPES.length + '</b> cook-along videos</span>';
 }
 
 function renderGrid() {
@@ -896,10 +1021,11 @@ function renderGrid() {
     return '<article class="card" data-id="' + r.id + '">' +
       '<button class="card-media" type="button" data-open="' + r.id + '" style="--band:' + r.colors[3] + '" aria-label="Open ' + esc(r.name) + '">' + media +
         '<span class="media-chip">' + ICON.clock + r.time + ' min</span>' +
+        (r.chef ? '<span class="media-chip bottom">' + esc(r.chef) + '</span>' : "") +
         (r.spice ? '<span class="media-chip right" title="Spice level">' + ICON.flame.repeat(r.spice) + '</span>' : "") +
       '</button>' +
       '<div class="card-body">' +
-        '<div class="kicker">' + esc(cuisineLabel(r)) + ' · ' + esc(r.origin) + '</div>' +
+        '<div class="kicker">' + esc(kickerText(r)) + '</div>' +
         '<h3><button class="card-title" type="button" data-open="' + r.id + '">' + esc(r.name) + '</button></h3>' +
         '<div class="macros">' +
           '<div class="macro"><b>' + r.cal + '</b><span>cal</span></div>' +
@@ -944,7 +1070,7 @@ function openRecipe(id, opts) {
   const sheet = $("#sheet");
   sheet.innerHTML =
     '<div class="sheet-head">' +
-      '<div><div class="kicker">' + esc(cuisineLabel(r)) + ' · ' + esc(r.origin) + ' · <span class="' + (fit.ok ? "fit-ok" : "fit-warn") + '">' + esc(fit.text) + '</span></div>' +
+      '<div><div class="kicker">' + esc(kickerText(r)) + ' · <span class="' + (fit.ok ? "fit-ok" : "fit-warn") + '">' + esc(fit.text) + '</span></div>' +
       '<h2 id="sheet-title">' + esc(r.name) + '</h2></div>' +
       '<button class="icon-btn" type="button" data-action="close" aria-label="Close recipe">' + ICON.close + '</button>' +
     '</div>' +
@@ -955,7 +1081,7 @@ function openRecipe(id, opts) {
           '<a class="btn btn-small" href="' + tiktokSearch(r) + '" target="_blank" rel="noopener">Find it on TikTok</a>' +
           '<a class="btn btn-small" href="' + ytShorts(r) + '" target="_blank" rel="noopener">More short videos</a>' +
         '</div>' +
-        '<p class="credit">Video by ' + esc(r.video.channel) + '. The recipe below is a lighter version written for this page, so amounts can differ a little from the video.</p>' +
+        '<p class="credit">' + esc(r.credit || ("Video by " + r.video.channel + ". The recipe below is a lighter version written for this page, so amounts can differ a little from the video.")) + '</p>' +
       '</div>' +
       '<div class="sheet-stats">' +
         '<div class="stat"><b>' + r.time + '</b><span>minutes</span></div>' +
@@ -1114,7 +1240,7 @@ function toggleFav(id) {
   if (openId === id) openRecipe(id, { keepFocus: true });
 }
 function setCuisine(c) { state.cuisine = c; renderChips(); renderGrid(); }
-function setOnlyFlag(f) { state.cuisine = "all"; state.flags = new Set([f]); renderChips(); renderGrid(); }
+function setOnlyFlag(f) { state.cuisine = "all"; state.chef = "all"; state.flags = new Set([f]); renderChips(); renderGrid(); }
 function revealGrid() {
   const g = $("#recipes"), rect = g.getBoundingClientRect();
   if (rect.top > window.innerHeight * 0.75) g.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
@@ -1129,6 +1255,7 @@ document.addEventListener("click", e => {
   }
   const d = t.dataset;
   if (d.cuisine) setCuisine(d.cuisine);
+  else if (d.chef) { state.chef = state.chef === d.chef ? "all" : d.chef; renderChips(); renderGrid(); }
   else if (d.flag) { state.flags.has(d.flag) ? state.flags.delete(d.flag) : state.flags.add(d.flag); renderChips(); renderGrid(); }
   else if (d.open) { if (!$("#drawer-wrap").hidden) closeDrawer(); openRecipe(d.open); }
   else if (d.fav) toggleFav(d.fav);
@@ -1149,7 +1276,7 @@ document.addEventListener("click", e => {
     box.replaceWith(holder);
   }
   else if (d.action === "close") closeRecipe();
-  else if (d.action === "clear") { state.cuisine = "all"; state.flags.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
+  else if (d.action === "clear") { state.cuisine = "all"; state.chef = "all"; state.flags.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
   else if (d.action === "copy") {
     const ta = $("#shop-text");
     const done = () => toast("Shopping list copied");
