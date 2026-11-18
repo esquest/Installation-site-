@@ -4,7 +4,7 @@
 <meta name="description" content="Fast high-protein dinners plus recipes from Roy Choi, Gordon Ramsay and your Notion kitchen, with cook-along videos and full recipes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,700&family=Geist:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,700&family=Geist:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Shippori+Mincho:wght@500;700&display=swap">
 <style>
 /* Layout: split hero (headline left, live 3D lazy-susan dinner picker right), target band,
    Taiwanese feature split, then a photo-card recipe grid. Light theme by choice (user request).
@@ -546,6 +546,292 @@ footer { border-top: 2px solid var(--ink); color: var(--muted); }
 .hero-shuffle { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; }
 @media (max-width: 1000px) { .chef-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .chef-cards { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; } .chef-card b { font-size: 16px; } .chef-card small { display: none; } .filter-label { min-width: 0; width: 100%; } }
+
+/* ===== Recipe sheet laid out like a class-guide page (all styles) ===== */
+.sheet { position: relative; }
+.sheet-hero { position: relative; height: clamp(220px, 34vw, 380px); overflow: hidden; border-bottom: 3px solid var(--ink); background: #222; }
+.sheet-hero > img { width: 100%; height: 100%; object-fit: cover; animation: heroIn 1.1s var(--ease) both; }
+@keyframes heroIn { from { transform: scale(1.06); } to { transform: none; } }
+.sheet-close { position: absolute; top: 14px; right: 14px; background: var(--surface); z-index: 2; }
+.hero-label { position: absolute; left: 18px; bottom: 18px; display: inline-grid; place-items: center; }
+.hero-label > span { position: relative; background: var(--ink); color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 13px; padding: 5px 11px 4px; transform: rotate(-1.5deg); }
+.splat { display: none; }
+.jp-vert, .hanko { display: none; }
+.sheet-head { display: block; padding: 26px 32px 10px; }
+.sheet-kicker { margin-bottom: 14px; }
+.yield { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; padding: 0 28px 8px 0; border-bottom: 1.5px solid var(--ink); margin-bottom: 14px; }
+.sheet-head h2 { font-size: clamp(34px, 5vw, 58px); line-height: 1.02; margin: 0; }
+.sub { margin: 8px 0 0; font-size: 19px; color: var(--accent-ink); font-weight: 600; }
+.sheet-body { padding: 10px 32px 32px; }
+.intro { border-top: 5px solid var(--ink); border-bottom: 5px solid var(--ink); padding: 22px 0; display: grid; gap: 16px; }
+.lede { margin: 0; font-size: 18px; line-height: 1.55; }
+@media (min-width: 760px) { .lede { columns: 2; column-gap: 44px; column-rule: 1px solid var(--ink); } }
+.lede .arrow { color: #ec3f1f; display: inline-block; vertical-align: -3px; margin-right: 6px; }
+.lede .arrow .ico { width: 19px; height: 19px; }
+.quote { margin: 0; padding: 0; }
+.quote p { margin: 0; font-family: var(--font-display); font-size: clamp(20px, 2.4vw, 26px); line-height: 1.3; font-weight: 700; }
+.quote p::before { content: "\201C"; } .quote p::after { content: "\201D"; }
+.quote cite { display: block; margin-top: 8px; font-style: normal; font-size: 14px; color: var(--muted); }
+.cols h3 .label { display: inline-block; background: var(--ink); color: #fff; font-family: var(--font-display); font-size: 16px; letter-spacing: .05em; text-transform: uppercase; padding: 3px 9px 2px; }
+.method-col { border-left: 1.5px solid var(--ink); padding-left: 28px; }
+.ing-group { list-style: none; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-ink); padding: 14px 10px 2px; }
+.ing-group:first-child { padding-top: 2px; }
+.protip { padding: 14px 18px; border-left: 5px solid var(--accent); background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+.protip b { color: var(--accent-ink); }
+.guide-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.sheet .nomacros { margin: 0; color: var(--muted); }
+@media (max-width: 760px) {
+  .method-col { border-left: 0; padding-left: 0; }
+  .sheet-head { padding: 20px 18px 8px; } .sheet-body { padding: 8px 18px 26px; }
+}
+
+/* ===== Style switcher ===== */
+.skin-pick { position: relative; }
+.skin-btn { gap: 8px; }
+.skin-btn b { font-weight: 700; }
+.skin-dots { display: inline-flex; }
+.skin-dots i { width: 11px; height: 11px; border-radius: 99px; border: 1.5px solid var(--ink); margin-left: -4px; }
+.skin-dots i:first-child { margin-left: 0; background: #ec3f1f; } .skin-dots i:nth-child(2) { background: #b8935a; } .skin-dots i:nth-child(3) { background: #f4efe6; }
+.skin-menu { position: absolute; right: 0; top: calc(100% + 10px); width: min(330px, calc(100vw - 32px)); background: var(--surface); color: var(--ink); border: 2px solid var(--ink); border-radius: 14px; box-shadow: var(--shadow-lift); padding: 6px; display: grid; gap: 2px; z-index: 60; animation: rise .25s var(--ease); }
+.skin-menu button { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; text-align: left; border: 0; background: transparent; color: inherit; padding: 10px; border-radius: 10px; }
+.skin-menu button:hover, .skin-menu button:focus-visible { background: color-mix(in srgb, var(--ink) 7%, transparent); outline: none; }
+.skin-menu b { display: block; font-size: 15px; } .skin-menu small { display: block; font-size: 13px; color: var(--muted); }
+.skin-menu .sw { display: inline-flex; }
+.skin-menu .sw i { width: 18px; height: 18px; border-radius: 99px; border: 1.5px solid #15120d; margin-left: -6px; }
+.skin-menu .sw i:first-child { margin-left: 0; }
+@media (max-width: 1000px) { .skin-btn-label { display: none; } }
+@media (max-width: 520px) { .skin-btn b { display: none; } #week-btn { font-size: 0; gap: 0; } #week-btn .ico { width: 18px; height: 18px; } #week-btn .count { font-size: 12px; margin-left: 4px; } }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .45s; }
+
+/* ===== Guides library + reader ===== */
+.guides { padding-block: 56px 60px; display: grid; gap: 26px; grid-template-columns: minmax(0, 1fr); }
+.no-guides #guides, .no-guides .guides-link, .no-guides .guide-btn { display: none !important; }
+.guide-shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.guide-card { display: grid; grid-template-rows: auto 1fr; background: var(--surface); border: 2px solid var(--ink); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+.guide-cover { position: relative; border: 0; padding: 0; display: block; aspect-ratio: 4 / 3.3; overflow: hidden; background: #ddd; border-bottom: 2px solid var(--ink); }
+.guide-cover img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .8s var(--ease); }
+.guide-cover:hover img { transform: scale(1.04); }
+.guide-pages { position: absolute; right: 10px; bottom: 10px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+.guide-meta { padding: 14px 16px 16px; display: grid; gap: 10px; align-content: start; }
+.guide-meta > b { font-family: var(--font-display); font-size: 19px; line-height: 1.15; }
+.guide-meta .chef-tag { justify-self: start; }
+.guide-toc { display: flex; flex-wrap: wrap; gap: 6px; }
+.guide-toc .chip { font-size: 12px; padding: 5px 9px; }
+.guide-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+@media (max-width: 1000px) { .guide-shelf { grid-template-columns: minmax(0, 1fr); } .guide-card { grid-template-columns: minmax(0, 220px) minmax(0, 1fr); grid-template-rows: none; } .guide-cover { border-bottom: 0; border-right: 2px solid var(--ink); aspect-ratio: auto; min-height: 100%; } }
+@media (max-width: 560px) { .guide-card { grid-template-columns: minmax(0, 1fr); } .guide-cover { aspect-ratio: 4 / 3; border-right: 0; border-bottom: 2px solid var(--ink); } }
+.reader-wrap { position: fixed; inset: 0; z-index: 45; background: #14120f; color: #f4efe6; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.reader-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: max(10px, env(safe-area-inset-top, 0px)) 16px 10px; border-bottom: 1px solid rgba(255,255,255,.12); }
+.reader-titles { display: grid; min-width: 0; }
+.reader-titles b { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.reader-titles span { font-size: 13px; opacity: .7; }
+.reader-tools { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.reader-toc select { background: #26221c; color: #f4efe6; border: 1px solid rgba(255,255,255,.25); border-radius: 8px; padding: 7px 8px; max-width: 46vw; font: inherit; font-size: 14px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+#reader .btn { background: #f4efe6; color: #14120f; border-color: #f4efe6; box-shadow: none; }
+#reader .icon-btn { background: transparent; color: #f4efe6; border-color: rgba(255,255,255,.35); }
+#reader .icon-btn:disabled { opacity: .3; }
+.reader-stage { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 14px 12px; min-height: 0; touch-action: pan-y; }
+.reader-pages { height: 100%; min-height: 0; display: flex; justify-content: center; align-items: center; gap: 6px; }
+.reader-pages img { max-height: 100%; max-width: 100%; min-width: 0; object-fit: contain; box-shadow: 0 20px 50px rgba(0,0,0,.5); background: #fff; animation: pageIn .35s var(--ease); }
+.reader-pages img:only-child { max-width: min(100%, 900px); }
+.reader-pages img + img { max-width: 50%; } .reader-pages img:first-child:not(:only-child) { max-width: 50%; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.reader-thumbs { display: grid; grid-auto-flow: column; grid-auto-columns: 54px; gap: 8px; overflow-x: auto; padding: 10px 16px max(12px, env(safe-area-inset-bottom, 0px)); border-top: 1px solid rgba(255,255,255,.12); }
+.reader-thumbs button { border: 2px solid transparent; padding: 0; background: none; color: #f4efe6; border-radius: 4px; position: relative; opacity: .6; }
+.reader-thumbs button[aria-current] { border-color: #f6c51c; opacity: 1; }
+.reader-thumbs img { width: 100%; aspect-ratio: 612 / 792; object-fit: cover; display: block; border-radius: 2px; }
+.reader-thumbs span { position: absolute; left: 3px; bottom: 2px; font-size: 10px; font-weight: 700; text-shadow: 0 1px 2px #000; }
+@media (max-width: 640px) { .reader-nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; background: rgba(0,0,0,.45) !important; } .reader-nav.prev { left: 6px; } .reader-nav.next { right: 6px; } .reader-stage { grid-template-columns: minmax(0, 1fr); padding: 10px 4px; } .hide-sm { display: none; } }
+.chef-cards { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.chef-tag.nn { background: #b5532b; }
+@media (max-width: 1200px) { .chef-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .chef-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+html { transition: background-color .4s; }
+
+/* =====================================================================
+   ROY CHOI: white guide paper, black tape labels, thick rules, spray paint
+   ===================================================================== */
+html[data-skin="rc"] { --bg: #fbfaf5; --surface: #ffffff; --accent: #e0168c; --accent-ink: #b30d6e; --red: #ec3f1f; }
+html[data-skin="rc"] body { background-color: #fbfaf5; background-image: radial-gradient(rgba(21,18,13,.07) 1px, transparent 1.2px); background-size: 14px 14px; }
+html[data-skin="rc"] body::before { background: #fbfaf5; }
+html[data-skin="rc"] .nav { background: color-mix(in srgb, #fbfaf5 94%, transparent); }
+html[data-skin="rc"] .hero h1 em { background: var(--ink); color: #fff; }
+html[data-skin="rc"] .hero::after { content: ""; position: absolute; right: 0; top: 4%; width: min(260px, 60vw); height: 140px; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 170'><g fill='%2315120d'><path d='M34 86C24 46 86 20 160 24c74 4 132 18 128 62-4 42-62 62-132 58C88 140 44 126 34 86Z'/><circle cx='18' cy='40' r='4'/><circle cx='300' cy='70' r='3.5'/><circle cx='290' cy='130' r='5'/><circle cx='96' cy='12' r='3.5'/><circle cx='250' cy='152' r='2.5'/></g></svg>") no-repeat center / contain; opacity: .06; pointer-events: none; z-index: -1; }
+html[data-skin="rc"] .hero { position: relative; isolation: isolate; }
+html[data-skin="rc"] .band.yellow { --band: #f6c51c; } html[data-skin="rc"] .band.pink { --band: #f7a8c9; } html[data-skin="rc"] .band.lilac { --band: #7fd6cc; }
+html[data-skin="rc"] .btn-primary { background: #ec3f1f; color: #fff; }
+html[data-skin="rc"] .btn-primary:hover { background: #ff5232; }
+html[data-skin="rc"] .chef-card[aria-pressed="true"] { box-shadow: 0 0 0 4px #ec3f1f, var(--shadow-lift); }
+html[data-skin="rc"] .sheet { border-radius: 4px; }
+html[data-skin="rc"] .sheet-hero { border-bottom: 0; margin: 14px 14px 0; height: clamp(220px, 32vw, 360px); overflow: visible; }
+html[data-skin="rc"] .sheet-hero > img { animation: none; }
+@media (max-width: 760px) { .hero-stage { overflow-x: clip; } html[data-skin="rc"] .hero-label { transform: scale(.8); transform-origin: right bottom; } }
+html[data-skin="rc"] .hero-label { left: auto; right: -4px; bottom: -40px; width: 300px; height: 160px; z-index: 1; }
+html[data-skin="rc"] .splat { display: block; position: absolute; inset: 0; width: 100%; height: 100%; fill: #111; }
+html[data-skin="rc"] .hero-label > span { background: none; transform: rotate(-4deg); font-family: "Geist", sans-serif; font-weight: 700; font-size: 14px; max-width: 200px; text-align: left; line-height: 1.25; }
+html[data-skin="rc"] .sheet-head { padding-top: 40px; padding-right: 300px; }
+@media (max-width: 760px) { html[data-skin="rc"] .sheet-head { padding-right: 18px; padding-top: 64px; } }
+html[data-skin="rc"] .steps li { grid-template-columns: 16px minmax(0, 1fr); }
+html[data-skin="rc"] .steps li::before { content: ""; width: 8px; height: 8px; border: 0; border-radius: 99px; background: #ec3f1f; margin-top: 12px; justify-self: center; }
+html[data-skin="rc"] .ing-group { color: #15120d; }
+html[data-skin="rc"] .protip { border-left-color: #ec3f1f; background: #fff1ec; } html[data-skin="rc"] .protip b { color: #ec3f1f; }
+
+/* =====================================================================
+   GORDON RAMSAY: large white space, serif, gold hairlines, quiet luxury
+   ===================================================================== */
+html[data-skin="gr"] { --bg: #ffffff; --surface: #ffffff; --ink: #141414; --muted: #6f6a62; --line: #e9e3d7; --line-strong: #d8cfbd; --accent: #a8804a; --accent-ink: #8a6634; --gold: #b8935a; --goldg: linear-gradient(135deg, #e6d3a6, #b08a52 48%, #e9d7ad);
+  --shadow: none; --shadow-lift: 0 26px 60px rgba(20, 20, 20, .10); --font-display: "Cormorant Garamond", Georgia, serif; }
+html[data-skin="gr"] body { background: #fff; }
+html[data-skin="gr"] body::before { background: #fff; }
+html[data-skin="gr"] .nav { background: rgba(255,255,255,.92); }
+html[data-skin="gr"] .nav.scrolled { border-bottom: 1px solid var(--line); }
+html[data-skin="gr"] .brand { font-weight: 600; font-size: 24px; letter-spacing: .01em; }
+html[data-skin="gr"] .brand-mark { background: #141414; color: #d7bd88; border-radius: 0; }
+html[data-skin="gr"] .nav-links a { font-weight: 500; text-transform: uppercase; letter-spacing: .14em; font-size: 12px; }
+html[data-skin="gr"] h1, html[data-skin="gr"] h2, html[data-skin="gr"] h3 { font-weight: 500; letter-spacing: -0.01em; }
+html[data-skin="gr"] .hero h1 { font-size: clamp(44px, 6vw, 82px); line-height: .98; }
+html[data-skin="gr"] .hero h1 em { background: none; color: var(--accent); font-style: italic; padding: 0; }
+html[data-skin="gr"] .btn { border: 1px solid #141414; border-radius: 0; box-shadow: none; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; font-size: 12px; background: #fff; }
+html[data-skin="gr"] .btn:hover { transform: none; box-shadow: none; background: #141414; color: #fff; }
+html[data-skin="gr"] .btn:active { transform: none; box-shadow: none; }
+html[data-skin="gr"] .btn-primary { background: #141414; color: #e3cc98; border-color: #141414; }
+html[data-skin="gr"] .btn-primary:hover { background: #000; color: #f1dfb4; }
+html[data-skin="gr"] .icon-btn, html[data-skin="gr"] .round { border: 1px solid var(--line-strong); box-shadow: none; }
+html[data-skin="gr"] .round.cook { background: #141414; color: #e3cc98; border-color: #141414; }
+html[data-skin="gr"] .chip { border: 1px solid var(--line-strong); border-radius: 0; font-family: "Geist", sans-serif; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; font-size: 11px; background: #fff; }
+html[data-skin="gr"] .chip:hover { background: #faf6ee; border-color: var(--gold); }
+html[data-skin="gr"] .chip[aria-pressed="true"] { background: #141414; color: #e3cc98; border-color: #141414; }
+html[data-skin="gr"] .filter-label { font-family: "Geist", sans-serif; letter-spacing: .2em; font-size: 11px; color: var(--accent-ink); }
+html[data-skin="gr"] .tape { background: none; color: var(--accent-ink); transform: none; box-shadow: none; padding: 0 0 0 34px; font-family: "Geist", sans-serif; font-weight: 600; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; position: relative; }
+html[data-skin="gr"] .tape::before { content: ""; position: absolute; left: 0; top: 50%; width: 24px; height: 1px; background: var(--gold); }
+html[data-skin="gr"] .band::before { background: #faf7f0; border-block: 1px solid #ece3d0; }
+html[data-skin="gr"] .card { border: 1px solid var(--line); border-radius: 0; padding: 0 0 20px; box-shadow: none; }
+html[data-skin="gr"] .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); border-color: #dcc9a2; }
+html[data-skin="gr"] .card-photo { border: 0; border-radius: 0; }
+html[data-skin="gr"] .card-body { padding-inline: 18px; }
+html[data-skin="gr"] .card-title { font-size: 25px; font-weight: 500; letter-spacing: 0; line-height: 1.08; }
+html[data-skin="gr"] .chef-tag { background: none; color: var(--accent-ink); border: 1px solid var(--gold); font-family: "Geist", sans-serif; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; padding: 3px 8px; }
+html[data-skin="gr"] .chef-card, html[data-skin="gr"] .shelf-item, html[data-skin="gr"] .guide-card { border: 1px solid var(--line); border-radius: 0; box-shadow: none; }
+html[data-skin="gr"] .chef-card:hover, html[data-skin="gr"] .shelf-item:hover, html[data-skin="gr"] .guide-card:hover { box-shadow: var(--shadow-lift); }
+html[data-skin="gr"] .chef-card[aria-pressed="true"] { box-shadow: 0 0 0 1px var(--gold), var(--shadow-lift); }
+html[data-skin="gr"] .chef-card .pic { border-bottom: 0; } html[data-skin="gr"] .chef-card b { font-size: 24px; font-weight: 500; }
+html[data-skin="gr"] .chef-card .pic .tape { background: rgba(255,255,255,.92); padding: 5px 10px; color: #141414; } html[data-skin="gr"] .chef-card .pic .tape::before { display: none; }
+html[data-skin="gr"] .shelf-item img, html[data-skin="gr"] .guide-cover { border: 0; border-radius: 0; }
+html[data-skin="gr"] .guide-cover { border-bottom: 1px solid var(--line); }
+html[data-skin="gr"] .num, html[data-skin="gr"] .chef-card .num { color: var(--accent-ink); }
+html[data-skin="gr"] .cf-card, html[data-skin="gr"] .story, html[data-skin="gr"] .swipe-card, html[data-skin="gr"] .feature-photo { border: 0; border-radius: 2px; box-shadow: 0 30px 70px rgba(20,20,20,.18); }
+html[data-skin="gr"] .target, html[data-skin="gr"] .feature-item, html[data-skin="gr"] .wheel-card, html[data-skin="gr"] .stats, html[data-skin="gr"] .week-sum, html[data-skin="gr"] .day, html[data-skin="gr"] .seg, html[data-skin="gr"] .search input, html[data-skin="gr"] .sort, html[data-skin="gr"] .field input, html[data-skin="gr"] .empty { border: 1px solid var(--line); border-radius: 0; box-shadow: none; }
+html[data-skin="gr"] .stats div, html[data-skin="gr"] .week-sum div { border-color: var(--line) !important; }
+html[data-skin="gr"] .seg button[aria-pressed="true"] { background: #141414; color: #e3cc98; }
+html[data-skin="gr"] .count { background: var(--goldg); color: #141414; }
+html[data-skin="gr"] footer { border-top: 1px solid var(--line); }
+html[data-skin="gr"] .sheet-wrap { background: rgba(250, 247, 240, .7); }
+html[data-skin="gr"] .sheet { border: 0; border-radius: 0; box-shadow: 0 40px 120px rgba(20,20,20,.22); outline: 1px solid #dcc9a2; outline-offset: -12px; }
+html[data-skin="gr"] .sheet-hero { border-bottom: 0; height: clamp(240px, 36vw, 420px); }
+html[data-skin="gr"] .sheet-close { background: rgba(255,255,255,.94); border-color: transparent; }
+html[data-skin="gr"] .hero-label { left: 50%; transform: translateX(-50%); bottom: 22px; }
+html[data-skin="gr"] .hero-label > span { background: rgba(255,255,255,.94); color: #141414; transform: none; font-family: "Geist", sans-serif; font-weight: 600; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; padding: 9px 18px; }
+html[data-skin="gr"] .sheet-head { text-align: center; padding: 44px 40px 6px; }
+html[data-skin="gr"] .sheet-kicker { justify-content: center; }
+html[data-skin="gr"] .yield { border: 0; padding: 0; font-family: "Geist", sans-serif; font-size: 11px; letter-spacing: .26em; color: var(--accent-ink); font-weight: 600; }
+html[data-skin="gr"] .sheet-head h2 { font-size: clamp(40px, 6vw, 72px); font-weight: 500; }
+html[data-skin="gr"] .sheet-head h2::after { content: ""; display: block; width: 64px; height: 1px; background: var(--gold); margin: 22px auto 0; }
+html[data-skin="gr"] .sub { color: var(--muted); font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 500; font-size: 22px; }
+html[data-skin="gr"] .sheet-body { padding: 18px clamp(18px, 5vw, 64px) 44px; gap: 34px; }
+html[data-skin="gr"] .intro { border: 0; padding: 0; text-align: center; justify-items: center; gap: 18px; }
+html[data-skin="gr"] .quote p { font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 500; font-size: clamp(24px, 3vw, 34px); max-width: 28ch; color: #141414; }
+html[data-skin="gr"] .quote p::before, html[data-skin="gr"] .quote p::after { color: var(--gold); }
+html[data-skin="gr"] .quote cite { color: var(--accent-ink); letter-spacing: .2em; text-transform: uppercase; font-size: 11px; font-weight: 600; }
+html[data-skin="gr"] .lede { columns: 1; max-width: 62ch; font-size: 17px; color: #3b3833; }
+html[data-skin="gr"] .lede .arrow { display: none; }
+html[data-skin="gr"] .cols h3 .label { background: none; color: #141414; font-family: "Cormorant Garamond", serif; font-weight: 500; font-size: 30px; letter-spacing: 0; text-transform: none; padding: 0; border-bottom: 1px solid var(--gold); }
+html[data-skin="gr"] .method-col { border-left: 1px solid var(--line); }
+html[data-skin="gr"] .steps li::before { background: #fff; border: 1px solid var(--gold); color: var(--accent-ink); font-family: "Cormorant Garamond", serif; font-size: 18px; font-weight: 600; }
+html[data-skin="gr"] .ing-group { font-family: "Geist", sans-serif; color: var(--accent-ink); letter-spacing: .16em; font-size: 11px; }
+html[data-skin="gr"] .tip, html[data-skin="gr"] .protip { background: #faf7f0; border: 0; border-left: 2px solid var(--gold); border-radius: 0; }
+html[data-skin="gr"] .tip b { color: var(--accent-ink); }
+html[data-skin="gr"] .poster, html[data-skin="gr"] .player { border-radius: 0; }
+
+/* =====================================================================
+   NIKI NAKAYAMA: washi paper, sumi ink, terracotta, airy kaiseki calm
+   ===================================================================== */
+html[data-skin="nn"] { --bg: #f4efe6; --surface: #fbf8f2; --ink: #2b2824; --muted: #6e675d; --line: #ddd3c3; --line-strong: #cbbfab; --accent: #b5532b; --accent-ink: #9a4320; --moss: #5f6f52;
+  --shadow: none; --shadow-lift: 0 22px 50px rgba(70, 55, 35, .12); --font-display: "Jost", "Geist", sans-serif; }
+html[data-skin="nn"] body { background-color: #f4efe6; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='.012 .09' numOctaves='3' seed='4'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .47  0 0 0 0 .36  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>"); }
+html[data-skin="nn"] body::before { background: #f4efe6; }
+html[data-skin="nn"] .nav { background: color-mix(in srgb, #f4efe6 92%, transparent); }
+html[data-skin="nn"] .nav.scrolled { border-bottom: 1px solid var(--line); }
+html[data-skin="nn"] .brand { font-weight: 400; letter-spacing: .06em; text-transform: lowercase; }
+html[data-skin="nn"] .brand-mark { background: none; color: var(--accent); border: 1px solid var(--accent); border-radius: 0; font-weight: 400; }
+html[data-skin="nn"] .nav-links a { font-family: "Jost", sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: .16em; font-size: 12px; }
+html[data-skin="nn"] h1, html[data-skin="nn"] h2, html[data-skin="nn"] h3 { font-weight: 300; letter-spacing: .02em; }
+html[data-skin="nn"] .hero h1 { font-size: clamp(40px, 5.6vw, 76px); line-height: 1.02; color: #4a4640; }
+html[data-skin="nn"] .hero h1 em { background: none; color: var(--accent); padding: 0; font-style: normal; }
+html[data-skin="nn"] .library-head h2, html[data-skin="nn"] .chefs-head h2, html[data-skin="nn"] .feature h2, html[data-skin="nn"] .stories-copy h2, html[data-skin="nn"] .swipe-head h2, html[data-skin="nn"] .target h2 { text-transform: uppercase; letter-spacing: .06em; color: #57534c; }
+html[data-skin="nn"] .btn { border: 1px solid var(--ink); border-radius: 2px; box-shadow: none; background: transparent; font-family: "Jost", sans-serif; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; }
+html[data-skin="nn"] .btn:hover { transform: none; box-shadow: none; background: var(--ink); color: #f4efe6; }
+html[data-skin="nn"] .btn:active { transform: none; box-shadow: none; }
+html[data-skin="nn"] .btn-primary { background: var(--ink); color: #f4efe6; }
+html[data-skin="nn"] .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+html[data-skin="nn"] .icon-btn, html[data-skin="nn"] .round { border: 1px solid var(--line-strong); box-shadow: none; background: var(--surface); }
+html[data-skin="nn"] .round.cook { background: var(--ink); color: #f4efe6; border-color: var(--ink); }
+html[data-skin="nn"] .chip { border: 1px solid var(--line-strong); border-radius: 2px; background: transparent; font-family: "Jost", sans-serif; font-weight: 400; font-size: 13px; letter-spacing: .04em; }
+html[data-skin="nn"] .chip:hover { background: var(--surface); border-color: var(--accent); }
+html[data-skin="nn"] .chip[aria-pressed="true"] { background: var(--ink); color: #f4efe6; border-color: var(--ink); }
+html[data-skin="nn"] .filter-label { font-family: "Jost", sans-serif; font-weight: 500; letter-spacing: .2em; color: var(--accent); }
+html[data-skin="nn"] .tape { background: none; color: var(--accent); transform: none; box-shadow: none; padding: 0; font-family: "Jost", sans-serif; font-weight: 500; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 10px; }
+html[data-skin="nn"] .tape::before { content: ""; width: 9px; height: 9px; background: var(--accent); border-radius: 1px; }
+html[data-skin="nn"] .band::before { background: #ece4d5; border-block: 1px solid var(--line); }
+html[data-skin="nn"] .band.lilac::before { background: #e6e6da; } html[data-skin="nn"] .band.pink::before { background: #efe5d9; }
+html[data-skin="nn"] .card { border: 0; border-radius: 0; padding: 0 0 8px; background: transparent; box-shadow: none; }
+html[data-skin="nn"] .card:hover { transform: translateY(-3px); box-shadow: none; }
+html[data-skin="nn"] .card-photo { border: 0; border-radius: 2px; }
+html[data-skin="nn"] .card:hover .card-photo { box-shadow: var(--shadow-lift); }
+html[data-skin="nn"] .card-body { padding-inline: 2px; }
+html[data-skin="nn"] .card-title { font-family: "Jost", sans-serif; font-weight: 400; font-size: 19px; letter-spacing: .02em; }
+html[data-skin="nn"] .chef-tag { background: none; color: var(--accent); border: 1px solid var(--accent); font-family: "Jost", sans-serif; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; font-size: 10px; padding: 2px 7px; }
+html[data-skin="nn"] .chef-card, html[data-skin="nn"] .shelf-item, html[data-skin="nn"] .guide-card { border: 1px solid var(--line); border-radius: 2px; box-shadow: none; background: var(--surface); }
+html[data-skin="nn"] .chef-card:hover, html[data-skin="nn"] .shelf-item:hover, html[data-skin="nn"] .guide-card:hover { box-shadow: var(--shadow-lift); }
+html[data-skin="nn"] .chef-card[aria-pressed="true"] { box-shadow: 0 0 0 1px var(--accent), var(--shadow-lift); }
+html[data-skin="nn"] .chef-card .pic, html[data-skin="nn"] .guide-cover { border: 0; }
+html[data-skin="nn"] .chef-card .pic .tape { background: rgba(251,248,242,.92); padding: 5px 9px; }
+html[data-skin="nn"] .chef-card b, html[data-skin="nn"] .shelf-item b, html[data-skin="nn"] .guide-meta > b { font-weight: 400; }
+html[data-skin="nn"] .shelf-item img { border: 0; border-radius: 2px; }
+html[data-skin="nn"] .num, html[data-skin="nn"] .chef-card .num { color: var(--accent); }
+html[data-skin="nn"] .cf-card, html[data-skin="nn"] .story, html[data-skin="nn"] .swipe-card, html[data-skin="nn"] .feature-photo { border: 0; border-radius: 2px; box-shadow: 0 24px 50px rgba(70,55,35,.18); }
+html[data-skin="nn"] .target, html[data-skin="nn"] .feature-item, html[data-skin="nn"] .wheel-card, html[data-skin="nn"] .stats, html[data-skin="nn"] .week-sum, html[data-skin="nn"] .day, html[data-skin="nn"] .seg, html[data-skin="nn"] .search input, html[data-skin="nn"] .sort, html[data-skin="nn"] .field input, html[data-skin="nn"] .empty { border: 1px solid var(--line); border-radius: 2px; box-shadow: none; }
+html[data-skin="nn"] .stats div, html[data-skin="nn"] .week-sum div { border-color: var(--line) !important; }
+html[data-skin="nn"] .seg button[aria-pressed="true"] { background: var(--ink); color: #f4efe6; }
+html[data-skin="nn"] .count { background: var(--accent); }
+html[data-skin="nn"] footer { border-top: 1px solid var(--line); }
+html[data-skin="nn"] .sheet-wrap { background: rgba(43, 40, 36, .45); }
+html[data-skin="nn"] .sheet { border: 0; border-radius: 2px; background: #fbf8f2; box-shadow: 0 40px 100px rgba(43,40,36,.3); }
+html[data-skin="nn"] .sheet-hero { border-bottom: 0; height: clamp(240px, 38vw, 440px); }
+html[data-skin="nn"] .sheet-close { background: rgba(251,248,242,.94); border-color: transparent; }
+html[data-skin="nn"] .hero-label > span { background: rgba(251,248,242,.94); color: var(--accent); transform: none; font-family: "Jost", sans-serif; font-weight: 500; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; padding: 8px 14px; }
+html[data-skin="nn"] .jp-vert { display: block; position: absolute; right: 22px; top: 72px; writing-mode: vertical-rl; font-family: "Shippori Mincho", serif; font-weight: 500; font-size: clamp(26px, 3.4vw, 40px); letter-spacing: .14em; color: #fbf8f2; background: rgba(30, 27, 23, .5); padding: 16px 10px; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+html[data-skin="nn"] .hanko { display: grid; place-items: center; position: absolute; left: 18px; top: 18px; width: 54px; height: 54px; background: #b5332b; color: #fbeee6; font-family: "Shippori Mincho", serif; font-weight: 700; font-size: 14px; line-height: 1.15; text-align: center; border-radius: 5px; transform: rotate(-4deg); box-shadow: inset 0 0 0 2px rgba(251, 238, 230, .55); opacity: .92; }
+html[data-skin="nn"] .sheet-head { padding: 40px 40px 6px; }
+html[data-skin="nn"] .yield { border-bottom: 1px solid var(--accent); color: var(--accent); font-family: "Jost", sans-serif; font-weight: 500; font-size: 12px; letter-spacing: .2em; }
+html[data-skin="nn"] .sheet-head h2 { font-family: "Jost", sans-serif; font-weight: 300; text-transform: uppercase; letter-spacing: .06em; color: #6b6760; font-size: clamp(36px, 6vw, 68px); }
+html[data-skin="nn"] .sub { color: var(--accent); font-family: "Jost", sans-serif; font-weight: 400; font-size: clamp(19px, 2.4vw, 26px); }
+html[data-skin="nn"] .sheet-body { padding: 14px clamp(18px, 4.5vw, 48px) 40px; gap: 32px; }
+html[data-skin="nn"] .intro { border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); padding: 24px 0; }
+html[data-skin="nn"] .lede { column-rule: 1px solid var(--line); color: #403c36; font-size: 17px; line-height: 1.7; }
+html[data-skin="nn"] .lede .arrow { display: none; }
+html[data-skin="nn"] .quote p { font-family: "Jost", sans-serif; font-weight: 300; }
+html[data-skin="nn"] .ing-col { background: #ede5d7; border: 1px solid var(--line); padding: 18px 16px; align-self: start; }
+html[data-skin="nn"] .ing label:hover { background: rgba(255,255,255,.45); }
+html[data-skin="nn"] .cols h3 .label { background: none; color: #57534c; font-family: "Jost", sans-serif; font-weight: 400; font-size: 18px; letter-spacing: .14em; padding: 0; }
+html[data-skin="nn"] .method-col { border-left: 0; padding-left: 0; }
+html[data-skin="nn"] .ing-group { font-family: "Jost", sans-serif; font-weight: 500; color: var(--accent); letter-spacing: .02em; text-transform: none; font-size: 15px; }
+html[data-skin="nn"] .steps li::before { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: "Jost", sans-serif; font-weight: 400; }
+html[data-skin="nn"] .protip { border: 0; background: none; padding: 0; }
+html[data-skin="nn"] .protip b { color: var(--accent); }
+html[data-skin="nn"] .protip span { background: linear-gradient(transparent 12%, #f3e3a0 12%, #f3e3a0 88%, transparent 88%); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: 0 3px; }
+html[data-skin="nn"] .tip { background: #e8ebe1; border: 1px solid #cfd6c4; border-radius: 2px; } html[data-skin="nn"] .tip b { color: var(--moss); }
+html[data-skin="nn"] .poster, html[data-skin="nn"] .player { border-radius: 2px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
@@ -556,8 +842,12 @@ footer { border-top: 2px solid var(--ink); color: var(--muted); }
     <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">E</span>Esquest Eats</a>
     <nav class="nav-links" aria-label="Main">
       <a href="#chefs">Chefs</a>
-      <a href="#taiwanese">Taiwanese</a>
+      <a href="#guides" class="guides-link">Guides</a>
       <a href="#recipes">Recipes</a>
+      <div class="skin-pick">
+        <button class="btn btn-sm skin-btn" id="skin-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="skin-menu"><span class="skin-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="skin-btn-label">Style</span> <b id="skin-now">Auto</b></button>
+        <div class="skin-menu" id="skin-menu" role="menu" aria-label="Site style" hidden></div>
+      </div>
       <button class="btn btn-sm" id="week-btn" type="button"><span class="ico" data-icon="calendar-blank"></span>This week <span class="count" id="week-count">0</span></button>
     </nav>
   </div>
@@ -568,7 +858,7 @@ footer { border-top: 2px solid var(--ink); color: var(--muted); }
     <div class="hero-copy">
       <h1 id="hero-title">Fast dinners that hit your <em>protein</em>.</h1>
       <span class="tape pink">Esquest Eats kitchen</span>
-      <p>Fast high-protein dinners, plus Roy Choi, Gordon Ramsay and your own Notion recipes. Flip through, then cook.</p>
+      <p>Fast high-protein dinners, plus Roy Choi, Gordon Ramsay, Niki Nakayama and your own Notion recipes. Flip through, then cook.</p>
       <div class="hero-cta">
         <button class="btn btn-primary" id="cf-open" type="button"><span class="ico" data-icon="cooking-pot"></span>Open this dish</button>
         <a class="btn" href="#recipes">Browse recipes</a>
@@ -606,13 +896,22 @@ footer { border-top: 2px solid var(--ink); color: var(--muted); }
     <div class="chefs-head">
       <span class="tape">Chef's table</span>
       <h2 id="chefs-title">Cook with the chefs</h2>
-      <p>Pick a chef to see their dishes right here, or send the whole set to the recipe library below.</p>
+      <p>Pick a chef and the whole site changes to match their class guide. Use the Style menu up top to switch any time.</p>
     </div>
     <div class="chef-cards" id="chef-cards" role="group" aria-label="Chefs"></div>
     <div class="shelf-wrap">
       <div class="shelf-head"><h3 id="shelf-title"></h3><button class="btn btn-sm" type="button" id="shelf-all"></button></div>
       <div class="shelf" id="shelf" role="list"></div>
     </div>
+  </section>
+
+  <section class="wrap guides" id="guides" aria-labelledby="guides-title">
+    <div class="chefs-head">
+      <span class="tape">The library</span>
+      <h2 id="guides-title">Read the class guides</h2>
+      <p>Every page of the three MasterClass guides, right here. Recipes link straight to their page.</p>
+    </div>
+    <div class="guide-shelf" id="guide-shelf"></div>
   </section>
 
   <section class="wrap rv" aria-labelledby="target-title">
@@ -690,6 +989,23 @@ footer { border-top: 2px solid var(--ink); color: var(--muted); }
   </div>
 </footer>
 
+<div class="reader-wrap" id="reader" hidden role="dialog" aria-modal="true" aria-labelledby="reader-title">
+  <div class="reader-bar">
+    <div class="reader-titles"><b id="reader-title"></b><span id="reader-count" class="num"></span></div>
+    <div class="reader-tools">
+      <label class="reader-toc"><span class="sr">Jump to</span><select id="reader-toc"></select></label>
+      <a class="btn btn-sm" id="reader-pdf" href="#" target="_blank" rel="noopener"><span class="ico" data-icon="download-simple"></span><span class="hide-sm">PDF</span></a>
+      <button class="icon-btn" type="button" id="reader-close" aria-label="Close guide"><span class="ico" data-icon="x"></span></button>
+    </div>
+  </div>
+  <div class="reader-stage" id="reader-stage">
+    <button class="icon-btn reader-nav prev" type="button" id="reader-prev" aria-label="Previous page"><span class="ico" data-icon="caret-left"></span></button>
+    <div class="reader-pages" id="reader-pages"></div>
+    <button class="icon-btn reader-nav next" type="button" id="reader-next" aria-label="Next page"><span class="ico" data-icon="caret-right"></span></button>
+  </div>
+  <div class="reader-thumbs" id="reader-thumbs" role="list"></div>
+</div>
+
 <div class="sheet-wrap" id="sheet-wrap" hidden>
   <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title"></div>
 </div>
@@ -714,7 +1030,7 @@ footer { border-top: 2px solid var(--ink); color: var(--muted); }
 "use strict";
 
 /* Icons: Phosphor Icons (MIT), inlined from @phosphor-icons/core 2.1.1. */
-const ICONS = {"arrow-left":"<path d=\"M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z\"/>","arrow-right":"<path d=\"M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z\"/>","arrow-square-out":"<path d=\"M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z\"/>","arrow-up":"<path d=\"M205.66,117.66a8,8,0,0,1-11.32,0L136,59.31V216a8,8,0,0,1-16,0V59.31L61.66,117.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0l72,72A8,8,0,0,1,205.66,117.66Z\"/>","basket":"<path d=\"M136,120v56a8,8,0,0,1-16,0V120a8,8,0,0,1,16,0Zm36.84-.8-5.6,56A8,8,0,0,0,174.4,184a7.32,7.32,0,0,0,.81,0,8,8,0,0,0,7.95-7.2l5.6-56a8,8,0,0,0-15.92-1.6Zm-89.68,0a8,8,0,0,0-15.92,1.6l5.6,56a8,8,0,0,0,8,7.2,7.32,7.32,0,0,0,.81,0,8,8,0,0,0,7.16-8.76ZM239.93,89.06,224.86,202.12A16.06,16.06,0,0,1,209,216H47a16.06,16.06,0,0,1-15.86-13.88L16.07,89.06A8,8,0,0,1,24,80H68.37L122,18.73a8,8,0,0,1,12,0L187.63,80H232a8,8,0,0,1,7.93,9.06ZM89.63,80h76.74L128,36.15ZM222.86,96H33.14L47,200H209Z\"/>","bookmark-simple":"<path d=\"M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Zm0,177.57-51.77-32.35a8,8,0,0,0-8.48,0L72,209.57V48H184Z\"/>","calendar-blank":"<path d=\"M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z\"/>","cards":"<path d=\"M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z\"/>","check":"<path d=\"M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z\"/>","clock":"<path d=\"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z\"/>","cooking-pot":"<path d=\"M88,48V16a8,8,0,0,1,16,0V48a8,8,0,0,1-16,0Zm40,8a8,8,0,0,0,8-8V16a8,8,0,0,0-16,0V48A8,8,0,0,0,128,56Zm32,0a8,8,0,0,0,8-8V16a8,8,0,0,0-16,0V48A8,8,0,0,0,160,56Zm92.8,46.4L224,124v60a32,32,0,0,1-32,32H64a32,32,0,0,1-32-32V124L3.2,102.4a8,8,0,0,1,9.6-12.8L32,104V80a8,8,0,0,1,8-8H216a8,8,0,0,1,8,8v24l19.2-14.4a8,8,0,0,1,9.6,12.8ZM208,88H48v96a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16Z\"/>","copy":"<path d=\"M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z\"/>","fire":"<path d=\"M183.89,153.34a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68ZM216,144a88,88,0,0,1-176,0c0-27.92,11-56.47,32.66-84.85a8,8,0,0,1,11.93-.89l24.12,23.41,22-60.41a8,8,0,0,1,12.63-3.41C165.21,36,216,84.55,216,144Zm-16,0c0-46.09-35.79-85.92-58.21-106.33L119.52,98.74a8,8,0,0,1-13.09,3L80.06,76.16C64.09,99.21,56,122,56,144a72,72,0,0,0,144,0Z\"/>","heart-fill":"<path d=\"M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z\"/>","heart":"<path d=\"M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z\"/>","magnifying-glass":"<path d=\"M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z\"/>","pause":"<path d=\"M200,32H160a16,16,0,0,0-16,16V208a16,16,0,0,0,16,16h40a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm0,176H160V48h40ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Zm0,176H56V48H96Z\"/>","play-fill":"<path d=\"M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z\"/>","play":"<path d=\"M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z\"/>","plus":"<path d=\"M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z\"/>","shuffle":"<path d=\"M237.66,178.34a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L212.69,192H200.94a72.12,72.12,0,0,1-58.59-30.15l-41.72-58.4A56.1,56.1,0,0,0,55.06,80H32a8,8,0,0,1,0-16H55.06a72.12,72.12,0,0,1,58.59,30.15l41.72,58.4A56.1,56.1,0,0,0,200.94,176h11.75l-10.35-10.34a8,8,0,0,1,11.32-11.32ZM143,107a8,8,0,0,0,11.16-1.86l1.2-1.67A56.1,56.1,0,0,1,200.94,80h11.75L202.34,90.34a8,8,0,0,0,11.32,11.32l24-24a8,8,0,0,0,0-11.32l-24-24a8,8,0,0,0-11.32,11.32L212.69,64H200.94a72.12,72.12,0,0,0-58.59,30.15l-1.2,1.67A8,8,0,0,0,143,107Zm-30,42a8,8,0,0,0-11.16,1.86l-1.2,1.67A56.1,56.1,0,0,1,55.06,176H32a8,8,0,0,0,0,16H55.06a72.12,72.12,0,0,0,58.59-30.15l1.2-1.67A8,8,0,0,0,113,149Z\"/>","tiktok-logo":"<path d=\"M224,72a48.05,48.05,0,0,1-48-48,8,8,0,0,0-8-8H128a8,8,0,0,0-8,8V156a20,20,0,1,1-28.57-18.08A8,8,0,0,0,96,130.69V88a8,8,0,0,0-9.4-7.88C50.91,86.48,24,119.1,24,156a76,76,0,0,0,152,0V116.29A103.25,103.25,0,0,0,224,128a8,8,0,0,0,8-8V80A8,8,0,0,0,224,72Zm-8,39.64a87.19,87.19,0,0,1-43.33-16.15A8,8,0,0,0,160,102v54a60,60,0,0,1-120,0c0-25.9,16.64-49.13,40-57.6v27.67A36,36,0,1,0,136,156V32h24.5A64.14,64.14,0,0,0,216,87.5Z\"/>","timer":"<path d=\"M128,40a96,96,0,1,0,96,96A96.11,96.11,0,0,0,128,40Zm0,176a80,80,0,1,1,80-80A80.09,80.09,0,0,1,128,216ZM173.66,90.34a8,8,0,0,1,0,11.32l-40,40a8,8,0,0,1-11.32-11.32l40-40A8,8,0,0,1,173.66,90.34ZM96,16a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,16Z\"/>","x":"<path d=\"M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z\"/>","youtube-logo":"<path d=\"M164.44,121.34l-48-32A8,8,0,0,0,104,96v64a8,8,0,0,0,12.44,6.66l48-32a8,8,0,0,0,0-13.32ZM120,145.05V111l25.58,17ZM234.33,69.52a24,24,0,0,0-14.49-16.4C185.56,39.88,131,40,128,40s-57.56-.12-91.84,13.12a24,24,0,0,0-14.49,16.4C19.08,79.5,16,97.74,16,128s3.08,48.5,5.67,58.48a24,24,0,0,0,14.49,16.41C69,215.56,120.4,216,127.34,216h1.32c6.94,0,58.37-.44,91.18-13.11a24,24,0,0,0,14.49-16.41c2.59-10,5.67-28.22,5.67-58.48S236.92,79.5,234.33,69.52Zm-15.49,113a8,8,0,0,1-4.77,5.49c-31.65,12.22-85.48,12-86,12H128c-.54,0-54.33.2-86-12a8,8,0,0,1-4.77-5.49C34.8,173.39,32,156.57,32,128s2.8-45.39,5.16-54.47A8,8,0,0,1,41.93,68c30.52-11.79,81.66-12,85.85-12h.27c.54,0,54.38-.18,86,12a8,8,0,0,1,4.77,5.49C221.2,82.61,224,99.43,224,128S221.2,173.39,218.84,182.47Z\"/>"};
+const ICONS = {"book-open":"<path d=\"M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z\"/>","download-simple":"<path d=\"M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z\"/>","palette":"<path d=\"M200.77,53.89A103.27,103.27,0,0,0,128,24h-1.07A104,104,0,0,0,24,128c0,43,26.58,79.06,69.36,94.17A32,32,0,0,0,136,192a16,16,0,0,1,16-16h46.21a31.81,31.81,0,0,0,31.2-24.88,104.43,104.43,0,0,0,2.59-24A103.28,103.28,0,0,0,200.77,53.89Zm13,93.71A15.89,15.89,0,0,1,198.21,160H152a32,32,0,0,0-32,32,16,16,0,0,1-21.31,15.07C62.49,194.3,40,164,40,128a88,88,0,0,1,87.09-88h.9a88.35,88.35,0,0,1,88,87.25A88.86,88.86,0,0,1,213.81,147.6ZM140,76a12,12,0,1,1-12-12A12,12,0,0,1,140,76ZM96,100A12,12,0,1,1,84,88,12,12,0,0,1,96,100Zm0,56a12,12,0,1,1-12-12A12,12,0,0,1,96,156Zm88-56a12,12,0,1,1-12-12A12,12,0,0,1,184,100Z\"/>","caret-left":"<path d=\"M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z\"/>","caret-right":"<path d=\"M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z\"/>","arrow-left":"<path d=\"M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z\"/>","arrow-right":"<path d=\"M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z\"/>","arrow-square-out":"<path d=\"M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z\"/>","arrow-up":"<path d=\"M205.66,117.66a8,8,0,0,1-11.32,0L136,59.31V216a8,8,0,0,1-16,0V59.31L61.66,117.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0l72,72A8,8,0,0,1,205.66,117.66Z\"/>","basket":"<path d=\"M136,120v56a8,8,0,0,1-16,0V120a8,8,0,0,1,16,0Zm36.84-.8-5.6,56A8,8,0,0,0,174.4,184a7.32,7.32,0,0,0,.81,0,8,8,0,0,0,7.95-7.2l5.6-56a8,8,0,0,0-15.92-1.6Zm-89.68,0a8,8,0,0,0-15.92,1.6l5.6,56a8,8,0,0,0,8,7.2,7.32,7.32,0,0,0,.81,0,8,8,0,0,0,7.16-8.76ZM239.93,89.06,224.86,202.12A16.06,16.06,0,0,1,209,216H47a16.06,16.06,0,0,1-15.86-13.88L16.07,89.06A8,8,0,0,1,24,80H68.37L122,18.73a8,8,0,0,1,12,0L187.63,80H232a8,8,0,0,1,7.93,9.06ZM89.63,80h76.74L128,36.15ZM222.86,96H33.14L47,200H209Z\"/>","bookmark-simple":"<path d=\"M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Zm0,177.57-51.77-32.35a8,8,0,0,0-8.48,0L72,209.57V48H184Z\"/>","calendar-blank":"<path d=\"M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z\"/>","cards":"<path d=\"M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z\"/>","check":"<path d=\"M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z\"/>","clock":"<path d=\"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z\"/>","cooking-pot":"<path d=\"M88,48V16a8,8,0,0,1,16,0V48a8,8,0,0,1-16,0Zm40,8a8,8,0,0,0,8-8V16a8,8,0,0,0-16,0V48A8,8,0,0,0,128,56Zm32,0a8,8,0,0,0,8-8V16a8,8,0,0,0-16,0V48A8,8,0,0,0,160,56Zm92.8,46.4L224,124v60a32,32,0,0,1-32,32H64a32,32,0,0,1-32-32V124L3.2,102.4a8,8,0,0,1,9.6-12.8L32,104V80a8,8,0,0,1,8-8H216a8,8,0,0,1,8,8v24l19.2-14.4a8,8,0,0,1,9.6,12.8ZM208,88H48v96a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16Z\"/>","copy":"<path d=\"M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z\"/>","fire":"<path d=\"M183.89,153.34a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68ZM216,144a88,88,0,0,1-176,0c0-27.92,11-56.47,32.66-84.85a8,8,0,0,1,11.93-.89l24.12,23.41,22-60.41a8,8,0,0,1,12.63-3.41C165.21,36,216,84.55,216,144Zm-16,0c0-46.09-35.79-85.92-58.21-106.33L119.52,98.74a8,8,0,0,1-13.09,3L80.06,76.16C64.09,99.21,56,122,56,144a72,72,0,0,0,144,0Z\"/>","heart-fill":"<path d=\"M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z\"/>","heart":"<path d=\"M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z\"/>","magnifying-glass":"<path d=\"M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z\"/>","pause":"<path d=\"M200,32H160a16,16,0,0,0-16,16V208a16,16,0,0,0,16,16h40a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm0,176H160V48h40ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Zm0,176H56V48H96Z\"/>","play-fill":"<path d=\"M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z\"/>","play":"<path d=\"M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z\"/>","plus":"<path d=\"M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z\"/>","shuffle":"<path d=\"M237.66,178.34a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L212.69,192H200.94a72.12,72.12,0,0,1-58.59-30.15l-41.72-58.4A56.1,56.1,0,0,0,55.06,80H32a8,8,0,0,1,0-16H55.06a72.12,72.12,0,0,1,58.59,30.15l41.72,58.4A56.1,56.1,0,0,0,200.94,176h11.75l-10.35-10.34a8,8,0,0,1,11.32-11.32ZM143,107a8,8,0,0,0,11.16-1.86l1.2-1.67A56.1,56.1,0,0,1,200.94,80h11.75L202.34,90.34a8,8,0,0,0,11.32,11.32l24-24a8,8,0,0,0,0-11.32l-24-24a8,8,0,0,0-11.32,11.32L212.69,64H200.94a72.12,72.12,0,0,0-58.59,30.15l-1.2,1.67A8,8,0,0,0,143,107Zm-30,42a8,8,0,0,0-11.16,1.86l-1.2,1.67A56.1,56.1,0,0,1,55.06,176H32a8,8,0,0,0,0,16H55.06a72.12,72.12,0,0,0,58.59-30.15l1.2-1.67A8,8,0,0,0,113,149Z\"/>","tiktok-logo":"<path d=\"M224,72a48.05,48.05,0,0,1-48-48,8,8,0,0,0-8-8H128a8,8,0,0,0-8,8V156a20,20,0,1,1-28.57-18.08A8,8,0,0,0,96,130.69V88a8,8,0,0,0-9.4-7.88C50.91,86.48,24,119.1,24,156a76,76,0,0,0,152,0V116.29A103.25,103.25,0,0,0,224,128a8,8,0,0,0,8-8V80A8,8,0,0,0,224,72Zm-8,39.64a87.19,87.19,0,0,1-43.33-16.15A8,8,0,0,0,160,102v54a60,60,0,0,1-120,0c0-25.9,16.64-49.13,40-57.6v27.67A36,36,0,1,0,136,156V32h24.5A64.14,64.14,0,0,0,216,87.5Z\"/>","timer":"<path d=\"M128,40a96,96,0,1,0,96,96A96.11,96.11,0,0,0,128,40Zm0,176a80,80,0,1,1,80-80A80.09,80.09,0,0,1,128,216ZM173.66,90.34a8,8,0,0,1,0,11.32l-40,40a8,8,0,0,1-11.32-11.32l40-40A8,8,0,0,1,173.66,90.34ZM96,16a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,16Z\"/>","x":"<path d=\"M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z\"/>","youtube-logo":"<path d=\"M164.44,121.34l-48-32A8,8,0,0,0,104,96v64a8,8,0,0,0,12.44,6.66l48-32a8,8,0,0,0,0-13.32ZM120,145.05V111l25.58,17ZM234.33,69.52a24,24,0,0,0-14.49-16.4C185.56,39.88,131,40,128,40s-57.56-.12-91.84,13.12a24,24,0,0,0-14.49,16.4C19.08,79.5,16,97.74,16,128s3.08,48.5,5.67,58.48a24,24,0,0,0,14.49,16.41C69,215.56,120.4,216,127.34,216h1.32c6.94,0,58.37-.44,91.18-13.11a24,24,0,0,0,14.49-16.41c2.59-10,5.67-28.22,5.67-58.48S236.92,79.5,234.33,69.52Zm-15.49,113a8,8,0,0,1-4.77,5.49c-31.65,12.22-85.48,12-86,12H128c-.54,0-54.33.2-86-12a8,8,0,0,1-4.77-5.49C34.8,173.39,32,156.57,32,128s2.8-45.39,5.16-54.47A8,8,0,0,1,41.93,68c30.52-11.79,81.66-12,85.85-12h.27c.54,0,54.38-.18,86,12a8,8,0,0,1,4.77,5.49C221.2,82.61,224,99.43,224,128S221.2,173.39,218.84,182.47Z\"/>"};
 const ic = n => '<span class="ico" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor">' + (ICONS[n] || "") + '</svg></span>';
 
 /* =========================================================
@@ -3986,6 +4302,237 @@ Object.keys(RC_NOTION).forEach(id => { const r = RECIPES.find(x => x.id === id);
     tip: "For a fitness version, halve the butter and fold in 8 oz diced cooked chicken. That lands near 575 calories and 47g protein per serving." });
 })();
 
+
+/* =========================================================
+   Niki Nakayama: 10 recipes from her MasterClass guide plus the onigiri she and Carole
+   Iida-Nakayama shared with the press. Ingredients follow the sources; methods and
+   intros are condensed in our own words. Macros are our estimates.
+   ========================================================= */
+const NN_CREDIT = "From Niki Nakayama's MasterClass class guide. Ingredients follow the guide; the method is condensed here, so read the guide for every detail.";
+const NN = (o) => Object.assign({ chef: "Niki Nakayama", source: "guide", credit: NN_CREDIT, spice: 0, tags: [], tip: "" }, o);
+const NN_RECIPES = [
+  NN({ id: "nn-ichiban-dashi", name: "Ichiban Dashi", sub: "Kombu and bonito stock", jp: "一番出汁", kaiseki: "The foundation", origin: "n/naka, Los Angeles",
+    image: "nn-ichiban-dashi", makes: "Makes about 60 ounces", serves: "60 oz", time: 75, tax: "sauces japanese", guide: { id: "nn", page: 17 },
+    intro: "Three ingredients, kombu, bonito and water, and nothing to hide behind. Niki calls dashi what Japanese flavor is all about: it seasons her dressings, marinades, eggs, soups and vegetables, so the quality of each ingredient and your attention to detail are what you taste.",
+    protip: "Niki uses rishiri kombu, dark and narrow with a ruffled edge, for a clear broth. Buy the largest bonito flakes (hanakatsuo) you can find.",
+    ingredients: ["30 g kombu", "60 oz cold filtered water", "50 g katsuobushi (bonito flakes)"],
+    steps: [{ t: "Cut, don't tear, 30 g of kombu so it fits your pot. Clean cut edges keep the stock clear." },
+      { t: "Put the kombu in a heavy pot with the cold water and hold it around 140°F (60°C) for about an hour. Never let it boil.", min: 60 },
+      { t: "Lift out the kombu (save it for a second, lighter dashi or for pickles). Bring the broth to a light simmer." },
+      { t: "Add the bonito and simmer only 15 to 20 seconds. Skim lightly.", min: 1 },
+      { t: "Strain through cheesecloth, gently squeezing the cloth. Use right away or refrigerate up to 3 days." }],
+    tip: "Almost no calories and big savory flavor. Use it to cook rice, poach chicken or thin sauces instead of butter or oil." }),
+  NN({ id: "nn-zukuri", name: "Zukuri", sub: "Modern rockfish sashimi", jp: "造り", kaiseki: "First course", origin: "Opening course at n/naka",
+    image: "nn-zukuri", makes: "Serves 4", serves: 4, time: 70, cal: 120, pro: 19, carb: 4, fat: 3, tags: ["seafood"], tax: "bites japanese", guide: { id: "nn", page: 20 },
+    intro: "The opening course on n/naka's kaiseki menu: untraditional on purpose, with flavors bold enough to set the tone. The rockfish is cured with parsley, dill and lime, an idea Niki credits to Adeline Grattard of Yam'Tcha in Paris, and served with a sauce of charred romaine and ponzu.",
+    ingredients: ["## For the cured rockfish", "2 pieces of rockfish from the upper loin", "½ cup kosher salt", "4 oz fresh flat-leaf parsley", "4 oz dill", "Peel of ½ lime, finely grated",
+      "## For the burnt romaine sauce", "1 tbsp grapeseed oil, plus extra", "2 hearts of romaine, cut in half", "Salt to taste", "1 tsp minced garlic, or to taste", "3 oz ponzu, or to taste",
+      "## For the garnishes", "2 red radishes", "Chives", "½ lime, cut into 2 quarters", "Seasonal microgreens such as sorrel and shiso"],
+    steps: [{ t: "Pour just-boiled water over the skin once or twice so it curls slightly, then plunge the fish into ice water for 15 to 20 seconds. Pat dry and check for stray scales." },
+      { t: "Mix the salt, parsley, dill and lime peel. Bury the fish in the cure and chill.", min: 40 },
+      { t: "Char the romaine cut side down in hot oil with a pinch of salt, about a minute a side.", min: 2 },
+      { t: "Blend the romaine with garlic and ponzu, loosening with a little oil. Taste and adjust." },
+      { t: "Rinse off the cure and pat dry. Slice one loin paper thin (usuzukuri) and the other slightly thicker (hiragiri), one long stroke per slice." },
+      { t: "Shave the radishes on a mandoline into ice water. Cut the chives on the bias and the lime into thin half-moons." },
+      { t: "Plate the radish in an overlapping circle, stand the fish slices beside it, scatter chives, greens and lime, and serve the romaine sauce for dipping." }],
+    tip: "Lean white fish is almost pure protein. Go easy on the cure rinse time so it stays lightly salted." }),
+  NN({ id: "nn-owan", name: "Owan", sub: "Soup with bone broth", jp: "お椀", kaiseki: "Soup course", origin: "n/naka, Los Angeles",
+    image: "nn-owan", makes: "Serves 4", serves: 4, time: 60, cal: 130, pro: 15, carb: 7, fat: 4, tags: ["seafood"], tax: "bites japanese", guide: { id: "nn", page: 22 },
+    intro: "A warm reset between two cold courses. The broth is built from the rockfish bones left over from the sashimi, in the kaiseki spirit of using every part. Skip the spoon, Niki says: lift the bowl and sip slowly so you catch every aroma.",
+    ingredients: ["Rockfish bones, left over from preparing a whole fish", "2 rockfish collars, cut in half", "½ onion, sliced", "48 oz dashi stock", "2 tsp sake", "Salt to taste",
+      "½ cup thick-sliced daikon half-moons, lightly blanched", "¼ cup 1-inch carrot pieces cut on the bias, lightly blanched", "2 small shiitake caps, quartered and blanched", "1 tbsp julienned ginger", "¼ cup scallions, thinly sliced"],
+    steps: [{ t: "Lay the bones and collars on a parchment-lined tray and ladle just-boiled water over both sides a few times to clean them. Remove any scales." },
+      { t: "Put the bones and onion in a pot with the dashi and keep it at a bare simmer, skimming, until the onion is translucent.", min: 40 },
+      { t: "Meanwhile pour ½ tsp sake over each collar and steam them.", min: 4 },
+      { t: "Lift out the bones, strain the broth through cheesecloth, return it to the pot and season with a few pinches of salt. Taste it twice.", min: 2 },
+      { t: "Set daikon, carrot and shiitake side by side in each bowl, top with a collar, pour the broth in at the side, and finish with ginger and scallions." }],
+    tip: "Clear soups are a great way to start a meal: warm, filling and light." }),
+  NN({ id: "nn-otsukuri", name: "Otsukuri", sub: "Traditional tuna sashimi", jp: "お造り", kaiseki: "Sashimi course", origin: "n/naka, Los Angeles",
+    image: "nn-otsukuri", makes: "Serves 4", serves: 4, time: 45, cal: 160, pro: 28, carb: 5, fat: 3, tags: ["seafood"], tax: "bites japanese", guide: { id: "nn", page: 28 },
+    intro: "Otsukuri means cutting, and the cut is the lesson: \"so that we always do right by the ingredients.\" Niki plates by the phrase yama-tani-kawa, mountain, valley, river, so the plate has height and movement, with a tuna rosette, pine-cut cucumber and fresh wasabi.",
+    protip: "Don't mix wasabi into the soy sauce. Dab a little on the fish with your chopsticks, then dip the fish in the soy.",
+    ingredients: ["## For the soy sauce", "9 parts soy sauce", "2 parts dashi", "1 part mirin (alcohol cooked off)", "1 part sake (alcohol cooked off)",
+      "## For the vegetables", "1 cup julienned daikon from ½ medium daikon, rotary cut", "¼ cup scallions, white and light green parts, thinly sliced", "1 small Japanese cucumber, cut into 4 pine trees",
+      "## For the toro and sashimi", "5 to 8 g toro per serving (scraped from the sinew)", "2 pieces tuna loin, cut from akami",
+      "## For the garnishes", "4 shiso leaves", "Wasabi flowers (optional)", "8 g wasabi, grated from fresh root", "Soy sauce for serving"],
+    steps: [{ t: "Blend the soy sauce, dashi, mirin and sake and chill." },
+      { t: "Peel the daikon into one long paper-thin sheet (katsuramuki), stack and cut into fine strands (ken). Crisp them in ice water, then dry." },
+      { t: "Slice the scallions straight across (koguchigiri), rinse in ice water and dry. Cut the cucumber into pine-tree shapes (matsugiri)." },
+      { t: "Scrape the fatty toro from the sinew with a spoon and fold in the scallions." },
+      { t: "Square off two saku blocks and cut against the grain into about 12 slices a third of an inch thick (hirazukuri)." },
+      { t: "Slice 20 thin pieces at an angle, overlap 5 at a time and roll each line into a rosette." },
+      { t: "Plate a mound of daikon, lean a shiso leaf on it, fan 3 slices at 11 o'clock, then add a rosette, a pine tree, a spoon of toro and a little mound of wasabi." }],
+    tip: "Lean akami tuna is one of the most protein-dense foods there is. Skip the toro to keep it extra lean." }),
+  NN({ id: "nn-yakimono", name: "Yakimono", sub: "Grilled tuna", jp: "焼物", kaiseki: "Grilled course", origin: "n/naka, Los Angeles",
+    image: "nn-yakimono", makes: "Serves 2", serves: 2, time: 90, cal: 360, pro: 44, carb: 18, fat: 10, tags: ["seafood"], tax: "mains japanese", guide: { id: "nn", page: 33 },
+    intro: "Niki loves grilling because it demands full attention, moving fish and coals to manage the heat. The tuna soaks in a soy, sake and mirin glaze that caramelizes over binchotan, balanced by a quick salt-and-yuzu cucumber pickle. \"It's always nice to have parts that are caramelized and parts that are not.\"",
+    ingredients: ["## For the pickled cucumber", "1 Japanese cucumber", "2 percent salt (2 percent of the cucumber's weight)", "2 red shiso leaves", "½ tsp yuzu juice",
+      "## For the grilled tuna", "2 oz sake", "2 oz mirin", "4 oz soy sauce", "2 tsp ginger, grated", "1 clove garlic, grated", "1 oz sugar", "4 small tuna steaks, about 3 oz each, cut from the loin", "4 red shiso leaves for garnish"],
+    steps: [{ t: "Slice the cucumber into ¼-inch coins, weigh them, add 2 percent salt and let them sit. Pour off the liquid.", min: 15 },
+      { t: "Toss the cucumber with julienned shiso and yuzu juice and chill." },
+      { t: "Light 8 to 10 pieces of binchotan (or your grill) until glowing all over.", min: 30 },
+      { t: "Simmer the sake and mirin to cook off the alcohol, then stir into the soy, ginger, garlic and sugar.", min: 3 },
+      { t: "Marinate the tuna in the glaze.", min: 40 },
+      { t: "Double-skewer the steaks against the grain. Grill over two heights of coals, moving them to manage the heat, until caramelized and golden, about 4 minutes a side.", min: 8 },
+      { t: "Plate two overlapping steaks on shiso leaves with a mound of the pickled cucumber." }],
+    tip: "A strong protein main. Brush on half the glaze to trim the sugar." }),
+  NN({ id: "nn-mushimono", name: "Mushimono", sub: "Steamed rockfish with potato purée", jp: "蒸物", kaiseki: "Steamed course", origin: "n/naka, Los Angeles",
+    image: "nn-mushimono", makes: "Serves 4", serves: 4, time: 45, cal: 320, pro: 16, carb: 22, fat: 18, tags: ["seafood"], tax: "mains japanese", guide: { id: "nn", page: 36 },
+    intro: "The steamed course brings the meal together halfway through: heartwarming without being heavy. Silky ankake, a dashi sauce thickened with potato starch, stands in for fat, and the bowls go out piping hot. \"If it's supposed to be hot, it's going to be hot.\"",
+    protip: "Japanese seasoning is ratio-based. This ankake is 12 parts dashi to 1 mirin to 1 usukuchi soy.",
+    ingredients: ["## For the steamed rockfish", "4 rockfish fillets (2 to 3 oz each)", "1 tsp sake", "1 tsp soy sauce", "Pinch of salt",
+      "## For the potato purée", "1 russet potato, cut into large pieces and boiled", "6 tbsp butter, room temperature", "4 oz dashi", "Salt to taste",
+      "## For the ankake", "12 oz dashi, divided", "1 oz mirin", "1 oz usukuchi soy sauce (light colored, not low sodium)", "2 tbsp potato starch",
+      "## For the garnishes", "1 in lemon rind, thinly julienned", "4 red baby bell peppers, julienned", "1 oz scallions, thinly sliced"],
+    steps: [{ t: "Splash the fillets with sake and soy, add a pinch of salt and pre-steam them.", min: 4 },
+      { t: "Pulse the potato and butter in a food processor, adding dashi a little at a time, to a loose purée that slides off a spatula. Salt lightly." },
+      { t: "Warm 8 oz dashi with the mirin and soy. Whisk the rest of the dashi with the potato starch and add it gradually, whisking until the sauce thickens.", min: 4 },
+      { t: "Spoon purée into heatproof bowls, set the fish skin side up on top and steam until hot through (135 to 145°F).", min: 4 },
+      { t: "Add lemon rind, a thin layer of ankake, peppers and scallions. Lid the bowls and serve at once." }],
+    tip: "Halve the butter in the purée and add a splash more dashi to save about 80 calories a bowl." }),
+  NN({ id: "nn-tempura", name: "Agemono: Tempura", sub: "Rockfish and vegetable tempura", jp: "天ぷら", kaiseki: "Fried course", origin: "n/naka, Los Angeles",
+    image: "nn-tempura", makes: "Serves 4", serves: 4, time: 45, cal: 420, pro: 17, carb: 42, fat: 20, tags: ["seafood"], tax: "mains japanese", guide: { id: "nn", page: 39 },
+    intro: "Frying tempura is an art form of its own. A cold, lumpy batter, hot oil and a light hand give a shell so thin you can see the ingredient through it. Use whatever vegetables look good: \"Be open, try everything and see how you like it.\"",
+    protip: "Keep the batter over ice, mix it with chopsticks and leave lumps. Test the oil with a drop of batter: it should float up and bubble.",
+    ingredients: ["## For the tempura batter", "1 cup flour", "1 tsp baking soda", "2 tsp potato starch", "1 egg", "1 cup ice water",
+      "## For the rockfish and vegetables", "3 qt rice bran or soybean oil, for frying", "¼ cup potato starch, for coating", "8 ½-inch slices of rockfish", "4 broccoli florets", "4 pieces zucchini, cut into ¼-inch discs", "4 pieces Japanese sweet potato, cut into ¼-inch discs",
+      "## For the dipping sauce and serving", "2 cups dashi", "½ cup mirin", "½ cup soy sauce", "Freshly grated daikon, to taste", "Freshly grated ginger, squeezed, to taste", "Sea salt, to taste", "Lemon wedges"],
+    steps: [{ t: "Heat at least 3 to 4 inches of oil in a wide pot to 350°F (177°C)." },
+      { t: "Sift the flour, baking soda and starch into a bowl set over ice. Mix the egg with the ice water, add it and stir briefly with chopsticks, leaving lumps." },
+      { t: "Simmer the dashi, mirin and soy (4:1:1) for the dipping sauce. Put grated daikon topped with ginger in small bowls.", min: 5 },
+      { t: "Dust each piece in potato starch, dip lightly in batter and fry in small batches: vegetables 1 to 2 minutes, root vegetables 3 to 4, fish 1 to 2.", min: 2 },
+      { t: "Drain on a rack, pieces spaced apart. Skim crumbs and let the oil recover between batches." },
+      { t: "Serve on paper with salt, lemon and the warm dipping sauce." }],
+    tip: "Fill half the plate with vegetables, and let the fish carry the protein." }),
+  NN({ id: "nn-tuna-karaage", name: "Agemono: Tuna Karaage", sub: "Niki's \"tuna chicken\"", jp: "唐揚げ", kaiseki: "Fried course", origin: "n/naka, Los Angeles",
+    image: "nn-tuna-karaage", makes: "Serves 4", serves: 4, time: 60, cal: 380, pro: 24, carb: 22, fat: 21, tags: ["seafood"], tax: "mains japanese", guide: { id: "nn", page: 43 },
+    intro: "Only the deep-red heart of the loin goes to sashimi, so trimmed or oxidized tuna becomes this snack. It gets a dry starch-and-panko crust instead of batter, crunchy and great with sake or beer. Karaage is usually fried chicken, so Niki calls it \"tuna chicken.\"",
+    ingredients: ["4 oz tuna marinade (from Yakimono: Grilled Tuna)", "2 oz dashi", "1 tsp sesame oil", "½ tsp grated garlic", "12 pieces sliced tuna (2½ by 1 by ½ inch)", "3 qt rice bran or soybean oil, for frying", "½ cup potato starch, for coating", "¼ cup panko, for coating", "3 cups julienned cabbage", "Lemon wedges, for serving",
+      "## For the sesame aioli", "½ cup Kewpie mayonnaise", "3 tbsp ponzu", "2 tsp sesame oil"],
+    steps: [{ t: "Mix the marinade, dashi, sesame oil and garlic, and marinate the tuna.", min: 40 },
+      { t: "Heat the oil to 350°F (177°C). Toss the tuna in potato starch, then sprinkle with panko and toss again." },
+      { t: "Fry a few pieces at a time, keeping them apart, until medium golden brown.", min: 2 },
+      { t: "Whisk the mayonnaise, ponzu and sesame oil." },
+      { t: "Pile cabbage on each plate, overlap the karaage on top and serve with lemon and the aioli." }],
+    tip: "Air-fry at 400°F for 6 to 7 minutes and use light mayo in the aioli to cut the fat roughly in half." }),
+  NN({ id: "nn-shokuji-rice", name: "Shokuji: Donabe Rice", sub: "Perfect Japanese steamed rice", jp: "食事", kaiseki: "Closing course", origin: "n/naka, Los Angeles",
+    image: "nn-shokuji-rice", makes: "Serves 4", serves: 4, time: 60, cal: 240, pro: 4, carb: 53, fat: 1, tax: "bites japanese", guide: { id: "nn", page: 44 },
+    intro: "Kaiseki often ends with plain rice and house pickles, a nod to the humble tea-ceremony meal it grew from. Good rice is fluffy, glossy and slightly sticky, every grain intact. Niki's favorite meal growing up was \"egg and rice and soy sauce.\"",
+    ingredients: ["2 cups Japanese short-grain rice, weighed", "Cold water weighing 111 percent of the rice"],
+    steps: [{ t: "Weigh the rice, then weigh out water at 111 percent of that weight." },
+      { t: "Rinse the rice in a strainer under a gentle stream, swishing with your fingers, until the water runs fairly clear. Drain well." },
+      { t: "Soak the rice in the measured water in your donabe, pot or rice cooker.", min: 25 },
+      { t: "Cover and cook over medium heat until steam streams steadily from the lid.", min: 12 },
+      { t: "Rest off the heat, still covered.", min: 18 },
+      { t: "Fluff gently from the edges inward, then fill bowls about 80 percent full with small scoops." }],
+    tip: "Pair a bowl with grilled fish or eggs to turn it into a balanced meal." }),
+  NN({ id: "nn-quick-pickles", name: "Quick-Pickled Vegetables", sub: "Sweet vinegar pickles", jp: "甘酢漬け", kaiseki: "Closing course", origin: "n/naka, Los Angeles",
+    image: "nn-quick-pickles", makes: "Makes about 1 cup", serves: 4, time: 15, cal: 35, pro: 0, carb: 8, fat: 0, tax: "bites japanese", guide: { id: "nn", page: 45 },
+    intro: "A simple, versatile 2:2:1 brine called mazu, or sweet vinegar, that uses up trim from the rest of the meal: the daikon core, the carrots and the kombu left from dashi. Add shiso or other aromatics to change it up.",
+    ingredients: ["## For the brine", "5 oz water or dashi", "5 oz rice vinegar", "2.5 oz sugar", "1 tsp salt",
+      "## For the vegetables", "¼ cup daikon, cut into ½-inch-thick quarter circles", "¼ cup thinly sliced carrots", "¼ cup sliced red bell peppers, seeds removed", "¼ cup julienned cooked kombu (left from dashi)"],
+    steps: [{ t: "Bring the water or dashi, vinegar, sugar and salt to a light simmer, stirring to dissolve. Take it off the heat.", min: 3 },
+      { t: "Pour the brine over the vegetables and let them cool. Eat right away or keep them in the fridge up to a month." }],
+    tip: "Pickles add a lot of flavor for almost no calories. Keep a jar ready for rice bowls." }),
+  NN({ id: "nn-onigiri", name: "Onigiri", sub: "Rice balls with umeboshi", jp: "おにぎり", kaiseki: "Everyday", origin: "Shared by Niki and Carole Iida-Nakayama",
+    image: "onigiri", photo: { by: "Buddy AN", url: "https://unsplash.com/photos/LJS6ELPyZfk" }, makes: "Makes about 8", serves: 4, time: 75, cal: 330, pro: 7, carb: 71, fat: 1, tax: "bites japanese",
+    credit: "Niki Nakayama and Carole Iida-Nakayama's recipe as published by the Honolulu Star-Advertiser (Tribune News Service). Ingredients follow the article; the method is condensed here.",
+    source: "web", sourceUrl: "https://staradvertiser.com/?p=845944",
+    intro: "\"The PB&J of Japan.\" Niki and Carole blend koshihikari with California short-grain rice, shape the balls loosely and insist on nori so crisp it crackles. Niki's favorite filling is umeboshi, the salty pickled plum.",
+    protip: "Pack the nori separately so it stays crisp. Shaped onigiri keep, wrapped, up to 4 hours at room temperature.",
+    ingredients: ["1 cup Japanese koshihikari rice", "1 cup California short-grain rice", "1½ cups cold filtered water, plus more for rinsing", "Fillings: pitted umeboshi torn into bits, mentaiko, flaked smoked fish, or tuna with mayonnaise", "Coarse sea salt, preferably Japanese", "Nori, preferably ariake grade, cut into 3-by-6-inch rectangles"],
+    steps: [{ t: "Rinse the rice in a fine sieve set in a bowl, swirling and changing the water 4 to 7 times until it runs clear. Drain well." },
+      { t: "Put the rice in a donabe or saucepan with the filtered water, stir once and soak.", min: 30 },
+      { t: "Cover and bring to a vigorous boil over high heat, about 10 to 12 minutes, then simmer on medium-low.", min: 2 },
+      { t: "Rest off the heat, covered.", min: 20 },
+      { t: "Turn the rice gently with a paddle and let it cool until you can handle it." },
+      { t: "Put ⅓ cup rice in a small bowl, add a teaspoon of filling and cover with a little more rice." },
+      { t: "Wet your hands, salt one palm and your fingertips, and press the rice loosely into a triangle about an inch thick." },
+      { t: "Toast the nori briefly over a flame until crisp, wrap and eat right away." }],
+    tip: "Pair two with a protein like grilled fish or edamame, or use tuna with light mayo as the filling." })
+];
+NN_RECIPES.forEach(r => RECIPES.push(r));
+
+/* Roy Choi recipes that already lived in Notion: replace them with the full guide versions. */
+const RC_GUIDE_FIX = {
+  "n-salsa-verde": { makes: "Makes about 2 cups", serves: "2 cups", time: 25, page: 11,
+    intro: "The salsa at every L.A. taco stand for good reason: tart tomatillos, herbs and green chilies, spicy but not too spicy. Roy chars everything on a griddle first for a smoky depth, then uses it far beyond tacos, over rice bowls, on grilled vegetables, even in a Bloody Mary.",
+    ingredients: ["1 tbsp cooking oil, plus more as needed", "2 large tomatillos, peeled and rinsed", "3 garlic cloves, peeled", "6 scallions", "2 jalapeños", "2 serrano chilies", "1 bunch cilantro with stems, roughly chopped (about 1½ cups)", "2 limes", "½ cup rice vinegar", "3 large pinches kosher salt", "2 large pinches freshly ground black pepper"],
+    steps: [{ t: "Char the tomatillos, garlic, scallions, jalapeños and serranos in a little oil over medium-high heat, turning, until blistered and softened but not burnt.", min: 12 },
+      { t: "Let them cool slightly. Stem the chilies (seed them for a milder salsa)." },
+      { t: "Put everything in a blender, pack the cilantro on top, squeeze in the limes and add the vinegar, salt and pepper." },
+      { t: "Blend on high just until smooth, about 15 seconds, loosening with water or oil if needed. Keeps a week in the fridge." }] },
+  "n-kalbi-marinade": { image: "rc-sauce-jars", makes: "Makes about 8 cups", serves: "8 cups", time: 10, page: 12,
+    intro: "Roy's version of the classic marinade for kalbi: garlicky, sweet and savory with nutty sesame. It's the base for BBQ Kalbi and BBQ Mixed Vegetables, and it also works as a braising sauce or salad dressing. Kiwi tenderizes; pear or pineapple work too, and apple juice can stand in for mirin.",
+    ingredients: ["1 large onion, peeled and roughly chopped", "1 cup peeled garlic cloves", "1 bunch scallions (about 8), roughly chopped", "5 tbsp toasted sesame seeds", "1 cup sugar", "2 large kiwifruits", "2 cups soy sauce", "1 cup mirin, apple juice, or water", "2 cups fresh orange juice", "1 cup toasted sesame oil"],
+    steps: [{ t: "Put the onion, garlic, scallions, sesame seeds and sugar in a blender. Scoop in the kiwi flesh and toss the skins." },
+      { t: "Add the remaining ingredients and blend on high just until smooth, about 10 seconds." },
+      { t: "Store in a sealed jar in the fridge for up to a week." }] },
+  "n-scallion-dipping-sauce": { makes: "Makes about 4 cups", serves: "4 cups", time: 10, page: 13,
+    intro: "If you make only one sauce, Roy says, make this one. Salty, spicy and tangy, it lifts anything crispy or starchy: dumplings, pancakes, fried chicken, fried rice, potatoes, soups and noodles. It keeps for ages.",
+    ingredients: ["2 tbsp crushed toasted sesame seeds", "2 cups soy sauce", "3 tbsp gochugaru (Korean chili flakes)", "½ cup toasted sesame oil", "¾ cup rice vinegar", "2 tbsp sugar", "1 bunch scallions (about 8), trimmed and thinly sliced"],
+    steps: [{ t: "Whisk everything together in a large bowl." },
+      { t: "Taste, adding a little water if you want it mellower. Keeps up to 3 months in the fridge." }] },
+  "n-kogi-vinaigrette": { makes: "Makes about 6 cups", serves: "6 cups", time: 10, page: 13,
+    intro: "You can't talk about the Kogi truck without this sauce. It started with the pungent, tangy scallion slaw served at Koreatown barbecue spots; Roy pushed it further and crowned every taco with it. Garlic and ginger sing, gochugaru adds just enough heat.",
+    ingredients: ["1 2-inch knob of ginger", "4 garlic cloves, peeled", "3 scallions, roughly chopped", "¼ cup gochugaru (Korean chili flakes)", "¼ cup sugar", "1 tbsp kosher salt", "2 tsp black pepper", "1 cup soy sauce", "2 cups rice vinegar (unseasoned)", "½ cup toasted sesame oil", "1 cup neutral oil (canola, grapeseed, etc.)"],
+    steps: [{ t: "Scrape the skin off the ginger with a spoon and slice it into thin discs." },
+      { t: "Blend everything on high until smooth, about 15 seconds." },
+      { t: "Store in a sealed jar in the fridge for up to 3 months." }] },
+  "n-bbq-kalbi": { makes: "Serves 6 to 8", serves: "6 to 8", time: 150, page: 15, cal: 560, pro: 31, carb: 14, fat: 41,
+    intro: "Look for flanken-style short ribs, cut thin across the bone; L.A. butchers sold them that way, so it became known as L.A.-style kalbi. The marinade cures the meat slightly and makes it tender, and the thin cut cooks fast. Serve it on a sizzling cast-iron plate over raw onions, with panchan, pancakes and rice.",
+    ingredients: ["2 cups Kalbi Marinade", "4 lb boneless or bone-in flanken short ribs, sliced ½ inch thick", "## To serve", "1 large white onion, thinly sliced"],
+    steps: [{ t: "Massage the marinade into the ribs and refrigerate at least 2 hours and up to a day.", min: 120 },
+      { t: "Heat a grill or grill pan to medium-high for 5 to 10 minutes, then oil the grates.", min: 8 },
+      { t: "Grill the ribs, turning once, until charred all over and glistening, about 4 minutes a side.", min: 8 },
+      { t: "Spread the onions in a hot cast-iron pan, stack the ribs on top and eat right away." }],
+    tip: "Rich cut. Keep it to 4 oz of meat and fill up on namul, kimchi and lettuce wraps." }
+};
+Object.keys(RC_GUIDE_FIX).forEach(id => { const r = RECIPES.find(x => x.id === id); if (!r) return; const f = RC_GUIDE_FIX[id];
+  Object.assign(r, f, { guide: { id: "rc", page: f.page }, source: "guide", credit: RC_CREDIT + " Saved in your Notion recipes too." }); delete r.page; });
+
+/* Yields, intros and guide pages for Roy's other recipes. */
+const RC_EXTRA = {
+  "rc-bbq-vegetables": ["Serves 6 to 8", 17, "Kalbi flavor without the meat. Marinate the vegetables briefly in Kalbi Marinade or Kogi Vinaigrette, then grill them until charred and just tender. They also make a great vegetarian Kogi taco."],
+  "rc-kogi-short-rib-tacos": ["Makes 4 tacos", 18, "Gather the toppings first: a street-taco relish, Salsa Verde and a Kogi slaw. Then griddle the tortillas and the chopped kalbi, which Roy calls \"double-caramelized,\" seared once on the grill and again on the griddle. Hot tortilla, kalbi, relish, salsa, slaw, lime. Devour and repeat."],
+  "rc-kimchi-paste": ["Makes about 4 cups", 21, "Roy's big lesson: kimchi is a verb. Almost any vegetable or fruit can be kimchi'd, and this spicy, funky, shockingly red paste is what ties them together. Make it ahead; it only deepens in the fridge. No salted shrimp? Fish sauce and oyster sauce still bring the brininess."],
+  "rc-napa-kimchi": ["Makes 1 gallon-size jar", 22, "Two steps: brine the cabbage so it softens and drinks up flavor, then rub the paste into every leaf. Gloves and an apron are strongly recommended. Ferment a few days at room temperature, then in the fridge, tasting as you go."],
+  "roy-choi-kimchi-fried-rice": ["Serves 3", 24, "Leftover rice and old kimchi become the best fried rice you've had. Caramelize half the kimchi in butter and sesame, fry the rice alone until a crispy layer forms, and listen for the crackle before you flip. Spam or hot dogs are classic add-ins."],
+  "rc-kimchi-tuna-melt": ["Serves 2", 26, "A diner tuna melt jazzed up with punchy kimchi and molten cheddar. Tuna salad is something you \"make with your eyes and intuition,\" so taste as you mix. Warm the filling in the pan first, and butter the bread corner to corner."],
+  "rc-mung-bean-pancakes": ["Serves 4", 34, "A \"mutant\" cross between potato pancakes and mung bean pancakes: crunch from the potato, tenderness from the beans. Serve them hot with Scallion Dipping Sauce, or fold chopped meat or vegetables into the batter for a one-pan meal."],
+  "rc-3pm-dumplings": ["Serves 4 to 6", 36, "Named for the hour you'll find a Korean restaurant's staff around a table folding dumplings and catching up. Make a big batch with friends and freeze the extras. One filling is pork, beef and tofu; the other is a mushroom and chive duxelles."],
+  "rc-carnitas": ["Serves 8 or more", 40, "Roy's low-maintenance take on L.A.'s weekend smell: a whole pork shoulder rubbed with salt, pepper and garlic, sealed tight and cooked low and slow until you can cut it with a spoon. The rendered fat goes into a cilantro-tomatillo rice."],
+  "rc-carnitas-burrito": ["Makes 1 burrito", 43, "Leftover carnitas, cilantro rice, cheese, onions and salsa in one tortilla. Warm the tortilla first, keep the flaps tucked with your pinkies, and if it isn't perfect, foil covers a multitude of sins."],
+  "rc-grilled-fish-ponzu": ["Serves 2 to 4", 44, "Nothing impresses like a whole grilled fish. Stuff it with herbs and citrus to keep it moist, oil the grates well, and serve Roy's ginger-jalapeño ponzu. Wrap pieces in lettuce and herbs, or lift off the fillet for a restaurant-style plate."],
+  "rc-fruit-kimchi": ["Serves 2 to 4", 47, "Juicy fruit and salty kimchi paste turn out to be best pals. Pear and watermelon mimic the crunch of radish kimchi; try stone fruit, apples or citrus too. No marinating needed: toss, season and finish with crushed sesame."],
+  "rc-namul": ["Serves 2 to 4", 48, "It's hard to get excited about boiled broccoli, Roy admits, but trust him. Blanch, shock in ice water for color and crunch, then season with sesame, vinegar and a pinch of chili. The same method works for spinach, bean sprouts and more."],
+  "rc-pickled-cucumbers": ["Serves 2 to 4", 50, "Low effort, high reward, and a stealthy shortcut for on-the-fly meals. Toss sliced cucumbers in a hot pan with vinegar and spices for a few minutes, jar them, and by the time they're cold you have a snack, side and topping."],
+  "rc-next-day-rice-bowls": ["Serves 1 to 100", 52, "The payoff for everything in your fridge: rice, a protein, panchan, pickles, kimchi and a sauce or two. There is no wrong bowl. Put your swag on it."]
+};
+Object.keys(RC_EXTRA).forEach(id => { const r = RECIPES.find(x => x.id === id); if (!r) return; const e = RC_EXTRA[id];
+  r.makes = e[0]; r.guide = { id: "rc", page: e[1] }; r.intro = e[2]; });
+
+const GR_EXTRA = {
+  "gr-mushroom-toast-egg": [9, "Serves 4", "Prep 10 min, cook 20 min", "Learn to make a poached egg to die for.", "Gordon lowers each egg into gently rolling water from a small bowl so it never collapses, then sets it on buttery brioche with the best mushrooms of the season and crisp bacon."],
+  "gr-scrambled-eggs": [13, "Serves 2", "Prep 5 min, cook 5 min", "The secret behind any great scrambled egg is stopping it from overcooking.", "No salt before cooking, no whisking in a bowl. Eggs and butter go straight into a cold pan and move on and off the heat until soft and creamy. Leave out the uni and truffle for Gordon's everyday version."],
+  "gr-chicken-supreme": [16, "Serves 4", "Prep 20 min, cook 45 min", "Never cook chicken stone-cold; it goes dry before it's cooked in the center.", "Never eat a dry chicken breast again. Root vegetables roast with thyme, rosemary and parsley while the chicken sears, and the brown bits in the pan become the sauce."],
+  "gr-salmon-minestrone": [23, "Serves 4", "Prep 40 min, cook 30 min", "When you cook salmon, the skin is your safety net.", "A light, elegant supper: crisp-skinned salmon over an Italian-style minestrone built on a broth of mussels and clams, what Gordon calls the jewels of the sea."],
+  "gr-lobster-ravioli": [28, "Serves 4", "Prep 90 min, active cooking 60 min", "Don't worry about it, please don't stress out.", "The dish that put Gordon on the map, and still on his three-Michelin-star London menu. Claw, knuckle and leg meat become a basil-scented lobster and salmon mousse filling, served over a fresh tomato chutney."],
+  "gr-beef-wellington": [32, "Serves 4 to 5", "Prep 60 min, cook 45 min", "You're never going to see friends and family as excited as when you take that first slice off.", "The ultimate special-occasion showstopper. Filet seared in cast iron and brushed with Dijon, wrapped in prosciutto, a chive crêpe and mushroom duxelles, then sealed in puff pastry."]
+};
+Object.keys(GR_EXTRA).forEach(id => { const r = RECIPES.find(x => x.id === id); if (!r) return; const e = GR_EXTRA[id];
+  r.guide = { id: "gr", page: e[0] }; r.makes = e[1]; r.prep = e[2]; r.quote = e[3]; r.intro = e[4]; });
+
+/* The class guides themselves, readable on the page. */
+const GUIDES = [
+  { id: "rc", chef: "Roy Choi", title: "Roy Choi Teaches Intuitive Cooking", pages: 53, pdf: "guides/rc-classguide.pdf",
+    toc: [["Mother sauces", 10], ["Kalbi", 14], ["Kogi tacos", 18], ["Kimchi", 20], ["Fried rice and tuna melt", 24], ["Pancakes and dumplings", 33], ["Carnitas and grilled fish", 40], ["Panchan", 46], ["Next-day rice bowls", 52]] },
+  { id: "gr", chef: "Gordon Ramsay", title: "Gordon Ramsay Teaches Cooking I", pages: 44, pdf: "guides/gr-classguide.pdf",
+    toc: [["Eggs on brioche", 9], ["Scrambled eggs", 13], ["Chicken suprême", 16], ["Salmon minestrone", 23], ["Lobster ravioli", 28], ["Beef Wellington", 32]] },
+  { id: "nn", chef: "Niki Nakayama", title: "Niki Nakayama Teaches Modern Japanese Cooking", pages: 46, pdf: "guides/nn-classguide.pdf",
+    toc: [["Kaiseki concepts", 7], ["Pantry", 9], ["Knives", 14], ["Ichiban dashi", 17], ["Zukuri", 20], ["Owan", 22], ["Tuna primer", 24], ["Otsukuri", 28], ["Yakimono", 33], ["Mushimono", 36], ["Tempura", 39], ["Karaage", 43], ["Shokuji", 44]] }
+];
+
 /* =========================================================
    One clean taxonomy: course + cuisine, plus chef and source.
    ========================================================= */
@@ -4037,7 +4584,7 @@ const UNSPLASH_EXTRA = {
   "n-pie-crust": ["Priscilla Du Preez", "HG1pJiQHXzs"], "n-lush-pie": ["Alonso Reyes", "6dzARthU17g"]
 };
 RECIPES.forEach(r => {
-  const t = (TAXONOMY[r.id] || "mains").split(" ");
+  const t = (TAXONOMY[r.id] || r.tax || "mains").split(" ");
   r.course = t[0]; r.region = t[1] || null;
   if (!r.source) r.source = r.id.indexOf("n-") === 0 ? "notion" : "site";
   if (UNSPLASH_EXTRA[r.id]) r.photo = { by: UNSPLASH_EXTRA[r.id][0], url: "https://unsplash.com/photos/" + UNSPLASH_EXTRA[r.id][1] };
@@ -4058,9 +4605,13 @@ const FLAGS = [
 const CHEFS = [
   { id: "Roy Choi", label: "Roy Choi", img: "rc-portrait", tag: "Kogi truck, L.A.", blurb: "Korean barbecue meets the taco truck. Sauces you make once and use all week.", color: "var(--pink)" },
   { id: "Gordon Ramsay", label: "Gordon Ramsay", img: "gr-portrait", tag: "Michelin-star classics", blurb: "Technique first, from soft scrambled eggs to Beef Wellington.", color: "var(--teal)" },
+  { id: "Niki Nakayama", label: "Niki Nakayama", img: "nn-portrait", tag: "n/naka, Los Angeles", blurb: "Modern kaiseki: dashi, sashimi, tempura and the art of the cut.", color: "#e9e1d3" },
   { id: "notion", label: "Your Notion kitchen", img: "n-dong-po-rou", tag: "Your saved recipes", blurb: "Dim sum, family dinners, desserts and drinks from your Notion database.", color: "var(--lilac)" },
   { id: "site", label: "Weeknight protein picks", img: "taiwanese-popcorn-chicken", tag: "35 minutes or less", blurb: "Fast high-protein dinners with cook-along videos.", color: "var(--orange)" }
 ];
+const SKIN_OF = { "Roy Choi": "rc", "Gordon Ramsay": "gr", "Niki Nakayama": "nn" };
+const chefCls = c => SKIN_OF[c] || "";
+const ingOnly = r => r.ingredients.filter(x => x.indexOf("## ") !== 0);
 const chefOf = r => r.chef || (r.source === "notion" ? "notion" : "site");
 const chefLabel = id => (CHEFS.find(c => c.id === id) || {}).label || id;
 const courseLabel = r => (COURSES.find(c => c.id === r.course) || {}).label || "";
@@ -4164,8 +4715,8 @@ function cardHTML(r, i) {
       '<div class="card-meta"><span>' + esc(cuisineLabel(r)) + '</span>' + (r.time != null ? '<span class="sep"></span>' + ic("clock") + '<span class="num">' + r.time + ' min</span>' : "") +
         (r.spice ? '<span class="sep"></span><span class="spice" title="Spicy">' + ic("fire").repeat(r.spice) + '</span>' : "") + '</div>' +
       '<h3><button class="card-title" type="button" data-open="' + r.id + '">' + esc(r.name) + '</button></h3>' +
-      (r.chef ? '<div><span class="chef-tag ' + (r.chef === "Roy Choi" ? "rc" : "gr") + '">' + esc(r.chef) + '</span></div>' : "") +
-      (hasMacros(r) ? '<dl class="macros"><div><dt>cal</dt><dd>' + r.cal + '</dd></div><div class="pro"><dt>protein</dt><dd>' + r.pro + 'g</dd></div><div><dt>carbs</dt><dd>' + r.carb + 'g</dd></div><div><dt>fat</dt><dd>' + r.fat + 'g</dd></div></dl>' : '<p class="nomacros">' + (r.ingredients.length ? r.ingredients.length + ' ingredients' : 'Recipe not written yet') + '</p>') +
+      (r.chef ? '<div><span class="chef-tag ' + chefCls(r.chef) + '">' + esc(r.chef) + '</span></div>' : "") +
+      (hasMacros(r) ? '<dl class="macros"><div><dt>cal</dt><dd>' + r.cal + '</dd></div><div class="pro"><dt>protein</dt><dd>' + r.pro + 'g</dd></div><div><dt>carbs</dt><dd>' + r.carb + 'g</dd></div><div><dt>fat</dt><dd>' + r.fat + 'g</dd></div></dl>' : '<p class="nomacros">' + (ingOnly(r).length ? ingOnly(r).length + ' ingredients' : 'Recipe not written yet') + '</p>') +
       '<div class="card-foot">' + (fit.none ? '<span></span>' : '<span class="fit ' + (fit.ok ? "ok" : "warn") + '">' + (fit.ok ? ic("check") : "") + esc(fit.text) + '</span>') +
         '<span class="card-actions">' + (r.video ? '<span class="media-tags" title="' + (r.tiktok ? "YouTube and TikTok videos" : "YouTube video") + '">' + ic("youtube-logo") + (r.tiktok ? ic("tiktok-logo") : "") + '</span>' : "") +
         '<button class="icon-btn" type="button" data-fav="' + r.id + '" aria-pressed="' + fav + '" aria-label="' + (fav ? "Remove from saved" : "Save recipe") + '">' + ic(fav ? "heart-fill" : "heart") + '</button></span></div>' +
@@ -4229,38 +4780,76 @@ function mediaHTML(r) {
     '<p class="credit">' + esc(r.credit || ("Video by " + r.video.channel + ". The recipe below is a lighter version written for this page, so amounts can differ a little from the video.")) +
       (r.tiktok ? " TikTok: " + esc(r.tiktok.creator) + ", " + esc(r.tiktok.note) + "." : "") + '</p></div>';
 }
+const SPLAT = '<svg class="splat" viewBox="0 0 320 170" aria-hidden="true"><path d="M34 86C24 46 86 20 160 24c74 4 132 18 128 62-4 42-62 62-132 58C88 140 44 126 34 86Z"/><path d="M262 30c14-8 30-6 34 4-10 2-22 4-34-4ZM40 132c-12 8-24 10-30 2 10-4 20-6 30-2Z"/>' +
+  [[18, 40, 4], [8, 70, 2.5], [300, 70, 3.5], [312, 98, 2], [290, 130, 5], [250, 152, 2.5], [120, 158, 3], [66, 150, 2], [200, 8, 2.5], [96, 12, 3.5], [30, 18, 2], [306, 40, 2]].map(c => '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="' + c[2] + '"/>').join("") + '</svg>';
+function sheetHero(r) {
+  const k = chefCls(r.chef);
+  const label = k === "rc" ? "From Roy's class guide" + (r.guide ? ", page " + r.guide.page : "")
+    : k === "gr" ? "Gordon Ramsay  ·  MasterClass"
+    : k === "nn" ? (r.kaiseki || "n/naka") : [regionLabel(r), courseLabel(r)].filter(Boolean).join(", ");
+  return '<div class="sheet-hero"><img src="' + img(r.id) + '" alt="">' +
+    '<span class="hero-label">' + SPLAT + '<span>' + esc(label) + '</span></span>' +
+    (r.jp ? '<span class="jp-vert" lang="ja">' + esc(r.jp) + '</span>' : "") +
+    (k === "nn" ? '<span class="hanko" lang="ja" aria-hidden="true">一期<br>一会</span>' : "") +
+    '<button class="icon-btn sheet-close" type="button" data-action="close" aria-label="Close recipe">' + ic("x") + '</button></div>';
+}
+function ingHTML(r) {
+  let n = 0;
+  return r.ingredients.map(x => x.indexOf("## ") === 0
+    ? '<li class="ing-group">' + esc(x.slice(3)) + '</li>'
+    : '<li><label><input type="checkbox" id="ing-' + r.id + '-' + (n++) + '"><span>' + esc(x) + '</span></label></li>').join("");
+}
+function photoCredit(r) {
+  const im = String(r.image || "");
+  if (r.photo) return '<p class="photo-credit">Photo by <a href="' + r.photo.url + '" target="_blank" rel="noopener">' + esc(r.photo.by) + '</a> on Unsplash.</p>';
+  if (im.indexOf("rc-") === 0) return '<p class="photo-credit">Photo from Roy Choi\'s MasterClass class guide.</p>';
+  if (im.indexOf("nn-") === 0) return '<p class="photo-credit">Photo from Niki Nakayama\'s MasterClass class guide.</p>';
+  if (r.coverFrom) return '<p class="photo-credit">Cover photo from ' + esc(r.coverFrom) + ', saved with your Notion recipe.</p>';
+  return "";
+}
 function openRecipe(id, keep) {
   const r = byId(id); if (!r) return;
   if (openId !== id) mediaTab = "yt";
   openId = id;
   if (!keep) lastFocus = document.activeElement;
-  const fit = fitOf(r), fav = state.favs.has(id);
-  $("#sheet").innerHTML =
-    '<div class="sheet-head"><div>' +
-      '<div class="sheet-kicker">' + (r.chef ? '<span class="chef-tag ' + (r.chef === "Roy Choi" ? "rc" : "gr") + '">' + esc(r.chef) + '</span>' : '') + '<span>' + esc([cuisineLabel(r), r.origin].filter(Boolean).join(", ")) + '</span>' + (fit.none ? "" : '<span class="fit ' + (fit.ok ? "ok" : "warn") + '">' + (fit.ok ? ic("check") : "") + esc(fit.text) + '</span>') + '</div>' +
-      '<h2 id="sheet-title">' + esc(r.name) + '</h2></div>' +
-      '<button class="icon-btn" type="button" data-action="close" aria-label="Close recipe">' + ic("x") + '</button></div>' +
-    '<div class="sheet-body">' + mediaHTML(r) +
+  const fit = fitOf(r), fav = state.favs.has(id), k = chefCls(r.chef);
+  const yieldLine = [r.makes || (r.serves ? "Serves " + r.serves : ""), r.prep || (r.time != null ? r.time + " min" : "")].filter(Boolean).join("   ·   ");
+  const links = (r.guide ? '<button class="btn btn-sm guide-btn" type="button" data-guide="' + r.guide.id + '|' + r.guide.page + '">' + ic("book-open") + 'Read it in the class guide, page ' + r.guide.page + '</button>' : "") +
+    (r.sourceUrl ? '<a class="btn btn-sm" href="' + esc(r.sourceUrl) + '" target="_blank" rel="noopener">' + ic("arrow-square-out") + 'Read the original article</a>' : "");
+  $("#sheet").dataset.chef = k || "house";
+  $("#sheet").innerHTML = sheetHero(r) +
+    '<div class="sheet-head">' +
+      '<div class="sheet-kicker">' + (r.chef ? '<span class="chef-tag ' + k + '">' + esc(r.chef) + '</span>' : '') + '<span>' + esc([cuisineLabel(r), r.origin].filter(Boolean).join(", ")) + '</span>' + (fit.none ? "" : '<span class="fit ' + (fit.ok ? "ok" : "warn") + '">' + (fit.ok ? ic("check") : "") + esc(fit.text) + '</span>') + '</div>' +
+      (yieldLine ? '<div class="yield">' + esc(yieldLine) + '</div>' : '') +
+      '<h2 id="sheet-title">' + esc(r.name) + '</h2>' + (r.sub ? '<p class="sub">' + esc(r.sub) + '</p>' : '') +
+    '</div>' +
+    '<div class="sheet-body">' +
+      (r.intro || r.quote ? '<div class="intro">' +
+        (r.quote ? '<blockquote class="quote"><p>' + esc(r.quote) + '</p><cite>' + esc(r.chef) + '</cite></blockquote>' : '') +
+        (r.intro ? '<p class="lede"><span class="arrow" aria-hidden="true">' + ic("arrow-right") + '</span>' + esc(r.intro) + '</p>' : '') + '</div>' : '') +
+      mediaHTML(r) +
       (hasMacros(r) ? '<div class="nutrition">' + donutHTML(r) + '<div class="stats">' +
         '<div><b>' + (r.time != null ? r.time : "Varies") + '</b><span>minutes</span></div><div><b>' + esc(r.serves) + '</b><span>servings</span></div><div><b>' + r.cal + '</b><span>cal per serving</span></div>' +
-        '<div class="pro"><b>' + r.pro + 'g</b><span>protein</span></div><div><b>' + r.carb + 'g</b><span>carbs</span></div><div><b>' + r.fat + 'g</b><span>fat</span></div></div></div>' : '<p class="nomacros">' + (r.serves ? 'Makes ' + esc(r.serves) + '. ' : '') + 'Macros are not set for this one yet.</p>') +
+        '<div class="pro"><b>' + r.pro + 'g</b><span>protein</span></div><div><b>' + r.carb + 'g</b><span>carbs</span></div><div><b>' + r.fat + 'g</b><span>fat</span></div></div></div>'
+        : '<p class="nomacros">Macros are not set for this one. It is a sauce, stock or pantry recipe you use in other dishes.</p>') +
       '<div class="cols">' +
-        '<div><h3>Ingredients <small>' + r.ingredients.length + ' items</small></h3><ul class="ing">' +
-          r.ingredients.map((x, i) => '<li><label><input type="checkbox" id="ing-' + r.id + '-' + i + '"><span>' + esc(x) + '</span></label></li>').join("") + '</ul></div>' +
-        '<div><h3>Steps <small>Timers run while you cook</small></h3><ol class="steps">' +
+        '<div class="ing-col"><h3><span class="label">Ingredients</span> <small>' + ingOnly(r).length + ' items</small></h3><ul class="ing">' + ingHTML(r) + '</ul></div>' +
+        '<div class="method-col"><h3><span class="label">Method</span> <small>Timers run while you cook</small></h3><ol class="steps">' +
           (r.steps.length ? r.steps : [{ t: "No steps written yet. Add them in Notion and they will show here." }]).map((s, i) => '<li><div><p>' + esc(s.t) + '</p>' + (s.min ? '<button class="timer-btn" type="button" data-timer="' + r.id + '|' + i + '|' + s.min + '">' + ic("timer") + 'Start ' + s.min + ' min timer</button>' : "") + '</div></li>').join("") + '</ol></div>' +
       '</div>' +
+      (r.protip ? '<div class="protip"><b>Pro-Tip:</b> <span>' + esc(r.protip) + '</span></div>' : "") +
       (r.tip ? '<div class="tip"><b>Fitness tip.</b> ' + esc(r.tip) + '</div>' : "") +
+      (links ? '<div class="guide-row">' + links + '</div>' : "") +
       '<div class="sheet-foot">' +
         '<label class="toggle"><input type="checkbox" id="wake-toggle"' + (wakeLock ? " checked" : "") + '> Keep screen on while cooking</label>' +
         '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-sm" type="button" data-fav="' + r.id + '" aria-pressed="' + fav + '">' + ic(fav ? "heart-fill" : "heart") + (fav ? "Saved" : "Save") + '</button>' +
         '<button class="btn btn-sm" type="button" data-addweek="' + r.id + '">' + ic("plus") + 'Add to this week</button>' +
         (r.steps.length ? '<button class="btn btn-sm btn-primary" type="button" data-cook="' + r.id + '">' + ic("cooking-pot") + 'Start cooking mode</button>' : "") + '</div>' +
-      '</div>' +
-      (r.photo ? '<p class="photo-credit">Photo by <a href="' + r.photo.url + '" target="_blank" rel="noopener">' + esc(r.photo.by) + '</a> on Unsplash.</p>' : String(r.image || "").indexOf("rc-") === 0 ? '<p class="photo-credit">Photo from Roy Choi\'s MasterClass class guide.</p>' : r.coverFrom ? '<p class="photo-credit">Cover photo from ' + esc(r.coverFrom) + ', saved with your Notion recipe.</p>' : "") +
+      '</div>' + photoCredit(r) +
     '</div>';
   $("#sheet-wrap").hidden = false;
   document.body.style.overflow = "hidden";
+  applySkin();
   if (!keep) { $("#sheet-wrap").scrollTop = 0; $("#sheet").querySelector('[data-action="close"]').focus(); }
   try { if (location.hash !== "#" + id) history.replaceState(null, "", "#" + id); } catch (e) { /* ignore */ }
 }
@@ -4273,7 +4862,7 @@ function donutHTML(r) {
     '<div class="legend" aria-label="Where the calories come from">' + parts.map(p => '<span><i style="background:' + p[2] + '"></i>' + p[0] + ' <b>' + Math.round(p[1] / total * 100) + '%</b></span>').join("") + '</div></div>';
 }
 function closeRecipe() {
-  $("#sheet-wrap").hidden = true; $("#sheet").innerHTML = ""; document.body.style.overflow = ""; openId = null;
+  $("#sheet-wrap").hidden = true; $("#sheet").innerHTML = ""; document.body.style.overflow = $("#reader").hidden ? "" : "hidden"; openId = null; applySkin();
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* ignore */ }
   if (lastFocus && lastFocus.focus) lastFocus.focus();
 }
@@ -4341,7 +4930,7 @@ function addToWeek(id) {
 }
 function shoppingText() {
   const out = [];
-  state.week.forEach((id, i) => { if (!id) return; const r = byId(id); out.push(DAYS[i] + ": " + r.name + " (serves " + r.serves + ")"); r.ingredients.forEach(x => out.push("  [ ] " + x)); out.push(""); });
+  state.week.forEach((id, i) => { if (!id) return; const r = byId(id); out.push(DAYS[i] + ": " + r.name + " (serves " + r.serves + ")"); r.ingredients.forEach(x => out.push(x.indexOf("## ") === 0 ? "  " + x.slice(3) : "  [ ] " + x)); out.push(""); });
   return out.join("\n").trim();
 }
 function renderDrawer() {
@@ -4377,13 +4966,15 @@ document.addEventListener("click", e => {
   const d = t.dataset;
   if (d.course) { state.course = d.course; renderChips(); renderGrid(); }
   else if (d.region) { state.region = d.region; renderChips(); renderGrid(); }
-  else if (d.chefView) { state.chefView = d.chefView; renderChefs(true); }
+  else if (d.chefView) { state.chefView = d.chefView; skinCtx = SKIN_OF[d.chefView] || "house"; renderChefs(true); applySkin(); }
+  else if (d.skin) { setSkin(d.skin); closeSkinMenu(); }
+  else if (d.guide) { const g = d.guide.split("|"); openGuide(g[0], Number(g[1]) || 1); }
   else if (d.mode) setMode(d.mode);
   else if (d.cook) openCook(d.cook);
   else if (d.cookNav) stepCook(Number(d.cookNav));
   else if (d.cookTimer) { if (timers.has(d.cookTimer)) timers.delete(d.cookTimer); else startTimer(d.cookTimer); renderTimers(); renderCookTimer(); }
   else if (d.action === "cook-close") closeCook();
-  else if (d.chef) { state.chef = state.chef === d.chef ? "all" : d.chef; renderChips(); renderGrid(); }
+  else if (d.chef) { state.chef = state.chef === d.chef ? "all" : d.chef; if (SKIN_OF[state.chef]) skinCtx = SKIN_OF[state.chef]; renderChips(); renderGrid(); applySkin(); }
   else if (d.flag) { if (state.flags.has(d.flag)) state.flags.delete(d.flag); else state.flags.add(d.flag); renderChips(); renderGrid(); }
   else if (d.open) { if (!$("#drawer-wrap").hidden) closeDrawer(); openRecipe(d.open); }
   else if (d.fav) toggleFav(d.fav);
@@ -4395,7 +4986,7 @@ document.addEventListener("click", e => {
   else if (d.tab) { mediaTab = d.tab; openRecipe(openId, true); }
   else if (d.play) playInline(d.play);
   else if (d.action === "close") closeRecipe();
-  else if (d.action === "clear") { state.course = "all"; state.region = "all"; state.chef = "all"; state.flags.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
+  else if (d.action === "clear") { skinCtx = "house"; applySkin(); state.course = "all"; state.region = "all"; state.chef = "all"; state.flags.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
   else if (d.action === "copy") {
     const ta = $("#shop-text"), ok = () => toast("Shopping list copied"), fb = () => { ta.focus(); ta.select(); toast("List selected. Use your copy shortcut."); };
     try { navigator.clipboard.writeText(ta.value).then(ok, fb); } catch (err) { fb(); }
@@ -4423,7 +5014,13 @@ document.addEventListener("keydown", e => {
     else if (e.key === "ArrowLeft") stepCook(-1);
     return;
   }
-  if (e.key === "Escape") { if (!$("#drawer-wrap").hidden) closeDrawer(); else if (!$("#sheet-wrap").hidden) closeRecipe(); }
+  if (!$("#reader").hidden) {
+    if (e.key === "Escape") closeGuide();
+    else if (e.key === "ArrowRight") guideGo(reader.p + (twoUp() ? 2 : 1));
+    else if (e.key === "ArrowLeft") guideGo(reader.p - (twoUp() ? 2 : 1));
+    return;
+  }
+  if (e.key === "Escape") { if (!$("#skin-menu").hidden) { closeSkinMenu(); $("#skin-btn").focus(); } else if (!$("#drawer-wrap").hidden) closeDrawer(); else if (!$("#sheet-wrap").hidden) closeRecipe(); }
 });
 window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (byId(id) && openId !== id) openRecipe(id); });
 if (window.IntersectionObserver) {
@@ -4460,7 +5057,7 @@ function swipeCardHTML(r, k) {
     '<img src="' + img(r.id) + '" alt="' + esc(r.name) + '" draggable="false">' +
     '<span class="swipe-shade"></span><span class="stamp save">SAVE</span><span class="stamp skip">SKIP</span>' +
     '<div class="swipe-info"><span class="where">' + esc(r.chef ? r.chef + ", " + cuisineLabel(r) : r.origin) + '</span><h3>' + esc(r.name) + '</h3>' +
-    '<div class="facts">' + (hasMacros(r) ? '<span><b>' + (r.time != null ? r.time : "?") + '</b>min</span><span><b>' + r.pro + 'g</b>protein</span><span><b>' + r.cal + '</b>cal</span><span><b>' + r.serves + '</b>servings</span>' : '<span>' + esc(r.tags[0] || "Recipe") + '</span>' + (r.ingredients.length ? '<span><b>' + r.ingredients.length + '</b>ingredients</span>' : "")) + '</div></div></div>';
+    '<div class="facts">' + (hasMacros(r) ? '<span><b>' + (r.time != null ? r.time : "?") + '</b>min</span><span><b>' + r.pro + 'g</b>protein</span><span><b>' + r.cal + '</b>cal</span><span><b>' + r.serves + '</b>servings</span>' : '<span>' + esc(r.tags[0] || "Recipe") + '</span>' + (ingOnly(r).length ? '<span><b>' + ingOnly(r).length + '</b>ingredients</span>' : "")) + '</div></div></div>';
 }
 function renderDeck() {
   const el = $("#deck"), ids = deck.order.slice(deck.idx, deck.idx + 3);
@@ -4599,7 +5196,7 @@ function renderCook(dir) {
     '</div></div>' +
     '<div class="cook-nav"><button class="btn" type="button" data-cook-nav="-1"' + (cook.i ? "" : " disabled") + '>' + ic("arrow-left") + 'Back</button>' +
       '<button class="btn btn-primary" type="button" data-cook-nav="1">' + (last ? "Finish" : "Next step") + ic(last ? "check" : "arrow-right") + '</button></div>' +
-    '<details class="cook-ing"><summary>Ingredients (' + r.ingredients.length + ')</summary><ul>' + r.ingredients.map(x => '<li>' + esc(x) + '</li>').join("") + '</ul></details>';
+    '<details class="cook-ing"><summary>Ingredients (' + ingOnly(r).length + ')</summary><ul>' + r.ingredients.map(x => x.indexOf("## ") === 0 ? '<li class="ing-group">' + esc(x.slice(3)) + '</li>' : '<li>' + esc(x) + '</li>').join("") + '</ul></details>';
   renderCookTimer();
   const st = $("#cook-stage"); let sx = null;
   st.addEventListener("pointerdown", e => { sx = e.clientX; });
@@ -4683,7 +5280,7 @@ function storyGo(i) {
   segs.forEach((s, k) => { s.className = "seg" + (k < story.i ? " done" : ""); });
   const cur = segs[story.i]; void cur.offsetWidth; cur.className = "seg cur"; cur.style.setProperty("--dur", story.dur + "ms");
   const im = $("#story-img"); im.classList.remove("kb"); im.src = img(r.id); im.alt = r.name; void im.offsetWidth; if (!reduceMotion) im.classList.add("kb");
-  const st = hasMacros(r) ? [[r.pro, "g protein"], [r.cal, "calories"], [r.time != null ? r.time : r.carb, r.time != null ? "minutes" : "g carbs"]] : [[r.ingredients.length, "ingredients"], [r.steps.length, "steps"], [typeof r.serves === "number" ? r.serves : (parseInt(r.serves, 10) || 1), "servings"]];
+  const st = hasMacros(r) ? [[r.pro, "g protein"], [r.cal, "calories"], [r.time != null ? r.time : r.carb, r.time != null ? "minutes" : "g carbs"]] : [[ingOnly(r).length, "ingredients"], [r.steps.length, "steps"], [typeof r.serves === "number" ? r.serves : (parseInt(r.serves, 10) || 1), "servings"]];
   $("#story-info").innerHTML = '<div><div class="where">' + esc([r.chef, cuisineLabel(r)].filter(Boolean).join(", ")) + '</div><h3>' + esc(r.name) + '</h3></div>' +
     '<div class="story-stats"><div class="story-stat p"><b data-n="' + st[0][0] + '">0</b><span>' + st[0][1] + '</span></div><div class="story-stat c"><b data-n="' + st[1][0] + '">0</b><span>' + st[1][1] + '</span></div><div class="story-stat m"><b data-n="' + st[2][0] + '">0</b><span>' + st[2][1] + '</span></div></div>';
   const id = ++story.raf;
@@ -4735,12 +5332,130 @@ $("#shelf-all").addEventListener("click", () => {
 });
 
 /* =========================================================
+   Site styles: each chef's class guide becomes a look for the whole site
+   ========================================================= */
+const SKINS = [
+  { id: "auto", label: "Auto", note: "Changes with the chef you pick", sw: ["#c8a274", "#d4148a", "#b8935a"] },
+  { id: "house", label: "House", note: "Kraft paper and stickers", sw: ["#c8a274", "#f6c51c", "#15120d"] },
+  { id: "rc", label: "Roy Choi", note: "Street-guide paper, tape and spray paint", sw: ["#ffffff", "#ec3f1f", "#15120d"] },
+  { id: "gr", label: "Gordon Ramsay", note: "Bright white, gold and refined", sw: ["#ffffff", "#b8935a", "#141414"] },
+  { id: "nn", label: "Niki Nakayama", note: "Washi paper, sumi ink and quiet space", sw: ["#f4efe6", "#b5532b", "#5f6f52"] }
+];
+let skinPref = "auto", skinCtx = "house";
+function currentSkin() {
+  if (skinPref !== "auto") return skinPref;
+  if (!$("#reader").hidden && reader.g) return reader.g;
+  if (openId) { const r = byId(openId); if (r && SKIN_OF[r.chef]) return SKIN_OF[r.chef]; }
+  if (SKIN_OF[state.chef]) return SKIN_OF[state.chef];
+  return skinCtx;
+}
+function applySkin() {
+  const next = currentSkin(), root = document.documentElement;
+  const k = SKINS.find(x => x.id === skinPref);
+  $("#skin-now").textContent = skinPref === "auto" ? "Auto" : k.label;
+  if (root.dataset.skin === next) return;
+  const go = () => { root.dataset.skin = next; };
+  if (document.startViewTransition && !reduceMotion && root.dataset.skin) document.startViewTransition(go); else go();
+}
+function setSkin(id) {
+  skinPref = id;
+  try { localStorage.setItem("ee-skin", id); } catch (e) { /* ignore */ }
+  applySkin();
+  const k = SKINS.find(x => x.id === id);
+  toast(id === "auto" ? "Style follows the chef you pick" : k.label + " style on");
+}
+function renderSkinMenu() {
+  $("#skin-menu").innerHTML = SKINS.map(k => '<button type="button" role="menuitemradio" aria-checked="' + (skinPref === k.id) + '" data-skin="' + k.id + '">' +
+    '<span class="sw" aria-hidden="true">' + k.sw.map(c => '<i style="background:' + c + '"></i>').join("") + '</span>' +
+    '<span><b>' + esc(k.label) + '</b><small>' + esc(k.note) + '</small></span>' + (skinPref === k.id ? ic("check") : "") + '</button>').join("");
+}
+function openSkinMenu() {
+  renderSkinMenu(); $("#skin-menu").hidden = false; $("#skin-btn").setAttribute("aria-expanded", "true");
+  const c = $('#skin-menu [aria-checked="true"]'); if (c) c.focus();
+}
+function closeSkinMenu() { $("#skin-menu").hidden = true; $("#skin-btn").setAttribute("aria-expanded", "false"); }
+function skinInit() {
+  try { const v = localStorage.getItem("ee-skin"); if (v && SKINS.some(k => k.id === v)) skinPref = v; } catch (e) { /* ignore */ }
+  $("#skin-btn").addEventListener("click", e => { e.stopPropagation(); if ($("#skin-menu").hidden) openSkinMenu(); else closeSkinMenu(); });
+  document.addEventListener("click", e => { if (!$("#skin-menu").hidden && !e.target.closest(".skin-pick")) closeSkinMenu(); });
+  $("#skin-menu").addEventListener("keydown", e => {
+    const items = Array.from($("#skin-menu").querySelectorAll("button")), i = items.indexOf(document.activeElement);
+    if (e.key === "ArrowDown") { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+    else if (e.key === "Tab") closeSkinMenu();
+  });
+  applySkin();
+}
+
+/* =========================================================
+   Class guide reader: every page as an image, with a PDF download
+   ========================================================= */
+const reader = { g: null, p: 1, n: 0, back: null };
+const pageSrc = (g, p) => "guides/" + g + "/p-" + String(p).padStart(2, "0") + ".jpg";
+const twoUp = () => matchMedia("(min-width: 1100px)").matches;
+function guidesInit() {
+  const probe = new Image();
+  probe.onload = () => document.documentElement.classList.add("has-guides");
+  probe.onerror = () => document.documentElement.classList.add("no-guides");
+  probe.src = pageSrc("gr", 1);
+  $("#guide-shelf").innerHTML = GUIDES.map(g => '<article class="guide-card g-' + g.id + '">' +
+    '<button class="guide-cover" type="button" data-guide="' + g.id + '|1" aria-label="Read ' + esc(g.title) + '"><img src="' + pageSrc(g.id, 1) + '" alt="" loading="lazy"><span class="guide-pages">' + g.pages + ' pages</span></button>' +
+    '<div class="guide-meta"><span class="chef-tag ' + g.id + '">' + esc(g.chef) + '</span><b>' + esc(g.title) + '</b>' +
+      '<div class="guide-toc">' + g.toc.map(t => '<button type="button" class="chip" data-guide="' + g.id + '|' + t[1] + '">' + esc(t[0]) + '</button>').join("") + '</div>' +
+      '<div class="guide-actions"><button class="btn btn-sm btn-primary" type="button" data-guide="' + g.id + '|1">' + ic("book-open") + 'Read the guide</button>' +
+      '<a class="btn btn-sm" href="' + g.pdf + '" target="_blank" rel="noopener">' + ic("download-simple") + 'PDF</a></div></div></article>').join("");
+  $("#reader-prev").addEventListener("click", () => guideGo(reader.p - (twoUp() ? 2 : 1)));
+  $("#reader-next").addEventListener("click", () => guideGo(reader.p + (twoUp() ? 2 : 1)));
+  $("#reader-close").addEventListener("click", closeGuide);
+  $("#reader-toc").addEventListener("change", e => guideGo(Number(e.target.value)));
+  $("#reader-thumbs").addEventListener("click", e => { const b = e.target.closest("[data-page]"); if (b) guideGo(Number(b.dataset.page)); });
+  let x0 = null;
+  $("#reader-stage").addEventListener("pointerdown", e => { x0 = e.clientX; });
+  $("#reader-stage").addEventListener("pointerup", e => { if (x0 == null) return; const dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 50) guideGo(reader.p + (dx < 0 ? 1 : -1) * (twoUp() ? 2 : 1)); });
+}
+function openGuide(id, page) {
+  const g = GUIDES.find(x => x.id === id); if (!g) return;
+  reader.g = id; reader.n = g.pages; reader.back = document.activeElement;
+  $("#reader-title").textContent = g.title;
+  $("#reader-pdf").href = g.pdf;
+  $("#reader-toc").innerHTML = '<option value="1">Cover</option>' + g.toc.map(t => '<option value="' + t[1] + '">' + esc(t[0]) + ' (p. ' + t[1] + ')</option>').join("");
+  $("#reader-thumbs").innerHTML = Array.from({ length: g.pages }, (_, i) => '<button type="button" role="listitem" data-page="' + (i + 1) + '" aria-label="Page ' + (i + 1) + '"><img src="' + pageSrc(id, i + 1) + '" alt="" loading="lazy"><span>' + (i + 1) + '</span></button>').join("");
+  $("#reader").hidden = false;
+  document.body.style.overflow = "hidden";
+  guideGo(page || 1);
+  applySkin();
+  $("#reader-close").focus();
+}
+function guideGo(p) {
+  const n = reader.n; p = Math.max(1, Math.min(n, p));
+  reader.p = p;
+  const show = twoUp() && p < n ? [p, p + 1] : [p];
+  $("#reader-pages").innerHTML = show.map(q => '<img src="' + pageSrc(reader.g, q) + '" alt="Page ' + q + '">').join("");
+  $("#reader-count").textContent = (show.length > 1 ? "Pages " + show[0] + "-" + show[1] : "Page " + p) + " of " + n;
+  [p + 2, p + 3].forEach(q => { if (q <= n) { const im = new Image(); im.src = pageSrc(reader.g, q); } });
+  const g = GUIDES.find(x => x.id === reader.g);
+  const cur = [1].concat(g.toc.map(t => t[1])).filter(v => v <= p).pop();
+  $("#reader-toc").value = String(cur);
+  $("#reader-prev").disabled = p <= 1; $("#reader-next").disabled = show[show.length - 1] >= n;
+  $("#reader-thumbs").querySelectorAll("button").forEach(b => { const q = Number(b.dataset.page); if (show.indexOf(q) > -1) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+  const t = $('#reader-thumbs [data-page="' + p + '"]'); if (t) t.scrollIntoView({ block: "nearest", inline: "center", behavior: reduceMotion ? "auto" : "smooth" });
+}
+function closeGuide() {
+  $("#reader").hidden = true; reader.g = null;
+  if ($("#sheet-wrap").hidden) document.body.style.overflow = "";
+  applySkin();
+  if (reader.back && reader.back.focus) reader.back.focus();
+}
+
+/* =========================================================
    Boot
    ========================================================= */
 load();
 hydrateIcons();
 renderTaiwanese();
 renderChefs();
+skinInit();
+guidesInit();
 cfInit();
 storyInit();
 renderShortlist();
