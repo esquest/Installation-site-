@@ -270,6 +270,108 @@ h1, h2, h3 { margin: 0; text-wrap: balance; font-family: var(--font-display); le
 footer { border-top: 1px solid var(--line); padding-block: 28px 40px; color: var(--muted); font-size: 14px; }
 footer p { margin: 0; max-width: 90ch; }
 
+
+/* ---------- hero stage: swipe deck + spin ---------- */
+.hero-stage { display: grid; gap: 14px; min-width: 0; }
+.hero-stage-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.stage-hint { color: var(--muted); font-size: 14px; }
+.deck-wrap { display: grid; gap: 16px; }
+.deck { position: relative; height: 440px; border-radius: 24px; outline: none; margin-bottom: 30px; }
+.cookmode:not([hidden]) ~ .timers, .cookmode:not([hidden]) ~ .toast { display: none; }
+.deck:focus-visible { outline: 2.5px solid var(--accent); outline-offset: 4px; }
+.swipe-card { position: absolute; inset: 0; border-radius: 24px; overflow: hidden; background: #101214; box-shadow: var(--shadow-lift); touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab; transform-origin: 50% 95%; will-change: transform; transition: transform .45s var(--ease); }
+.swipe-card.dragging { cursor: grabbing; transition: none; }
+.swipe-card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
+.swipe-shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(12, 13, 14, .88) 0%, rgba(12, 13, 14, .25) 42%, rgba(12, 13, 14, 0) 62%); }
+.swipe-info { position: absolute; left: 24px; right: 24px; bottom: 22px; color: #fff; display: grid; gap: 10px; }
+.swipe-info .where { font-size: 14px; opacity: .85; }
+.swipe-info h3 { font-size: clamp(26px, 3vw, 34px); line-height: 1.05; font-weight: 800; }
+.swipe-info .facts { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; opacity: .92; }
+.swipe-info .facts b { display: block; font-family: var(--font-data); font-size: 18px; font-weight: 600; }
+.stamp { position: absolute; top: 24px; padding: 4px 14px; border: 3px solid; border-radius: 12px; font-family: var(--font-display); font-weight: 800; font-size: 26px; letter-spacing: .04em; opacity: 0; pointer-events: none; }
+.stamp.save { left: 24px; color: #8ff0b0; border-color: #8ff0b0; transform: rotate(-12deg); }
+.stamp.skip { right: 24px; color: #ffa58f; border-color: #ffa58f; transform: rotate(12deg); }
+.deck-controls { display: flex; justify-content: center; align-items: center; gap: 18px; }
+.round { width: 58px; height: 58px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); display: grid; place-items: center; box-shadow: var(--shadow); transition: transform .25s var(--ease), border-color .2s; }
+.round:hover { transform: translateY(-2px) scale(1.06); }
+.round:active { transform: scale(.94); }
+.round .ico { width: 24px; height: 24px; }
+.round.skip { color: var(--muted); }
+.round.save { color: var(--accent); }
+.round.cook { width: 70px; height: 70px; background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.round.cook .ico { width: 28px; height: 28px; }
+.deck-empty { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 12px; text-align: center; padding: 24px; border: 1px dashed var(--line-strong); border-radius: 24px; color: var(--muted); }
+.deck-empty strong { font-family: var(--font-display); font-size: 22px; color: var(--ink); }
+.shortlist { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 40px; font-size: 14px; color: var(--muted); flex-wrap: wrap; }
+.shortlist .faces { display: flex; padding-left: 10px; }
+.shortlist .faces button { all: unset; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; overflow: hidden; margin-left: -10px; border: 2px solid var(--bg); box-shadow: var(--shadow); transition: transform .25s var(--ease); }
+.shortlist .faces button:hover { transform: translateY(-3px); }
+.shortlist .faces button:focus-visible { outline: 2.5px solid var(--accent); }
+.shortlist .faces img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- fridge picker ---------- */
+.fridge { display: grid; gap: 10px; padding: 18px 20px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
+.fridge-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: space-between; }
+.fridge-head b { font-family: var(--font-display); font-size: 19px; letter-spacing: -0.01em; display: inline-flex; align-items: center; gap: 8px; }
+.fridge-head small { color: var(--muted); font-size: 14px; }
+.chip.food[aria-pressed="true"] { background: var(--ok); border-color: var(--ok); color: #fff; }
+.uses { font-size: 13px; color: var(--ok); font-weight: 600; }
+
+/* ---------- tilt + glare on card photos ---------- */
+.card-photo::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 255, 255, .38), rgba(255, 255, 255, 0) 45%); }
+.card-photo.tilting::after { opacity: 1; }
+.card-photo.tilting { transition: transform .12s linear, box-shadow .3s; }
+
+/* ---------- entrance motion ---------- */
+.grid.intro .card { animation: cardIn .8s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 45ms); }
+@keyframes cardIn { from { transform: translateY(26px); } to { transform: none; } }
+.rv { transition: transform .9s var(--ease); }
+.rv.pre { transform: translateY(28px); }
+
+/* ---------- macro donut ---------- */
+.nutrition { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: center; }
+.donut { display: flex; align-items: center; gap: 16px; }
+.donut svg { width: 128px; height: 128px; transform: rotate(-90deg); flex-shrink: 0; }
+.donut circle { fill: none; stroke-width: 14; }
+.donut .track { stroke: var(--line); }
+.donut .arc { stroke-dasharray: var(--len) 400; stroke-dashoffset: var(--off); animation: draw 1.1s var(--ease) backwards; animation-delay: var(--d, 0s); }
+@keyframes draw { from { stroke-dasharray: 0 400; } }
+.legend { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+.legend span { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.legend b { color: var(--ink); font-family: var(--font-data); font-weight: 600; }
+.nutrition .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.nutrition .stats div:nth-child(3) { border-right: 0; }
+.nutrition .stats div:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
+
+/* ---------- cooking mode ---------- */
+.cookmode { position: fixed; inset: 0; z-index: 55; background: var(--bg); display: grid; grid-template-rows: auto auto 1fr auto; padding: max(18px, env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) max(18px, env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px)); gap: 16px; animation: rise .4s var(--ease); }
+.cook-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; max-width: 960px; width: 100%; margin: 0 auto; }
+.cook-top small { color: var(--muted); font-size: 14px; }
+.cook-top h2 { font-size: clamp(24px, 3vw, 34px); font-weight: 800; }
+.cook-bars { display: flex; gap: 6px; max-width: 960px; width: 100%; margin: 0 auto; }
+.cook-bars i { flex: 1; height: 5px; border-radius: 5px; background: var(--line); transition: background .3s; }
+.cook-bars i.on { background: var(--accent); }
+.cook-stage { display: grid; place-items: center; overflow-y: auto; touch-action: pan-y; }
+.cook-step { max-width: 820px; width: 100%; display: grid; gap: 26px; justify-items: start; }
+.cook-step.from-right { animation: inR .5s var(--ease); }
+.cook-step.from-left { animation: inL .5s var(--ease); }
+@keyframes inR { from { transform: translateX(60px); opacity: .2; } }
+@keyframes inL { from { transform: translateX(-60px); opacity: .2; } }
+.cook-count { font-family: var(--font-data); font-size: 14px; color: var(--muted); }
+.cook-text { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 3.4vw, 40px); line-height: 1.22; letter-spacing: -0.015em; }
+.ring-row { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.ring { position: relative; width: 132px; height: 132px; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 10; }
+.ring .track { stroke: var(--line); }
+.ring .bar { stroke: var(--accent); stroke-linecap: round; stroke-dasharray: 352; transition: stroke-dashoffset .25s linear; }
+.ring .t { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--font-data); font-size: 26px; font-weight: 600; }
+.cook-nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; max-width: 960px; width: 100%; margin: 0 auto; }
+.cook-ing { max-width: 960px; width: 100%; margin: 0 auto; }
+.cook-ing summary { cursor: pointer; font-weight: 600; color: var(--muted); }
+.cook-ing ul { margin: 10px 0 0; padding-left: 18px; columns: 2; column-gap: 30px; font-size: 15px; }
+
 /* ---------- responsive ---------- */
 @media (max-width: 1000px) {
   .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -289,6 +391,9 @@ footer p { margin: 0; max-width: 90ch; }
   .nav-links a { display: none; }
 }
 @media (max-width: 560px) {
+  .deck { height: 400px; }
+  .nutrition { grid-template-columns: minmax(0, 1fr); }
+  .cook-ing ul { columns: 1; }
   .sheet-wrap { padding: 0; }
   .sheet { border-radius: 0; min-height: 100%; margin: 0; }
   .sheet-head, .sheet-body { padding-left: 18px; padding-right: 18px; }
@@ -321,26 +426,44 @@ footer p { margin: 0; max-width: 90ch; }
   <section class="wrap hero" aria-labelledby="hero-title">
     <div class="hero-copy">
       <h1 id="hero-title">Fast dinners that hit your <em>protein</em>.</h1>
-      <p>Asian, Mexican and Taiwanese dinners in 35 minutes or less. Each one has a video and the full recipe.</p>
+      <p>Asian, Mexican and Taiwanese dinners in 35 minutes or less. Swipe through them, then cook along with the video.</p>
       <div class="hero-cta">
         <button class="btn btn-primary" id="spin-btn" type="button"><span class="ico" data-icon="shuffle"></span>Spin for dinner</button>
         <a class="btn" href="#recipes">Browse recipes</a>
       </div>
     </div>
-    <div class="wheel-wrap">
-      <div class="wheel" id="wheel">
-        <canvas id="wheel-canvas" role="img" aria-label="A 3D lazy susan of dinner plates. Drag to turn it, tap the front plate to open the recipe."></canvas>
-        <div class="wheel-arrows">
-          <button class="icon-btn" type="button" id="wheel-prev" aria-label="Previous dish"><span class="ico" style="transform:scaleX(-1)" data-icon="arrow-right"></span></button>
-          <button class="icon-btn" type="button" id="wheel-next" aria-label="Next dish"><span class="ico" data-icon="arrow-right"></span></button>
+    <div class="hero-stage">
+      <div class="hero-stage-head">
+        <div class="tabs" role="tablist" aria-label="How to pick dinner">
+          <button type="button" role="tab" data-mode="swipe" aria-selected="true"><span class="ico" data-icon="cards"></span>Swipe</button>
+          <button type="button" role="tab" data-mode="spin" aria-selected="false"><span class="ico" data-icon="shuffle"></span>Spin</button>
         </div>
+        <span class="stage-hint" id="stage-hint">Swipe right to save, left to skip</span>
       </div>
-      <div class="wheel-card" id="wheel-card" aria-live="polite"></div>
-      <p class="wheel-hint">Drag the table to turn it. Tap the front plate to open its recipe. It holds up to 8 dishes from the filters below.</p>
+      <div class="deck-wrap" id="deck-wrap">
+        <div class="deck" id="deck" tabindex="0" aria-label="Recipe cards. Left arrow skips, right arrow saves, Enter opens the recipe."></div>
+        <div class="deck-controls">
+          <button class="round skip" type="button" id="deck-skip" aria-label="Skip this dish"><span class="ico" data-icon="x"></span></button>
+          <button class="round cook" type="button" id="deck-cook" aria-label="Open this recipe"><span class="ico" data-icon="cooking-pot"></span></button>
+          <button class="round save" type="button" id="deck-save" aria-label="Save this dish"><span class="ico" data-icon="heart"></span></button>
+        </div>
+        <div class="shortlist" id="shortlist"></div>
+      </div>
+    <div class="wheel-wrap" id="wheel-wrap" hidden>
+        <div class="wheel" id="wheel">
+          <canvas id="wheel-canvas" role="img" aria-label="A 3D lazy susan of dinner plates. Drag to turn it, tap the front plate to open the recipe."></canvas>
+          <div class="wheel-arrows">
+            <button class="icon-btn" type="button" id="wheel-prev" aria-label="Previous dish"><span class="ico" style="transform:scaleX(-1)" data-icon="arrow-right"></span></button>
+            <button class="icon-btn" type="button" id="wheel-next" aria-label="Next dish"><span class="ico" data-icon="arrow-right"></span></button>
+          </div>
+        </div>
+        <div class="wheel-card" id="wheel-card" aria-live="polite"></div>
+        <p class="wheel-hint">Drag the table to turn it. Tap the front plate to open its recipe. It holds up to 8 dishes from the filters below.</p>
+      </div>
     </div>
   </section>
 
-  <section class="wrap" aria-labelledby="target-title">
+  <section class="wrap rv" aria-labelledby="target-title">
     <div class="target">
       <div>
         <h2 id="target-title">Your dinner target</h2>
@@ -358,7 +481,7 @@ footer p { margin: 0; max-width: 90ch; }
     </div>
   </section>
 
-  <section class="wrap feature" id="taiwanese" aria-labelledby="tw-title">
+  <section class="wrap feature rv" id="taiwanese" aria-labelledby="tw-title">
     <button class="feature-photo" type="button" data-open="taiwanese-popcorn-chicken" aria-label="Open Taiwanese popcorn chicken">
       <img src="img/taiwanese-popcorn-chicken.jpg" alt="Crispy Taiwanese popcorn chicken in a takeout box" width="800" height="600">
     </button>
@@ -372,6 +495,10 @@ footer p { margin: 0; max-width: 90ch; }
   <section class="wrap library" id="recipes" aria-labelledby="lib-title">
     <div class="library-head">
       <h2 id="lib-title">All recipes</h2>
+      <div class="fridge" role="group" aria-labelledby="fridge-title">
+        <div class="fridge-head"><b id="fridge-title"><span class="ico" data-icon="basket"></span>Cook from your fridge</b><small id="fridge-note">Tap what you have and the best matches move to the front.</small></div>
+        <div class="chips" id="fridge-chips"></div>
+      </div>
       <div class="filters">
         <div class="chips" role="group" aria-label="Cuisine" id="cuisine-chips"></div>
         <div class="chips" role="group" aria-label="Quick filters" id="flag-chips"></div>
@@ -412,6 +539,8 @@ footer p { margin: 0; max-width: 90ch; }
   </aside>
 </div>
 
+<div class="cookmode" id="cook" role="dialog" aria-modal="true" aria-labelledby="cook-title" hidden></div>
+
 <div class="timers" id="timers" aria-live="polite"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -421,7 +550,7 @@ footer p { margin: 0; max-width: 90ch; }
 "use strict";
 
 /* Icons: Phosphor Icons (MIT), inlined from @phosphor-icons/core 2.1.1. */
-const ICONS = {"arrow-right":"<path d=\"M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z\"/>","arrow-square-out":"<path d=\"M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z\"/>","bookmark-simple":"<path d=\"M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Zm0,177.57-51.77-32.35a8,8,0,0,0-8.48,0L72,209.57V48H184Z\"/>","calendar-blank":"<path d=\"M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z\"/>","check":"<path d=\"M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z\"/>","clock":"<path d=\"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z\"/>","copy":"<path d=\"M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z\"/>","fire":"<path d=\"M183.89,153.34a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68ZM216,144a88,88,0,0,1-176,0c0-27.92,11-56.47,32.66-84.85a8,8,0,0,1,11.93-.89l24.12,23.41,22-60.41a8,8,0,0,1,12.63-3.41C165.21,36,216,84.55,216,144Zm-16,0c0-46.09-35.79-85.92-58.21-106.33L119.52,98.74a8,8,0,0,1-13.09,3L80.06,76.16C64.09,99.21,56,122,56,144a72,72,0,0,0,144,0Z\"/>","heart-fill":"<path d=\"M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z\"/>","heart":"<path d=\"M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z\"/>","magnifying-glass":"<path d=\"M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z\"/>","play-fill":"<path d=\"M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z\"/>","play":"<path d=\"M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z\"/>","plus":"<path d=\"M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z\"/>","shuffle":"<path d=\"M237.66,178.34a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L212.69,192H200.94a72.12,72.12,0,0,1-58.59-30.15l-41.72-58.4A56.1,56.1,0,0,0,55.06,80H32a8,8,0,0,1,0-16H55.06a72.12,72.12,0,0,1,58.59,30.15l41.72,58.4A56.1,56.1,0,0,0,200.94,176h11.75l-10.35-10.34a8,8,0,0,1,11.32-11.32ZM143,107a8,8,0,0,0,11.16-1.86l1.2-1.67A56.1,56.1,0,0,1,200.94,80h11.75L202.34,90.34a8,8,0,0,0,11.32,11.32l24-24a8,8,0,0,0,0-11.32l-24-24a8,8,0,0,0-11.32,11.32L212.69,64H200.94a72.12,72.12,0,0,0-58.59,30.15l-1.2,1.67A8,8,0,0,0,143,107Zm-30,42a8,8,0,0,0-11.16,1.86l-1.2,1.67A56.1,56.1,0,0,1,55.06,176H32a8,8,0,0,0,0,16H55.06a72.12,72.12,0,0,0,58.59-30.15l1.2-1.67A8,8,0,0,0,113,149Z\"/>","tiktok-logo":"<path d=\"M224,72a48.05,48.05,0,0,1-48-48,8,8,0,0,0-8-8H128a8,8,0,0,0-8,8V156a20,20,0,1,1-28.57-18.08A8,8,0,0,0,96,130.69V88a8,8,0,0,0-9.4-7.88C50.91,86.48,24,119.1,24,156a76,76,0,0,0,152,0V116.29A103.25,103.25,0,0,0,224,128a8,8,0,0,0,8-8V80A8,8,0,0,0,224,72Zm-8,39.64a87.19,87.19,0,0,1-43.33-16.15A8,8,0,0,0,160,102v54a60,60,0,0,1-120,0c0-25.9,16.64-49.13,40-57.6v27.67A36,36,0,1,0,136,156V32h24.5A64.14,64.14,0,0,0,216,87.5Z\"/>","timer":"<path d=\"M128,40a96,96,0,1,0,96,96A96.11,96.11,0,0,0,128,40Zm0,176a80,80,0,1,1,80-80A80.09,80.09,0,0,1,128,216ZM173.66,90.34a8,8,0,0,1,0,11.32l-40,40a8,8,0,0,1-11.32-11.32l40-40A8,8,0,0,1,173.66,90.34ZM96,16a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,16Z\"/>","x":"<path d=\"M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z\"/>","youtube-logo":"<path d=\"M164.44,121.34l-48-32A8,8,0,0,0,104,96v64a8,8,0,0,0,12.44,6.66l48-32a8,8,0,0,0,0-13.32ZM120,145.05V111l25.58,17ZM234.33,69.52a24,24,0,0,0-14.49-16.4C185.56,39.88,131,40,128,40s-57.56-.12-91.84,13.12a24,24,0,0,0-14.49,16.4C19.08,79.5,16,97.74,16,128s3.08,48.5,5.67,58.48a24,24,0,0,0,14.49,16.41C69,215.56,120.4,216,127.34,216h1.32c6.94,0,58.37-.44,91.18-13.11a24,24,0,0,0,14.49-16.41c2.59-10,5.67-28.22,5.67-58.48S236.92,79.5,234.33,69.52Zm-15.49,113a8,8,0,0,1-4.77,5.49c-31.65,12.22-85.48,12-86,12H128c-.54,0-54.33.2-86-12a8,8,0,0,1-4.77-5.49C34.8,173.39,32,156.57,32,128s2.8-45.39,5.16-54.47A8,8,0,0,1,41.93,68c30.52-11.79,81.66-12,85.85-12h.27c.54,0,54.38-.18,86,12a8,8,0,0,1,4.77,5.49C221.2,82.61,224,99.43,224,128S221.2,173.39,218.84,182.47Z\"/>"};
+const ICONS = {"arrow-left":"<path d=\"M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z\"/>","arrow-right":"<path d=\"M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z\"/>","arrow-square-out":"<path d=\"M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z\"/>","arrow-up":"<path d=\"M205.66,117.66a8,8,0,0,1-11.32,0L136,59.31V216a8,8,0,0,1-16,0V59.31L61.66,117.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0l72,72A8,8,0,0,1,205.66,117.66Z\"/>","basket":"<path d=\"M136,120v56a8,8,0,0,1-16,0V120a8,8,0,0,1,16,0Zm36.84-.8-5.6,56A8,8,0,0,0,174.4,184a7.32,7.32,0,0,0,.81,0,8,8,0,0,0,7.95-7.2l5.6-56a8,8,0,0,0-15.92-1.6Zm-89.68,0a8,8,0,0,0-15.92,1.6l5.6,56a8,8,0,0,0,8,7.2,7.32,7.32,0,0,0,.81,0,8,8,0,0,0,7.16-8.76ZM239.93,89.06,224.86,202.12A16.06,16.06,0,0,1,209,216H47a16.06,16.06,0,0,1-15.86-13.88L16.07,89.06A8,8,0,0,1,24,80H68.37L122,18.73a8,8,0,0,1,12,0L187.63,80H232a8,8,0,0,1,7.93,9.06ZM89.63,80h76.74L128,36.15ZM222.86,96H33.14L47,200H209Z\"/>","bookmark-simple":"<path d=\"M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Zm0,177.57-51.77-32.35a8,8,0,0,0-8.48,0L72,209.57V48H184Z\"/>","calendar-blank":"<path d=\"M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z\"/>","cards":"<path d=\"M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z\"/>","check":"<path d=\"M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z\"/>","clock":"<path d=\"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z\"/>","cooking-pot":"<path d=\"M88,48V16a8,8,0,0,1,16,0V48a8,8,0,0,1-16,0Zm40,8a8,8,0,0,0,8-8V16a8,8,0,0,0-16,0V48A8,8,0,0,0,128,56Zm32,0a8,8,0,0,0,8-8V16a8,8,0,0,0-16,0V48A8,8,0,0,0,160,56Zm92.8,46.4L224,124v60a32,32,0,0,1-32,32H64a32,32,0,0,1-32-32V124L3.2,102.4a8,8,0,0,1,9.6-12.8L32,104V80a8,8,0,0,1,8-8H216a8,8,0,0,1,8,8v24l19.2-14.4a8,8,0,0,1,9.6,12.8ZM208,88H48v96a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16Z\"/>","copy":"<path d=\"M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z\"/>","fire":"<path d=\"M183.89,153.34a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68ZM216,144a88,88,0,0,1-176,0c0-27.92,11-56.47,32.66-84.85a8,8,0,0,1,11.93-.89l24.12,23.41,22-60.41a8,8,0,0,1,12.63-3.41C165.21,36,216,84.55,216,144Zm-16,0c0-46.09-35.79-85.92-58.21-106.33L119.52,98.74a8,8,0,0,1-13.09,3L80.06,76.16C64.09,99.21,56,122,56,144a72,72,0,0,0,144,0Z\"/>","heart-fill":"<path d=\"M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z\"/>","heart":"<path d=\"M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z\"/>","magnifying-glass":"<path d=\"M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z\"/>","pause":"<path d=\"M200,32H160a16,16,0,0,0-16,16V208a16,16,0,0,0,16,16h40a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm0,176H160V48h40ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Zm0,176H56V48H96Z\"/>","play-fill":"<path d=\"M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z\"/>","play":"<path d=\"M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z\"/>","plus":"<path d=\"M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z\"/>","shuffle":"<path d=\"M237.66,178.34a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L212.69,192H200.94a72.12,72.12,0,0,1-58.59-30.15l-41.72-58.4A56.1,56.1,0,0,0,55.06,80H32a8,8,0,0,1,0-16H55.06a72.12,72.12,0,0,1,58.59,30.15l41.72,58.4A56.1,56.1,0,0,0,200.94,176h11.75l-10.35-10.34a8,8,0,0,1,11.32-11.32ZM143,107a8,8,0,0,0,11.16-1.86l1.2-1.67A56.1,56.1,0,0,1,200.94,80h11.75L202.34,90.34a8,8,0,0,0,11.32,11.32l24-24a8,8,0,0,0,0-11.32l-24-24a8,8,0,0,0-11.32,11.32L212.69,64H200.94a72.12,72.12,0,0,0-58.59,30.15l-1.2,1.67A8,8,0,0,0,143,107Zm-30,42a8,8,0,0,0-11.16,1.86l-1.2,1.67A56.1,56.1,0,0,1,55.06,176H32a8,8,0,0,0,0,16H55.06a72.12,72.12,0,0,0,58.59-30.15l1.2-1.67A8,8,0,0,0,113,149Z\"/>","tiktok-logo":"<path d=\"M224,72a48.05,48.05,0,0,1-48-48,8,8,0,0,0-8-8H128a8,8,0,0,0-8,8V156a20,20,0,1,1-28.57-18.08A8,8,0,0,0,96,130.69V88a8,8,0,0,0-9.4-7.88C50.91,86.48,24,119.1,24,156a76,76,0,0,0,152,0V116.29A103.25,103.25,0,0,0,224,128a8,8,0,0,0,8-8V80A8,8,0,0,0,224,72Zm-8,39.64a87.19,87.19,0,0,1-43.33-16.15A8,8,0,0,0,160,102v54a60,60,0,0,1-120,0c0-25.9,16.64-49.13,40-57.6v27.67A36,36,0,1,0,136,156V32h24.5A64.14,64.14,0,0,0,216,87.5Z\"/>","timer":"<path d=\"M128,40a96,96,0,1,0,96,96A96.11,96.11,0,0,0,128,40Zm0,176a80,80,0,1,1,80-80A80.09,80.09,0,0,1,128,216ZM173.66,90.34a8,8,0,0,1,0,11.32l-40,40a8,8,0,0,1-11.32-11.32l40-40A8,8,0,0,1,173.66,90.34ZM96,16a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,16Z\"/>","x":"<path d=\"M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z\"/>","youtube-logo":"<path d=\"M164.44,121.34l-48-32A8,8,0,0,0,104,96v64a8,8,0,0,0,12.44,6.66l48-32a8,8,0,0,0,0-13.32ZM120,145.05V111l25.58,17ZM234.33,69.52a24,24,0,0,0-14.49-16.4C185.56,39.88,131,40,128,40s-57.56-.12-91.84,13.12a24,24,0,0,0-14.49,16.4C19.08,79.5,16,97.74,16,128s3.08,48.5,5.67,58.48a24,24,0,0,0,14.49,16.41C69,215.56,120.4,216,127.34,216h1.32c6.94,0,58.37-.44,91.18-13.11a24,24,0,0,0,14.49-16.41c2.59-10,5.67-28.22,5.67-58.48S236.92,79.5,234.33,69.52Zm-15.49,113a8,8,0,0,1-4.77,5.49c-31.65,12.22-85.48,12-86,12H128c-.54,0-54.33.2-86-12a8,8,0,0,1-4.77-5.49C34.8,173.39,32,156.57,32,128s2.8-45.39,5.16-54.47A8,8,0,0,1,41.93,68c30.52-11.79,81.66-12,85.85-12h.27c.54,0,54.38-.18,86,12a8,8,0,0,1,4.77,5.49C221.2,82.61,224,99.43,224,128S221.2,173.39,218.84,182.47Z\"/>"};
 const ic = n => '<span class="ico" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor">' + (ICONS[n] || "") + '</svg></span>';
 
 /* =========================================================
@@ -978,13 +1107,28 @@ const FLAGS = [
   { id: "saved", label: "Saved", test: r => state.favs.has(r.id) }
 ];
 const CHEFS = ["Roy Choi", "Gordon Ramsay"];
+const FRIDGE = [
+  { id: "chicken", label: "Chicken", re: /chicken/ },
+  { id: "beef", label: "Beef", re: /beef|steak|sirloin|flank/ },
+  { id: "pork", label: "Pork", re: /pork/ },
+  { id: "shrimp", label: "Shrimp", re: /shrimp/ },
+  { id: "fish", label: "Salmon or cod", re: /salmon|cod/ },
+  { id: "eggs", label: "Eggs", re: /\begg/ },
+  { id: "rice", label: "Rice", re: /\brice\b(?! (wine|vinegar|noodles))/ },
+  { id: "noodles", label: "Noodles", re: /noodle|spaghetti/ },
+  { id: "tortillas", label: "Tortillas", re: /tortilla/ },
+  { id: "broccoli", label: "Broccoli", re: /broccoli/ },
+  { id: "cabbage", label: "Cabbage", re: /cabbage/ },
+  { id: "kimchi", label: "Kimchi", re: /kimchi/ }
+];
+const fridgeHits = r => { const text = r.ingredients.join(" ").toLowerCase(); return FRIDGE.filter(f => state.fridge.has(f.id) && f.re.test(text)); };
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 /* =========================================================
    State + storage
    ========================================================= */
 const KEY = "wok-comal-v2";
-const state = { cuisine: "all", chef: "all", flags: new Set(), q: "", sort: "fit", goal: "maintain", cal: 650, pro: 40, favs: new Set(), week: Array(7).fill(null), embedOk: false };
+const state = { mode: "swipe", fridge: new Set(), cuisine: "all", chef: "all", flags: new Set(), q: "", sort: "fit", goal: "maintain", cal: 650, pro: 40, favs: new Set(), week: Array(7).fill(null), embedOk: false };
 const byId = id => RECIPES.find(r => r.id === id);
 function load() {
   try {
@@ -994,12 +1138,13 @@ function load() {
     if (d.goal) state.goal = d.goal;
     if (Number.isFinite(d.cal)) state.cal = d.cal;
     if (Number.isFinite(d.pro)) state.pro = d.pro;
+    if (d.mode === "spin" || d.mode === "swipe") state.mode = d.mode;
     if (Array.isArray(d.favs)) state.favs = new Set(d.favs.filter(byId));
     if (Array.isArray(d.week) && d.week.length === 7) state.week = d.week.map(id => id && byId(id) ? id : null);
   } catch (e) { /* storage unavailable */ }
 }
 function save() {
-  try { localStorage.setItem(KEY, JSON.stringify({ goal: state.goal, cal: state.cal, pro: state.pro, favs: [...state.favs], week: state.week })); } catch (e) { /* ignore */ }
+  try { localStorage.setItem(KEY, JSON.stringify({ mode: state.mode, goal: state.goal, cal: state.cal, pro: state.pro, favs: [...state.favs], week: state.week })); } catch (e) { /* ignore */ }
 }
 
 /* =========================================================
@@ -1032,6 +1177,7 @@ function filtered() {
     if (state.cuisine !== "all" && !r.cuisine.includes(state.cuisine)) return false;
     if (state.chef !== "all" && r.chef !== state.chef) return false;
     for (const f of FLAGS) if (state.flags.has(f.id) && !f.test(r)) return false;
+    if (state.fridge.size && !fridgeHits(r).length) return false;
     if (q && !(r.name + " " + (r.chef || "") + " " + r.origin + " " + r.tags.join(" ") + " " + r.ingredients.join(" ")).toLowerCase().includes(q)) return false;
     return true;
   });
@@ -1039,11 +1185,14 @@ function filtered() {
     fit: (a, b) => (fitOf(b).ok - fitOf(a).ok) || (b.pro / b.cal - a.pro / a.cal),
     protein: (a, b) => b.pro - a.pro, cal: (a, b) => a.cal - b.cal, time: (a, b) => a.time - b.time || b.pro - a.pro
   }[state.sort];
+  if (state.fridge.size) return list.sort((a, b) => (fridgeHits(b).length - fridgeHits(a).length) || by(a, b));
   return list.sort(by);
 }
 function renderChips() {
   $("#cuisine-chips").innerHTML = CUISINES.map(c => '<button class="chip" type="button" data-cuisine="' + c.id + '" aria-pressed="' + (state.cuisine === c.id) + '">' + esc(c.label) + '</button>').join("");
   $("#flag-chips").innerHTML = FLAGS.map(f => '<button class="chip" type="button" data-flag="' + f.id + '" aria-pressed="' + state.flags.has(f.id) + '">' + esc(f.label) + (f.id === "saved" && state.favs.size ? ' <span class="num">' + state.favs.size + '</span>' : "") + '</button>').join("");
+  $("#fridge-chips").innerHTML = FRIDGE.map(f => '<button class="chip food" type="button" data-food="' + f.id + '" aria-pressed="' + state.fridge.has(f.id) + '">' + esc(f.label) + '</button>').join("");
+  $("#fridge-note").textContent = state.fridge.size ? "Showing dishes that use at least one of these, best matches first." : "Tap what you have and the best matches move to the front.";
   $("#chef-chips").innerHTML = CHEFS.map(c => '<button class="chip" type="button" data-chef="' + esc(c) + '" aria-pressed="' + (state.chef === c) + '">' + esc(c) + '</button>').join("");
 }
 function renderTarget() {
@@ -1054,27 +1203,43 @@ function renderTarget() {
   const best = RECIPES.slice().sort((a, b) => b.pro / b.cal - a.pro / a.cal)[0];
   $("#target-line").innerHTML = '<strong>' + fits + ' of ' + RECIPES.length + '</strong> dinners fit ' + state.cal + ' calories with about ' + state.pro + 'g protein. Best protein for the calories: ' + esc(best.name) + ', ' + best.pro + 'g in ' + best.cal + ' cal.';
 }
-function cardHTML(r) {
+function cardHTML(r, i) {
   const fit = fitOf(r), fav = state.favs.has(r.id);
-  return '<article class="card">' +
+  const hits = state.fridge.size ? fridgeHits(r) : [];
+  return '<article class="card" data-id="' + r.id + '" style="--i:' + Math.min(i, 12) + '">' +
     '<button class="card-photo" type="button" data-open="' + r.id + '" aria-label="Open ' + esc(r.name) + '"><img src="' + img(r.id) + '" alt="' + esc(r.name) + '" loading="lazy" width="800" height="600"></button>' +
     '<div class="card-body">' +
       '<div class="card-meta"><span>' + esc(cuisineLabel(r)) + '</span><span class="sep"></span>' + ic("clock") + '<span class="num">' + r.time + ' min</span>' +
         (r.spice ? '<span class="sep"></span><span class="spice" title="Spicy">' + ic("fire").repeat(r.spice) + '</span>' : "") + '</div>' +
       '<h3><button class="card-title" type="button" data-open="' + r.id + '">' + esc(r.name) + '</button></h3>' +
       (r.chef ? '<div class="chef">' + esc(r.chef) + '</div>' : "") +
+      (hits.length ? '<div class="uses">Uses your ' + esc(hits.map(h => h.label.toLowerCase()).join(", ")) + '</div>' : "") +
       '<dl class="macros"><div><dt>cal</dt><dd>' + r.cal + '</dd></div><div class="pro"><dt>protein</dt><dd>' + r.pro + 'g</dd></div><div><dt>carbs</dt><dd>' + r.carb + 'g</dd></div><div><dt>fat</dt><dd>' + r.fat + 'g</dd></div></dl>' +
       '<div class="card-foot"><span class="fit ' + (fit.ok ? "ok" : "warn") + '">' + (fit.ok ? ic("check") : "") + esc(fit.text) + '</span>' +
         '<span class="card-actions"><span class="media-tags" title="' + (r.tiktok ? "YouTube and TikTok videos" : "YouTube video") + '">' + ic("youtube-logo") + (r.tiktok ? ic("tiktok-logo") : "") + '</span>' +
         '<button class="icon-btn" type="button" data-fav="' + r.id + '" aria-pressed="' + fav + '" aria-label="' + (fav ? "Remove from saved" : "Save recipe") + '">' + ic(fav ? "heart-fill" : "heart") + '</button></span></div>' +
     '</div></article>';
 }
+let gridRenders = 0;
 function renderGrid() {
   const list = filtered();
+  const grid = $("#grid");
+  const before = new Map();
+  if (gridRenders && !reduceMotion) grid.querySelectorAll(".card").forEach(c => before.set(c.dataset.id, c.getBoundingClientRect()));
   $("#result-line").textContent = list.length === RECIPES.length ? "Showing all " + list.length + " recipes" : "Showing " + list.length + " of " + RECIPES.length + " recipes";
-  $("#grid").innerHTML = list.length ? list.map(cardHTML).join("") :
+  grid.classList.toggle("intro", gridRenders === 0 && !reduceMotion);
+  grid.innerHTML = list.length ? list.map(cardHTML).join("") :
     '<div class="empty"><strong>No dinners match all of these filters</strong><span>Remove a filter or two to see more.</span><button class="btn btn-sm" type="button" data-action="clear">Clear filters</button></div>';
+  if (before.size && grid.animate) {
+    grid.querySelectorAll(".card").forEach(c => {
+      const b = before.get(c.dataset.id), a = c.getBoundingClientRect();
+      if (b) { const dx = b.left - a.left, dy = b.top - a.top; if (dx || dy) c.animate([{ transform: "translate(" + dx + "px," + dy + "px)" }, { transform: "none" }], { duration: 550, easing: "cubic-bezier(.16,1,.3,1)" }); }
+      else c.animate([{ transform: "scale(.9)", opacity: 0 }, { transform: "none", opacity: 1 }], { duration: 420, easing: "cubic-bezier(.16,1,.3,1)" });
+    });
+  }
+  gridRenders++;
   if (wheel) wheel.setList(list.length ? list : RECIPES);
+  syncDeck(list);
 }
 function renderTaiwanese() {
   $("#tw-list").innerHTML = RECIPES.filter(r => r.cuisine.includes("taiwanese")).map(r =>
@@ -1125,9 +1290,9 @@ function openRecipe(id, keep) {
       '<h2 id="sheet-title">' + esc(r.name) + '</h2></div>' +
       '<button class="icon-btn" type="button" data-action="close" aria-label="Close recipe">' + ic("x") + '</button></div>' +
     '<div class="sheet-body">' + mediaHTML(r) +
-      '<div class="stats">' +
+      '<div class="nutrition">' + donutHTML(r) + '<div class="stats">' +
         '<div><b>' + r.time + '</b><span>minutes</span></div><div><b>' + r.serves + '</b><span>servings</span></div><div><b>' + r.cal + '</b><span>cal per serving</span></div>' +
-        '<div class="pro"><b>' + r.pro + 'g</b><span>protein</span></div><div><b>' + r.carb + 'g</b><span>carbs</span></div><div><b>' + r.fat + 'g</b><span>fat</span></div></div>' +
+        '<div class="pro"><b>' + r.pro + 'g</b><span>protein</span></div><div><b>' + r.carb + 'g</b><span>carbs</span></div><div><b>' + r.fat + 'g</b><span>fat</span></div></div></div>' +
       '<div class="cols">' +
         '<div><h3>Ingredients <small>' + r.ingredients.length + ' items</small></h3><ul class="ing">' +
           r.ingredients.map((x, i) => '<li><label><input type="checkbox" id="ing-' + r.id + '-' + i + '"><span>' + esc(x) + '</span></label></li>').join("") + '</ul></div>' +
@@ -1138,7 +1303,8 @@ function openRecipe(id, keep) {
       '<div class="sheet-foot">' +
         '<label class="toggle"><input type="checkbox" id="wake-toggle"' + (wakeLock ? " checked" : "") + '> Keep screen on while cooking</label>' +
         '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-sm" type="button" data-fav="' + r.id + '" aria-pressed="' + fav + '">' + ic(fav ? "heart-fill" : "heart") + (fav ? "Saved" : "Save") + '</button>' +
-        '<button class="btn btn-sm btn-primary" type="button" data-addweek="' + r.id + '">' + ic("plus") + 'Add to this week</button></div>' +
+        '<button class="btn btn-sm" type="button" data-addweek="' + r.id + '">' + ic("plus") + 'Add to this week</button>' +
+        '<button class="btn btn-sm btn-primary" type="button" data-cook="' + r.id + '">' + ic("cooking-pot") + 'Start cooking mode</button></div>' +
       '</div>' +
       '<p class="photo-credit">Photo by <a href="' + r.photo.url + '" target="_blank" rel="noopener">' + esc(r.photo.by) + '</a> on Unsplash.</p>' +
     '</div>';
@@ -1146,6 +1312,14 @@ function openRecipe(id, keep) {
   document.body.style.overflow = "hidden";
   if (!keep) { $("#sheet-wrap").scrollTop = 0; $("#sheet").querySelector('[data-action="close"]').focus(); }
   try { if (location.hash !== "#" + id) history.replaceState(null, "", "#" + id); } catch (e) { /* ignore */ }
+}
+function donutHTML(r) {
+  const parts = [["Protein", r.pro * 4, "var(--ok)"], ["Carbs", r.carb * 4, "#d4a03c"], ["Fat", r.fat * 9, "#7b828c"]];
+  const total = parts.reduce((s, p) => s + p[1], 0), C = 2 * Math.PI * 50;
+  let off = 0;
+  const arcs = parts.map((p, i) => { const len = C * p[1] / total; const el = '<circle class="arc" cx="64" cy="64" r="50" style="stroke:' + p[2] + ';--len:' + Math.max(0, len - 2).toFixed(1) + 'px;--off:' + (-off).toFixed(1) + 'px;--d:' + (i * 0.12) + 's"></circle>'; off += len; return el; }).join("");
+  return '<div class="donut"><svg viewBox="0 0 128 128" aria-hidden="true"><circle class="track" cx="64" cy="64" r="50"></circle>' + arcs + '</svg>' +
+    '<div class="legend" aria-label="Where the calories come from">' + parts.map(p => '<span><i style="background:' + p[2] + '"></i>' + p[0] + ' <b>' + Math.round(p[1] / total * 100) + '%</b></span>').join("") + '</div></div>';
 }
 function closeRecipe() {
   $("#sheet-wrap").hidden = true; $("#sheet").innerHTML = ""; document.body.style.overflow = ""; openId = null;
@@ -1202,6 +1376,7 @@ setInterval(() => {
     if (el && !t.done) el.textContent = fmt(t.end - Date.now());
   });
   if (changed) renderTimers();
+  renderCookTimer();
 }, 250);
 
 /* =========================================================
@@ -1250,6 +1425,12 @@ document.addEventListener("click", e => {
   if (!t) { if (e.target === $("#sheet-wrap")) closeRecipe(); if (e.target === $("#drawer-wrap")) closeDrawer(); return; }
   const d = t.dataset;
   if (d.cuisine) { state.cuisine = d.cuisine; renderChips(); renderGrid(); }
+  else if (d.food) { if (state.fridge.has(d.food)) state.fridge.delete(d.food); else state.fridge.add(d.food); renderChips(); renderGrid(); }
+  else if (d.mode) setMode(d.mode);
+  else if (d.cook) openCook(d.cook);
+  else if (d.cookNav) stepCook(Number(d.cookNav));
+  else if (d.cookTimer) { if (timers.has(d.cookTimer)) timers.delete(d.cookTimer); else startTimer(d.cookTimer); renderTimers(); renderCookTimer(); }
+  else if (d.action === "cook-close") closeCook();
   else if (d.chef) { state.chef = state.chef === d.chef ? "all" : d.chef; renderChips(); renderGrid(); }
   else if (d.flag) { if (state.flags.has(d.flag)) state.flags.delete(d.flag); else state.flags.add(d.flag); renderChips(); renderGrid(); }
   else if (d.open) { if (!$("#drawer-wrap").hidden) closeDrawer(); openRecipe(d.open); }
@@ -1262,7 +1443,7 @@ document.addEventListener("click", e => {
   else if (d.tab) { mediaTab = d.tab; openRecipe(openId, true); }
   else if (d.play) playInline(d.play);
   else if (d.action === "close") closeRecipe();
-  else if (d.action === "clear") { state.cuisine = "all"; state.chef = "all"; state.flags.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
+  else if (d.action === "clear") { state.cuisine = "all"; state.chef = "all"; state.flags.clear(); state.fridge.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
   else if (d.action === "copy") {
     const ta = $("#shop-text"), ok = () => toast("Shopping list copied"), fb = () => { ta.focus(); ta.select(); toast("List selected. Use your copy shortcut."); };
     try { navigator.clipboard.writeText(ta.value).then(ok, fb); } catch (err) { fb(); }
@@ -1283,7 +1464,15 @@ $("#cal-input").addEventListener("input", onTarget);
 $("#pro-input").addEventListener("input", onTarget);
 $("#week-btn").addEventListener("click", openDrawer);
 $("#drawer-close").addEventListener("click", closeDrawer);
-document.addEventListener("keydown", e => { if (e.key === "Escape") { if (!$("#drawer-wrap").hidden) closeDrawer(); else if (!$("#sheet-wrap").hidden) closeRecipe(); } });
+document.addEventListener("keydown", e => {
+  if (!$("#cook").hidden) {
+    if (e.key === "Escape") closeCook();
+    else if (e.key === "ArrowRight") stepCook(1);
+    else if (e.key === "ArrowLeft") stepCook(-1);
+    return;
+  }
+  if (e.key === "Escape") { if (!$("#drawer-wrap").hidden) closeDrawer(); else if (!$("#sheet-wrap").hidden) closeRecipe(); }
+});
 window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (byId(id) && openId !== id) openRecipe(id); });
 if (window.IntersectionObserver) {
   const sentinel = document.createElement("div"); sentinel.style.cssText = "position:absolute;top:8px;left:0;height:1px;width:1px;pointer-events:none";
@@ -1484,10 +1673,195 @@ function initWheel() {
 $("#spin-btn").addEventListener("click", () => {
   if (!wheel) return;
   const b = $("#spin-btn"); b.disabled = true;
+  if (state.mode !== "spin") setMode("spin");
   const rect = $("#wheel").getBoundingClientRect();
   if (rect.top < 60 || rect.bottom > innerHeight) $("#wheel").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
-  wheel.spin().then(r => { b.disabled = false; toast("Tonight: " + r.name); });
+  setTimeout(() => wheel.spin().then(r => { b.disabled = false; toast("Tonight: " + r.name); }), 120);
 });
+
+
+/* =========================================================
+   Hero mode: swipe deck or 3D spin
+   ========================================================= */
+function setMode(m) {
+  state.mode = m; save();
+  document.querySelectorAll("[data-mode]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.mode === m)));
+  $("#deck-wrap").hidden = m !== "swipe";
+  $("#wheel-wrap").hidden = m !== "spin";
+  $("#stage-hint").textContent = m === "swipe" ? "Swipe right to save, left to skip" : "Drag the table, tap a plate";
+}
+
+/* =========================================================
+   Swipe deck
+   ========================================================= */
+const deck = { order: [], idx: 0, saved: [], busy: false };
+function syncDeck(list) {
+  const ids = list.map(r => r.id);
+  if (ids.join() === deck.order.join()) return;
+  deck.order = ids; deck.idx = 0; renderDeck();
+}
+function swipeCardHTML(r, k) {
+  return '<div class="swipe-card" data-id="' + r.id + '" style="z-index:' + (10 - k) + ';transform:translateY(' + (k * 16) + 'px) scale(' + (1 - k * 0.05) + ')"' + (k ? ' aria-hidden="true"' : '') + '>' +
+    '<img src="' + img(r.id) + '" alt="' + esc(r.name) + '" draggable="false">' +
+    '<span class="swipe-shade"></span><span class="stamp save">SAVE</span><span class="stamp skip">SKIP</span>' +
+    '<div class="swipe-info"><span class="where">' + esc(r.chef ? r.chef + ", " + cuisineLabel(r) : r.origin) + '</span><h3>' + esc(r.name) + '</h3>' +
+    '<div class="facts"><span><b>' + r.time + '</b>min</span><span><b>' + r.pro + 'g</b>protein</span><span><b>' + r.cal + '</b>cal</span><span><b>' + r.serves + '</b>servings</span></div></div></div>';
+}
+function renderDeck() {
+  const el = $("#deck"), ids = deck.order.slice(deck.idx, deck.idx + 3);
+  if (!ids.length) {
+    el.innerHTML = '<div class="deck-empty"><strong>' + (deck.order.length ? "That's every dish" : "No dishes match your filters") + '</strong><span>' +
+      (deck.saved.length ? "You saved " + deck.saved.length + ". Tap one below, or start over." : "Start over, or loosen the filters below.") + '</span>' +
+      (deck.order.length ? '<button class="btn btn-sm" type="button" id="deck-restart">' + ic("arrow-left") + 'Start over</button>' : '') + '</div>';
+    const rb = $("#deck-restart"); if (rb) rb.addEventListener("click", () => { deck.idx = 0; renderDeck(); });
+    return;
+  }
+  el.innerHTML = ids.map((id, k) => swipeCardHTML(byId(id), k)).reverse().join("");
+  bindSwipe(el.lastElementChild);
+}
+function topCard() { const c = $("#deck").lastElementChild; return c && c.classList.contains("swipe-card") ? c : null; }
+function bindSwipe(card) {
+  if (!card) return;
+  const next = card.previousElementSibling;
+  let sx = 0, sy = 0, dx = 0, dy = 0, down = false;
+  const stampS = card.querySelector(".stamp.save"), stampK = card.querySelector(".stamp.skip");
+  card.addEventListener("pointerdown", e => {
+    if (deck.busy || e.button > 0) return;
+    down = true; sx = e.clientX; sy = e.clientY; dx = dy = 0;
+    card.classList.add("dragging");
+    try { card.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+  });
+  card.addEventListener("pointermove", e => {
+    if (!down) return;
+    dx = e.clientX - sx; dy = (e.clientY - sy) * 0.35;
+    card.style.transform = "translate(" + dx + "px," + dy + "px) rotate(" + (dx * 0.055) + "deg)";
+    stampS.style.opacity = Math.max(0, Math.min(1, dx / 90));
+    stampK.style.opacity = Math.max(0, Math.min(1, -dx / 90));
+    if (next) { const p = Math.min(1, Math.abs(dx) / 130); next.style.transition = "none"; next.style.transform = "translateY(" + (16 - 16 * p) + "px) scale(" + (0.95 + 0.05 * p) + ")"; }
+  });
+  const release = e => {
+    if (!down) return; down = false; card.classList.remove("dragging");
+    if (e.type === "pointerup" && Math.abs(dx) < 6 && Math.abs(dy) < 6) { openRecipe(card.dataset.id); return; }
+    if (dx > 110) decide(1, dy);
+    else if (dx < -110) decide(-1, dy);
+    else {
+      card.style.transform = ""; stampS.style.opacity = 0; stampK.style.opacity = 0;
+      if (next) { next.style.transition = ""; next.style.transform = "translateY(16px) scale(.95)"; }
+    }
+  };
+  card.addEventListener("pointerup", release);
+  card.addEventListener("pointercancel", release);
+}
+function decide(dir, dy) {
+  const card = topCard(); if (!card || deck.busy) return;
+  deck.busy = true;
+  const id = card.dataset.id, w = $("#deck").clientWidth;
+  card.classList.remove("dragging");
+  card.querySelector(dir > 0 ? ".stamp.save" : ".stamp.skip").style.opacity = 1;
+  card.style.transition = reduceMotion ? "none" : "transform .42s cubic-bezier(.3,.6,.4,1)";
+  card.style.transform = "translate(" + (dir * w * 1.4) + "px," + ((dy || 0) - 40) + "px) rotate(" + (dir * 26) + "deg)";
+  const next = card.previousElementSibling;
+  if (next) { next.style.transition = ""; next.style.transform = "none"; }
+  if (dir > 0) {
+    if (!state.favs.has(id)) { state.favs.add(id); save(); renderChips(); }
+    if (deck.saved.indexOf(id) === -1) deck.saved.push(id);
+    toast("Saved " + byId(id).name);
+    renderShortlist();
+  }
+  setTimeout(() => { deck.idx++; deck.busy = false; renderDeck(); if (dir > 0) renderGrid(); }, reduceMotion ? 0 : 300);
+}
+function renderShortlist() {
+  const ids = deck.saved.slice(-6);
+  $("#shortlist").innerHTML = ids.length
+    ? '<span>Saved from swiping</span><span class="faces">' + ids.map(id => '<button type="button" data-open="' + id + '" aria-label="Open ' + esc(byId(id).name) + '"><img src="' + img(id) + '" alt=""></button>').join("") + '</span>'
+    : '<span>Tap a card to open the recipe. Saved dishes show up here.</span>';
+}
+$("#deck-skip").addEventListener("click", () => decide(-1));
+$("#deck-save").addEventListener("click", () => decide(1));
+$("#deck-cook").addEventListener("click", () => { const c = topCard(); if (c) openRecipe(c.dataset.id); });
+$("#deck").addEventListener("keydown", e => {
+  if (e.key === "ArrowLeft") { e.preventDefault(); decide(-1); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); decide(1); }
+  else if (e.key === "Enter") { const c = topCard(); if (c) openRecipe(c.dataset.id); }
+});
+
+/* =========================================================
+   Tilt + glare on recipe photos (mouse only)
+   ========================================================= */
+if (!reduceMotion && matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  let tilted = null;
+  const reset = el => { el.classList.remove("tilting"); el.style.transform = ""; };
+  $("#grid").addEventListener("pointermove", e => {
+    const ph = e.target.closest(".card-photo");
+    if (tilted && tilted !== ph) { reset(tilted); tilted = null; }
+    if (!ph) return;
+    const b = ph.getBoundingClientRect(), x = (e.clientX - b.left) / b.width, y = (e.clientY - b.top) / b.height;
+    ph.classList.add("tilting"); tilted = ph;
+    ph.style.transform = "perspective(900px) translateY(-4px) rotateX(" + ((0.5 - y) * 9).toFixed(2) + "deg) rotateY(" + ((x - 0.5) * 11).toFixed(2) + "deg)";
+    ph.style.setProperty("--gx", (x * 100).toFixed(1) + "%"); ph.style.setProperty("--gy", (y * 100).toFixed(1) + "%");
+  });
+  $("#grid").addEventListener("pointerleave", () => { if (tilted) { reset(tilted); tilted = null; } });
+}
+
+/* =========================================================
+   Section entrance (sections start visible; only below-the-fold ones slide up once)
+   ========================================================= */
+if (!reduceMotion && window.IntersectionObserver) {
+  const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.remove("pre"); io.unobserve(en.target); } }), { threshold: 0.12 });
+  document.querySelectorAll(".rv").forEach(el => { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add("pre"); io.observe(el); } });
+}
+
+/* =========================================================
+   Cooking mode
+   ========================================================= */
+const cook = { id: null, i: 0 };
+function openCook(id) {
+  cook.id = id; cook.i = 0;
+  $("#cook").hidden = false; document.body.style.overflow = "hidden";
+  renderCook(0);
+  if (!wakeLock) setWake(true);
+}
+function closeCook() { $("#cook").hidden = true; cook.id = null; if ($("#sheet-wrap").hidden) document.body.style.overflow = ""; }
+function stepCook(d) {
+  const r = byId(cook.id); if (!r) return;
+  const n = cook.i + d;
+  if (n >= r.steps.length) { closeCook(); toast("Done. Enjoy dinner."); return; }
+  if (n < 0) return;
+  cook.i = n; renderCook(d);
+}
+function renderCook(dir) {
+  const r = byId(cook.id), s = r.steps[cook.i], last = cook.i === r.steps.length - 1;
+  const key = s.min ? r.id + "|" + cook.i + "|" + s.min : "";
+  $("#cook").innerHTML =
+    '<div class="cook-top"><div><small>Cooking mode</small><h2 id="cook-title">' + esc(r.name) + '</h2></div>' +
+      '<button class="icon-btn" type="button" data-action="cook-close" aria-label="Leave cooking mode">' + ic("x") + '</button></div>' +
+    '<div class="cook-bars" aria-hidden="true">' + r.steps.map((x, i) => '<i class="' + (i <= cook.i ? "on" : "") + '"></i>').join("") + '</div>' +
+    '<div class="cook-stage" id="cook-stage"><div class="cook-step ' + (dir > 0 ? "from-right" : dir < 0 ? "from-left" : "") + '">' +
+      '<span class="cook-count">Step ' + (cook.i + 1) + ' of ' + r.steps.length + '</span>' +
+      '<p class="cook-text">' + esc(s.t) + '</p>' +
+      (s.min ? '<div class="ring-row"><div class="ring"><svg viewBox="0 0 128 128" aria-hidden="true"><circle class="track" cx="64" cy="64" r="56"></circle><circle class="bar" id="cook-bar" cx="64" cy="64" r="56"></circle></svg><span class="t" id="cook-t">' + s.min + ':00</span></div>' +
+        '<button class="btn btn-primary" type="button" id="cook-timer-btn" data-cook-timer="' + key + '">' + ic("timer") + 'Start ' + s.min + ' min timer</button></div>' : '') +
+    '</div></div>' +
+    '<div class="cook-nav"><button class="btn" type="button" data-cook-nav="-1"' + (cook.i ? "" : " disabled") + '>' + ic("arrow-left") + 'Back</button>' +
+      '<button class="btn btn-primary" type="button" data-cook-nav="1">' + (last ? "Finish" : "Next step") + ic(last ? "check" : "arrow-right") + '</button></div>' +
+    '<details class="cook-ing"><summary>Ingredients (' + r.ingredients.length + ')</summary><ul>' + r.ingredients.map(x => '<li>' + esc(x) + '</li>').join("") + '</ul></details>';
+  renderCookTimer();
+  const st = $("#cook-stage"); let sx = null;
+  st.addEventListener("pointerdown", e => { sx = e.clientX; });
+  st.addEventListener("pointerup", e => { if (sx === null) return; const d = e.clientX - sx; sx = null; if (Math.abs(d) > 60) stepCook(d < 0 ? 1 : -1); });
+}
+function renderCookTimer() {
+  if (!cook.id || $("#cook").hidden) return;
+  const r = byId(cook.id), s = r.steps[cook.i]; if (!s.min) return;
+  const key = r.id + "|" + cook.i + "|" + s.min, t = timers.get(key), total = s.min * 60000;
+  const left = t ? (t.done ? 0 : Math.max(0, t.end - Date.now())) : total;
+  const bar = $("#cook-bar"), lab = $("#cook-t"), btn = $("#cook-timer-btn");
+  if (!bar) return;
+  bar.style.strokeDashoffset = (352 * (1 - left / total)).toFixed(1);
+  lab.textContent = t && t.done ? "Done" : fmt(left);
+  const label = t ? (t.done ? "Clear timer" : "Stop timer") : "Start " + s.min + " min timer";
+  if (btn.dataset.label !== label) { btn.dataset.label = label; btn.innerHTML = ic(t && !t.done ? "pause" : "timer") + label; }
+}
 
 /* =========================================================
    Boot
@@ -1496,6 +1870,8 @@ load();
 hydrateIcons();
 renderTaiwanese();
 try { wheel = initWheel(); } catch (e) { wheel = null; }
+setMode(state.mode);
+renderShortlist();
 renderAll();
 probeEmbeds();
 const start = location.hash.slice(1);

@@ -1,0 +1,64 @@
+name: Deploy recipes to S3
+
+# Publishes recipes/ (the Wok & Comal page and its photos) to an S3 bucket.
+# Setup (once, in GitHub: Settings > Secrets and variables > Actions):
+#   Secrets:   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY   (an IAM user limited to this bucket)
+#   Variables: AWS_S3_BUCKET (required), AWS_REGION (default us-east-1),
+#              AWS_S3_PREFIX (optional folder, e.g. "recipes"; empty = bucket root),
+#              AWS_CLOUDFRONT_DISTRIBUTION_ID (optional, clears the CDN cache after upload)
+# Until AWS_S3_BUCKET is set, the job is skipped instead of failing.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, claude/gallant-davinci-f971th]
+    paths:
+      - "recipes/**"
+      - ".github/workflows/deploy-recipes-s3.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-recipes-s3
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: ${{ vars.AWS_S3_BUCKET != '' }}
+    runs-on: ubuntu-latest
+    env:
+      BUCKET: ${{ vars.AWS_S3_BUCKET }}
+      PREFIX: ${{ vars.AWS_S3_PREFIX }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+
+      - name: Work out the destination
+        run: |
+          DEST="s3://${BUCKET}"
+          if [ -n "${PREFIX}" ]; then DEST="${DEST}/${PREFIX#/}"; fi
+          echo "DEST=${DEST%/}" >> "$GITHUB_ENV"
+
+      - name: Upload photos (cached for 30 days)
+        run: aws s3 sync recipes/img "${DEST}/img" --delete --cache-control "public, max-age=2592000" --content-type "image/jpeg"
+
+      - name: Upload the page (always fresh)
+        run: aws s3 cp recipes/index.html "${DEST}/index.html" --cache-control "no-cache" --content-type "text/html; charset=utf-8"
+
+      - name: Clear the CloudFront cache
+        if: ${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID != '' }}
+        run: |
+          PATH_PREFIX="/"
+          if [ -n "${PREFIX}" ]; then PATH_PREFIX="/${PREFIX#/}/"; fi
+          aws cloudfront create-invalidation --distribution-id "${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }}" --paths "${PATH_PREFIX}*"
+
+      - name: Show where it went
+        run: |
+          echo "Uploaded to ${DEST}/index.html"
+          echo "Website URL (if S3 static hosting is on): http://${BUCKET}.s3-website-${{ vars.AWS_REGION || 'us-east-1' }}.amazonaws.com/${PREFIX:+${PREFIX#/}/}"
