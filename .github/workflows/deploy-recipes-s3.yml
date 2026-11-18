@@ -6,6 +6,9 @@ name: Deploy recipes to S3
 #   Variables: AWS_S3_BUCKET (required), AWS_REGION (default us-east-1),
 #              AWS_S3_PREFIX (optional folder, e.g. "recipes"; empty = bucket root),
 #              AWS_CLOUDFRONT_DISTRIBUTION_ID (optional, clears the CDN cache after upload)
+#              INCLUDE_CLASS_GUIDE_PHOTOS ("true" to also upload the MasterClass guide photos,
+#              rc-*.jpg and gr-portrait/gr-kitchen. Off by default: they belong to MasterClass,
+#              so only turn this on if the bucket is private.)
 # Until AWS_S3_BUCKET is set, the job is skipped instead of failing.
 
 on:
@@ -46,7 +49,13 @@ jobs:
           echo "DEST=${DEST%/}" >> "$GITHUB_ENV"
 
       - name: Upload photos (cached for 30 days)
-        run: aws s3 sync recipes/img "${DEST}/img" --delete --cache-control "public, max-age=2592000" --content-type "image/jpeg"
+        run: |
+          EXCLUDE=""
+          if [ "${{ vars.INCLUDE_CLASS_GUIDE_PHOTOS }}" != "true" ]; then
+            EXCLUDE='--exclude rc-* --exclude gr-portrait.jpg --exclude gr-kitchen.jpg'
+          fi
+          set -f
+          aws s3 sync recipes/img "${DEST}/img" --delete ${EXCLUDE} --cache-control "public, max-age=2592000" --content-type "image/jpeg"
 
       - name: Upload the page (always fresh)
         run: aws s3 cp recipes/index.html "${DEST}/index.html" --cache-control "no-cache" --content-type "text/html; charset=utf-8"

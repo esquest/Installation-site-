@@ -1,14 +1,10 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Wok &amp; Comal</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Esquest Eats</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Fast, high-protein Asian, Mexican and Taiwanese dinners with cook-along videos and full recipes.">
+<meta name="description" content="Fast high-protein dinners plus recipes from Roy Choi, Gordon Ramsay and your Notion kitchen, with cook-along videos and full recipes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,700&family=Geist:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: split hero (headline left, live 3D lazy-susan dinner picker right), target band,
    Taiwanese feature split, then a photo-card recipe grid. Light theme by choice (user request).
@@ -82,22 +78,6 @@ h1, h2, h3 { margin: 0; text-wrap: balance; font-family: var(--font-display); le
 .hero h1 em { font-style: normal; color: var(--accent); }
 .hero p { margin: 0; font-size: 19px; color: var(--muted); max-width: 40ch; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
-.wheel-wrap { min-width: 0; display: grid; gap: 14px; }
-.wheel { position: relative; height: 430px; border-radius: 24px; background: radial-gradient(70% 60% at 50% 42%, #ffffff 0%, #eef0ec 70%, #e6e9e4 100%); border: 1px solid var(--line); overflow: hidden; }
-#wheel-canvas { width: 100%; height: 100%; display: block; touch-action: pan-y; cursor: grab; }
-#wheel-canvas.dragging { cursor: grabbing; }
-#wheel-canvas.hovering { cursor: pointer; }
-.wheel-fallback { position: absolute; inset: 0; display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; padding: 8px; }
-.wheel-fallback img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
-.wheel-fallback img:first-child { grid-row: span 2; }
-.wheel-arrows { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 8px; }
-.wheel-card { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card); padding: 10px 12px 10px 10px; box-shadow: var(--shadow); min-height: 86px; }
-.wheel-card img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; }
-.wheel-card b { display: block; font-family: var(--font-display); font-size: 18px; line-height: 1.2; letter-spacing: -0.01em; }
-.wheel-card small { color: var(--muted); font-size: 14px; }
-.wheel-hint { color: var(--muted); font-size: 13px; margin: 0; }
-
-/* ---------- target band ---------- */
 .target { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 40px; align-items: end; padding: 26px 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; }
 .target h2 { font-size: 26px; }
 .target-line { margin: 8px 0 0; color: var(--muted); max-width: 62ch; }
@@ -309,14 +289,6 @@ footer p { margin: 0; max-width: 90ch; }
 .shortlist .faces button:focus-visible { outline: 2.5px solid var(--accent); }
 .shortlist .faces img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ---------- fridge picker ---------- */
-.fridge { display: grid; gap: 10px; padding: 18px 20px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
-.fridge-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: space-between; }
-.fridge-head b { font-family: var(--font-display); font-size: 19px; letter-spacing: -0.01em; display: inline-flex; align-items: center; gap: 8px; }
-.fridge-head small { color: var(--muted); font-size: 14px; }
-.chip.food[aria-pressed="true"] { background: var(--ok); border-color: var(--ok); color: #fff; }
-.uses { font-size: 13px; color: var(--ok); font-weight: 600; }
-
 /* ---------- tilt + glare on card photos ---------- */
 .card-photo::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 255, 255, .38), rgba(255, 255, 255, 0) 45%); }
 .card-photo.tilting::after { opacity: 1; }
@@ -379,11 +351,72 @@ footer p { margin: 0; max-width: 90ch; }
   .stats div:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
   .cols { grid-template-columns: minmax(0, 1fr); }
 }
+/* coverflow hero */
+.cf { position: relative; height: 400px; perspective: 1100px; outline: none; }
+.cf:focus-visible { outline: 2.5px solid var(--accent); outline-offset: 6px; border-radius: 24px; }
+.cf-stage { position: absolute; inset: 0; transform-style: preserve-3d; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.cf-card { position: absolute; top: 50%; left: 50%; width: 240px; height: 320px; margin: -160px 0 0 -120px; border-radius: 22px; overflow: hidden; background: #101214; box-shadow: var(--shadow-lift); border: 0; padding: 0; cursor: pointer; transition: transform .7s var(--ease), opacity .5s, filter .5s; will-change: transform; }
+.cf-card img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; -webkit-user-drag: none; }
+.cf-card .cf-shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(12, 13, 14, .85) 0%, rgba(12, 13, 14, 0) 55%); }
+.cf-card .cf-label { position: absolute; left: 16px; right: 16px; bottom: 14px; color: #fff; text-align: left; display: grid; gap: 2px; }
+.cf-card .cf-label b { font-family: var(--font-display); font-size: 19px; line-height: 1.1; letter-spacing: -0.01em; }
+.cf-card .cf-label small { font-family: var(--font-data); font-size: 12px; opacity: .9; }
+.cf-arrow { position: absolute; top: 50%; margin-top: -20px; z-index: 30; background: rgba(252, 252, 251, .92); }
+.cf-prev { left: 0; } .cf-next { right: 0; }
+.cf-caption { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; font-size: 14px; color: var(--muted); min-height: 24px; }
+.cf-caption b { color: var(--ink); font-family: var(--font-display); font-size: 16px; }
+.cf-caption .num { color: var(--ink); }
+/* stories hero */
+.stories-sec { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 48px; align-items: center; padding-block: 56px; }
+.stories-copy { display: grid; gap: 16px; align-content: center; }
+.stories-copy h2 { font-size: clamp(30px, 3.6vw, 46px); line-height: 1.05; font-weight: 800; }
+.stories-copy p { margin: 0; color: var(--muted); font-size: 18px; max-width: 38ch; }
+.stories-legend { display: flex; gap: 18px; list-style: none; margin: 0; padding: 0; font-size: 14px; color: var(--muted); }
+.stories-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 99px; margin-right: 8px; }
+.story { position: relative; aspect-ratio: 9 / 14; max-height: 640px; width: 100%; border-radius: 28px; overflow: hidden; background: #101214; box-shadow: var(--shadow-lift); isolation: isolate; justify-self: center; }
+.story-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 40%; }
+.story-img.kb { animation: kb 7s ease-out forwards; }
+@keyframes kb { from { transform: scale(1); } to { transform: scale(1.08); } }
+.story-shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(12, 13, 14, .92) 0%, rgba(12, 13, 14, .35) 45%, rgba(12, 13, 14, .35) 70%, rgba(12, 13, 14, .55) 100%); }
+.story-bars { position: absolute; top: 14px; left: 14px; right: 14px; display: flex; gap: 5px; z-index: 5; }
+.story-bars .seg { flex: 1; height: 4px; border-radius: 4px; background: rgba(255, 255, 255, .32); overflow: hidden; }
+.story-bars .seg u { display: block; height: 100%; width: 0; background: #fff; text-decoration: none; }
+.story-bars .seg.done u { width: 100%; }
+.story-bars .seg.cur u { animation: segfill var(--dur, 6s) linear forwards; }
+.story.paused .seg.cur u, .story.paused .story-img.kb { animation-play-state: paused; }
+@keyframes segfill { from { width: 0; } to { width: 100%; } }
+.story-info { position: absolute; left: 22px; right: 22px; bottom: 22px; color: #fff; display: grid; gap: 14px; z-index: 4; pointer-events: none; }
+.story-info .where { font-size: 14px; opacity: .85; }
+.story-info h3 { font-size: clamp(28px, 3.4vw, 38px); line-height: 1.04; font-weight: 800; }
+.story-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.story-stat { background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .22); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: 16px; padding: 12px 12px 10px; display: grid; gap: 2px; }
+.story-stat b { font-family: var(--font-data); font-size: 30px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.story-stat span { font-size: 12px; opacity: .85; }
+.story-stat.p b { color: #9be3a4; } .story-stat.c b { color: #f3cf7e; } .story-stat.m b { color: #b7d6f0; }
+.story-zone { position: absolute; top: 28px; bottom: 0; z-index: 6; background: transparent; border: 0; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.story-zone:focus-visible { outline: 2.5px solid #fff; outline-offset: -4px; border-radius: 20px; }
+.z-prev { left: 0; width: 32%; } .z-open { left: 32%; width: 36%; } .z-next { right: 0; width: 32%; }
+/* relocated swipe deck */
+.swipe-sec { display: grid; gap: 22px; padding-block: 36px 24px; justify-items: center; }
+.swipe-head { text-align: center; display: grid; gap: 8px; }
+.swipe-head h2 { font-size: clamp(26px, 3vw, 36px); font-weight: 800; }
+.swipe-head p { margin: 0; color: var(--muted); }
+.swipe-sec .deck-wrap { width: 100%; max-width: 440px; }
+.nomacros { margin: 0; color: var(--muted); font-size: 14px; }
+@media (max-width: 900px) {
+  .stories-sec { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 36px; }
+  .story { max-width: 420px; }
+  .cf { height: 360px; }
+}
+@media (max-width: 560px) {
+  .cf-card { width: 200px; height: 270px; margin: -135px 0 0 -100px; }
+  .cf-arrow { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .story-img.kb { animation: none; } }
 @media (max-width: 900px) {
   .hero, .feature { grid-template-columns: minmax(0, 1fr); }
   .hero { padding-top: 20px; gap: 28px; }
   .feature { padding-top: 56px; gap: 24px; }
-  .wheel { height: 340px; }
   .target { grid-template-columns: minmax(0, 1fr); }
   .filters-end { margin-left: 0; width: 100%; }
   .search { flex: 1; }
@@ -397,24 +430,132 @@ footer p { margin: 0; max-width: 90ch; }
   .sheet-wrap { padding: 0; }
   .sheet { border-radius: 0; min-height: 100%; margin: 0; }
   .sheet-head, .sheet-body { padding-left: 18px; padding-right: 18px; }
-  .wheel { height: 300px; }
-  .wheel-card { grid-template-columns: 52px minmax(0, 1fr); }
-  .wheel-card img { width: 52px; height: 52px; }
-  .wheel-card .btn { grid-column: 1 / -1; }
   .target { padding: 20px; }
   .macros { gap: 16px; }
 }
+
+/* ===== Class-guide look: kraft paper, sticker cards, tape labels, candy color bands ===== */
+:root {
+  --bg: #c8a274; --surface: #fffdf6; --ink: #15120d; --muted: #3f3628; --line: #15120d; --line-strong: #15120d;
+  --accent: #d4148a; --accent-ink: #a80d6c; --on-accent: #ffffff; --ok: #17733a;
+  --yellow: #f6c51c; --pink: #f6a9cb; --lilac: #c8b4f3; --teal: #79d5cd; --orange: #f39a4a;
+  --shadow: 4px 4px 0 #15120d; --shadow-lift: 7px 7px 0 #15120d;
+  --font-display: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-data: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+body { background-color: var(--bg); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .24  0 0 0 0 .12  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.42'/></svg>"); }
+body::before { background: var(--bg); }
+h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
+.nav { background: color-mix(in srgb, var(--bg) 92%, transparent); }
+.nav.scrolled { border-bottom: 2px solid var(--ink); }
+.brand { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.04em; }
+.brand-mark { background: var(--ink); color: var(--yellow); border-radius: 6px; font-family: var(--font-display); }
+.nav-links a { color: var(--ink); font-weight: 600; }
+.nav-links a:hover { background: var(--surface); }
+.hero h1 { font-size: clamp(36px, 4.8vw, 62px); line-height: 1.04; }
+.hero h1 em { color: var(--ink); background: var(--yellow); padding: 0 .12em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.hero p, .stories-copy p, .swipe-head p, .feature p, .target-line, .result-line, .stage-hint, .wheel-hint { color: var(--muted); }
+.btn { border: 2px solid var(--ink); border-radius: 10px; box-shadow: 3px 3px 0 var(--ink); font-weight: 700; }
+.btn:hover { border-color: var(--ink); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.btn-primary { background: var(--yellow); color: var(--ink); border-color: var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+.btn-primary:hover { background: #ffd43b; border-color: var(--ink); }
+.btn-ghost { background: var(--surface); }
+.icon-btn { border: 2px solid var(--ink); color: var(--ink); }
+.icon-btn:hover { color: var(--accent); border-color: var(--ink); }
+.icon-btn[aria-pressed="true"] { color: var(--accent); border-color: var(--ink); background: #ffe3f1; }
+.count { background: var(--accent); color: #fff; }
+.tape { display: inline-block; align-self: start; justify-self: start; background: var(--ink); color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .02em; padding: 5px 11px 4px; transform: rotate(-1.5deg); box-shadow: 2px 2px 0 rgba(0,0,0,.18); }
+.tape.pink { background: var(--accent); }
+.band { position: relative; isolation: isolate; }
+.band::before { content: ""; position: absolute; inset: 0 calc(50% - 50vw); z-index: -1; background: var(--band, var(--yellow)); border-block: 2px solid var(--ink); }
+.band.yellow { --band: var(--yellow); } .band.pink { --band: var(--pink); } .band.lilac { --band: var(--lilac); } .band.teal { --band: var(--teal); }
+.band .stories-copy p, .band .feature p, .band .chefs-head p { color: #2b241a; }
+/* chips + filters */
+.chip { border: 2px solid var(--ink); border-radius: 8px; background: var(--surface); font-family: var(--font-display); font-size: 13px; font-weight: 700; }
+.chip:hover { border-color: var(--ink); background: #fff6d6; }
+.chip[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.chip.food[aria-pressed="true"] { background: var(--ok); }
+.filter-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; width: 100%; }
+.filter-label { font-family: var(--font-display); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; min-width: 78px; }
+.search input, .sort { border: 2px solid var(--ink); background: var(--surface); }
+.search input::placeholder { color: #6c6152; }
+/* cards */
+.card { background: var(--surface); border: 2px solid var(--ink); border-radius: 16px; padding: 10px 10px 14px; box-shadow: var(--shadow); transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
+.card:hover { transform: translate(-2px, -3px); box-shadow: var(--shadow-lift); }
+.card-photo { border: 2px solid var(--ink); border-radius: 10px; box-shadow: none; }
+.card:hover .card-photo { transform: none; box-shadow: none; }
+.card-body { padding-inline: 4px; }
+.card-title { font-family: var(--font-display); font-size: 19px; letter-spacing: -0.03em; }
+.card-title:hover { color: var(--accent-ink); }
+.card-meta { color: #5d5446; }
+.chef-tag { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: 12px; background: var(--ink); color: #fff; padding: 2px 8px; }
+.chef-tag.rc { background: var(--accent); } .chef-tag.gr { background: #1d4f91; }
+.macros dd { font-family: var(--font-data); }
+.empty { border: 2px dashed var(--ink); background: var(--surface); }
+/* panels */
+.target, .feature-item, .wheel-card { border: 2px solid var(--ink); box-shadow: var(--shadow); border-radius: 14px; }
+.target h2, .library-head h2, .feature h2, .stories-copy h2, .swipe-head h2 { font-family: var(--font-display); }
+.seg { border: 2px solid var(--ink); background: var(--surface); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.field input { border: 2px solid var(--ink); }
+.feature-photo, .story, .swipe-card, .cf-card { border: 3px solid var(--ink); box-shadow: var(--shadow-lift); }
+.cf-card { border-radius: 16px; }
+.sheet { border: 3px solid var(--ink); box-shadow: 10px 10px 0 var(--ink); border-radius: 18px; }
+.sheet-head h2 { font-family: var(--font-display); letter-spacing: -0.04em; }
+.stats, .week-sum { border: 2px solid var(--ink); }
+.stats div, .week-sum div { border-color: var(--ink) !important; }
+.steps li::before { background: var(--yellow); border: 2px solid var(--ink); }
+.tip { background: #e9f8ee; border: 2px solid var(--ink); }
+.drawer { border-left: 3px solid var(--ink); }
+.day { border: 2px solid var(--ink); }
+.round { border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+.round.save { color: var(--accent); }
+.round.cook { background: var(--yellow); color: var(--ink); border-color: var(--ink); }
+.timer, .toast { border: 2px solid #000; }
+.photo-credit { color: #5d5446; }
+.source-note { margin: 0; font-size: 13px; color: #5d5446; }
+footer { border-top: 2px solid var(--ink); color: var(--muted); }
+/* chef section */
+.chefs { padding-block: 56px 60px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 26px; }
+.chefs > *, .shelf-wrap { min-width: 0; }
+.chefs-head { display: grid; gap: 12px; }
+.chefs-head h2 { font-family: var(--font-display); font-size: clamp(30px, 4vw, 48px); line-height: 1.02; }
+.chefs-head p { margin: 0; max-width: 56ch; font-size: 17px; }
+.chef-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.chef-card { position: relative; display: grid; grid-template-rows: auto 1fr; text-align: left; padding: 0; background: var(--surface); border: 2px solid var(--ink); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
+.chef-card:hover { transform: translate(-2px, -3px); box-shadow: var(--shadow-lift); }
+.chef-card[aria-pressed="true"] { box-shadow: 0 0 0 4px var(--accent), var(--shadow-lift); }
+.chef-card .pic { position: relative; aspect-ratio: 5 / 4; overflow: hidden; border-bottom: 2px solid var(--ink); background: var(--chef, var(--teal)); }
+.chef-card .pic img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform .8s var(--ease); }
+.chef-card:hover .pic img { transform: scale(1.05); }
+.chef-card .pic .tape { position: absolute; left: 10px; bottom: 10px; }
+.chef-card .txt { padding: 12px 14px 14px; display: grid; gap: 6px; align-content: start; }
+.chef-card b { font-family: var(--font-display); font-size: 19px; letter-spacing: -0.03em; line-height: 1.1; }
+.chef-card small { color: #5d5446; font-size: 14px; line-height: 1.4; }
+.chef-card .num { font-weight: 700; color: var(--accent-ink); font-size: 13px; }
+.shelf-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+.shelf-head h3 { font-family: var(--font-display); font-size: 22px; }
+.shelf { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(210px, 230px); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 8px 14px 4px; overscroll-behavior-x: contain; }
+.shelf::-webkit-scrollbar { height: 10px; } .shelf::-webkit-scrollbar-thumb { background: var(--ink); border-radius: 10px; }
+.shelf-item { scroll-snap-align: start; text-align: left; padding: 8px; background: var(--surface); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 3px 3px 0 var(--ink); display: grid; gap: 8px; transition: transform .2s var(--ease); }
+.shelf-item:hover { transform: translateY(-3px); }
+.shelf-item img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; border: 2px solid var(--ink); }
+.shelf-item b { font-family: var(--font-display); font-size: 15px; line-height: 1.15; letter-spacing: -0.03em; }
+.shelf-item small { color: #5d5446; font-size: 12px; }
+.hero-shuffle { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; }
+@media (max-width: 1000px) { .chef-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .chef-cards { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; } .chef-card b { font-size: 16px; } .chef-card small { display: none; } .filter-label { min-width: 0; width: 100%; } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 </style>
-</head>
-<body>
 
 <header class="nav" id="nav">
   <div class="wrap nav-in">
-    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">W</span>Wok &amp; Comal</a>
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">E</span>Esquest Eats</a>
     <nav class="nav-links" aria-label="Main">
+      <a href="#chefs">Chefs</a>
       <a href="#taiwanese">Taiwanese</a>
       <a href="#recipes">Recipes</a>
       <button class="btn btn-sm" id="week-btn" type="button"><span class="ico" data-icon="calendar-blank"></span>This week <span class="count" id="week-count">0</span></button>
@@ -426,40 +567,51 @@ footer p { margin: 0; max-width: 90ch; }
   <section class="wrap hero" aria-labelledby="hero-title">
     <div class="hero-copy">
       <h1 id="hero-title">Fast dinners that hit your <em>protein</em>.</h1>
-      <p>Asian, Mexican and Taiwanese dinners in 35 minutes or less. Swipe through them, then cook along with the video.</p>
+      <span class="tape pink">Esquest Eats kitchen</span>
+      <p>Fast high-protein dinners, plus Roy Choi, Gordon Ramsay and your own Notion recipes. Flip through, then cook.</p>
       <div class="hero-cta">
-        <button class="btn btn-primary" id="spin-btn" type="button"><span class="ico" data-icon="shuffle"></span>Spin for dinner</button>
+        <button class="btn btn-primary" id="cf-open" type="button"><span class="ico" data-icon="cooking-pot"></span>Open this dish</button>
         <a class="btn" href="#recipes">Browse recipes</a>
       </div>
     </div>
     <div class="hero-stage">
-      <div class="hero-stage-head">
-        <div class="tabs" role="tablist" aria-label="How to pick dinner">
-          <button type="button" role="tab" data-mode="swipe" aria-selected="true"><span class="ico" data-icon="cards"></span>Swipe</button>
-          <button type="button" role="tab" data-mode="spin" aria-selected="false"><span class="ico" data-icon="shuffle"></span>Spin</button>
-        </div>
-        <span class="stage-hint" id="stage-hint">Swipe right to save, left to skip</span>
+      <div class="cf" id="cf" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Featured dinners. Left and right arrows change the dish, Enter opens it.">
+        <div class="cf-stage" id="cf-stage"></div>
+        <button class="icon-btn cf-arrow cf-prev" type="button" id="cf-prev" aria-label="Previous dish"><span class="ico" style="transform:scaleX(-1)" data-icon="arrow-right"></span></button>
+        <button class="icon-btn cf-arrow cf-next" type="button" id="cf-next" aria-label="Next dish"><span class="ico" data-icon="arrow-right"></span></button>
       </div>
-      <div class="deck-wrap" id="deck-wrap">
-        <div class="deck" id="deck" tabindex="0" aria-label="Recipe cards. Left arrow skips, right arrow saves, Enter opens the recipe."></div>
-        <div class="deck-controls">
-          <button class="round skip" type="button" id="deck-skip" aria-label="Skip this dish"><span class="ico" data-icon="x"></span></button>
-          <button class="round cook" type="button" id="deck-cook" aria-label="Open this recipe"><span class="ico" data-icon="cooking-pot"></span></button>
-          <button class="round save" type="button" id="deck-save" aria-label="Save this dish"><span class="ico" data-icon="heart"></span></button>
-        </div>
-        <div class="shortlist" id="shortlist"></div>
-      </div>
-    <div class="wheel-wrap" id="wheel-wrap" hidden>
-        <div class="wheel" id="wheel">
-          <canvas id="wheel-canvas" role="img" aria-label="A 3D lazy susan of dinner plates. Drag to turn it, tap the front plate to open the recipe."></canvas>
-          <div class="wheel-arrows">
-            <button class="icon-btn" type="button" id="wheel-prev" aria-label="Previous dish"><span class="ico" style="transform:scaleX(-1)" data-icon="arrow-right"></span></button>
-            <button class="icon-btn" type="button" id="wheel-next" aria-label="Next dish"><span class="ico" data-icon="arrow-right"></span></button>
-          </div>
-        </div>
-        <div class="wheel-card" id="wheel-card" aria-live="polite"></div>
-        <p class="wheel-hint">Drag the table to turn it. Tap the front plate to open its recipe. It holds up to 8 dishes from the filters below.</p>
-      </div>
+      <div class="cf-caption" id="cf-caption" aria-live="polite"></div>
+      <div class="hero-shuffle"><button class="btn btn-sm" type="button" id="cf-shuffle"><span class="ico" data-icon="shuffle"></span>Shuffle dishes</button></div>
+    </div>
+  </section>
+
+  <section class="wrap stories-sec band pink rv" id="tonight" aria-labelledby="stories-title">
+    <div class="stories-copy">
+      <h2 id="stories-title">Your protein, one dish at a time</h2>
+      <p>Tap the right side to skip ahead, the left side to go back, or the middle to open the recipe. Hold to pause.</p>
+      <ul class="stories-legend" aria-hidden="true"><li><i style="background:#9be3a4"></i>Protein</li><li><i style="background:#f3cf7e"></i>Calories</li><li><i style="background:#b7d6f0"></i>Minutes</li></ul>
+    </div>
+    <div class="story paused" id="story" role="group" aria-roledescription="carousel" aria-label="Dinner stories">
+      <div class="story-bars" id="story-bars" aria-hidden="true"></div>
+      <img class="story-img" id="story-img" alt="">
+      <div class="story-shade"></div>
+      <div class="story-info" id="story-info" aria-live="polite"></div>
+      <button class="story-zone z-prev" type="button" id="story-prev" aria-label="Previous dish"></button>
+      <button class="story-zone z-open" type="button" id="story-open" aria-label="Open this recipe"></button>
+      <button class="story-zone z-next" type="button" id="story-next" aria-label="Next dish"></button>
+    </div>
+  </section>
+
+  <section class="wrap chefs band yellow" id="chefs" aria-labelledby="chefs-title">
+    <div class="chefs-head">
+      <span class="tape">Chef's table</span>
+      <h2 id="chefs-title">Cook with the chefs</h2>
+      <p>Pick a chef to see their dishes right here, or send the whole set to the recipe library below.</p>
+    </div>
+    <div class="chef-cards" id="chef-cards" role="group" aria-label="Chefs"></div>
+    <div class="shelf-wrap">
+      <div class="shelf-head"><h3 id="shelf-title"></h3><button class="btn btn-sm" type="button" id="shelf-all"></button></div>
+      <div class="shelf" id="shelf" role="list"></div>
     </div>
   </section>
 
@@ -481,7 +633,23 @@ footer p { margin: 0; max-width: 90ch; }
     </div>
   </section>
 
-  <section class="wrap feature rv" id="taiwanese" aria-labelledby="tw-title">
+  <section class="wrap swipe-sec rv" aria-labelledby="swipe-title">
+    <div class="swipe-head">
+      <h2 id="swipe-title">Swipe to build a shortlist</h2>
+      <p>Right saves a dish, left skips it. Saved dishes collect under the cards.</p>
+    </div>
+    <div class="deck-wrap" id="deck-wrap">
+      <div class="deck" id="deck" tabindex="0" aria-label="Recipe cards. Left arrow skips, right arrow saves, Enter opens the recipe."></div>
+      <div class="deck-controls">
+        <button class="round skip" type="button" id="deck-skip" aria-label="Skip this dish"><span class="ico" data-icon="x"></span></button>
+        <button class="round cook" type="button" id="deck-cook" aria-label="Open this recipe"><span class="ico" data-icon="cooking-pot"></span></button>
+        <button class="round save" type="button" id="deck-save" aria-label="Save this dish"><span class="ico" data-icon="heart"></span></button>
+      </div>
+      <div class="shortlist" id="shortlist"></div>
+    </div>
+  </section>
+
+  <section class="wrap feature band lilac rv" id="taiwanese" aria-labelledby="tw-title">
     <button class="feature-photo" type="button" data-open="taiwanese-popcorn-chicken" aria-label="Open Taiwanese popcorn chicken">
       <img src="img/taiwanese-popcorn-chicken.jpg" alt="Crispy Taiwanese popcorn chicken in a takeout box" width="800" height="600">
     </button>
@@ -495,14 +663,11 @@ footer p { margin: 0; max-width: 90ch; }
   <section class="wrap library" id="recipes" aria-labelledby="lib-title">
     <div class="library-head">
       <h2 id="lib-title">All recipes</h2>
-      <div class="fridge" role="group" aria-labelledby="fridge-title">
-        <div class="fridge-head"><b id="fridge-title"><span class="ico" data-icon="basket"></span>Cook from your fridge</b><small id="fridge-note">Tap what you have and the best matches move to the front.</small></div>
-        <div class="chips" id="fridge-chips"></div>
-      </div>
       <div class="filters">
-        <div class="chips" role="group" aria-label="Cuisine" id="cuisine-chips"></div>
-        <div class="chips" role="group" aria-label="Quick filters" id="flag-chips"></div>
-        <div class="chips" role="group" aria-label="Chefs" id="chef-chips"></div>
+        <div class="filter-row"><span class="filter-label">Course</span><div class="chips" role="group" aria-label="Course" id="course-chips"></div></div>
+        <div class="filter-row"><span class="filter-label">Cuisine</span><div class="chips" role="group" aria-label="Cuisine" id="region-chips"></div></div>
+        <div class="filter-row"><span class="filter-label">Chef</span><div class="chips" role="group" aria-label="Chef" id="chef-chips"></div></div>
+        <div class="filter-row"><span class="filter-label">Quick</span><div class="chips" role="group" aria-label="Quick filters" id="flag-chips"></div></div>
         <div class="filters-end">
           <div class="search"><span class="ico" data-icon="magnifying-glass"></span><input id="search" type="search" placeholder="Search salmon, tacos, rice" aria-label="Search recipes"></div>
           <select class="sort" id="sort" aria-label="Sort recipes">
@@ -521,7 +686,7 @@ footer p { margin: 0; max-width: 90ch; }
 
 <footer>
   <div class="wrap">
-    <p>Macros are estimates per serving from standard nutrition values. Videos belong to their creators on YouTube and TikTok. Food photos come from Unsplash, with each photographer credited on the recipe.</p>
+    <p>Macros are estimates per serving from standard nutrition values. Videos belong to their creators on YouTube and TikTok. Roy Choi and Gordon Ramsay recipes and the Roy Choi photos come from your MasterClass class guides; keep this page private, since those belong to MasterClass. Other photos come from Unsplash (photographers credited on each recipe) or the web pages your Notion recipes linked to.</p>
   </div>
 </footer>
 
@@ -544,7 +709,6 @@ footer p { margin: 0; max-width: 90ch; }
 <div class="timers" id="timers" aria-live="polite"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function () {
 "use strict";
@@ -1093,12 +1257,2797 @@ const RECIPES = [
 ];
 
 const GOALS = { lean: { cal: 500, pro: 40 }, maintain: { cal: 650, pro: 40 }, build: { cal: 800, pro: 50 } };
-const CUISINES = [
-  { id: "all", label: "All" }, { id: "asian", label: "Asian" }, { id: "taiwanese", label: "Taiwanese" },
-  { id: "mexican", label: "Mexican" }, { id: "fusion", label: "Fusion" }
+/* Recipes brought over from the Notion Recipes database. Times and macros are left empty on purpose. */
+const NOTION_RECIPES = [
+ {
+  "id": "n-birria",
+  "name": "Birria",
+  "origin": "Entree",
+  "cuisine": [
+   "collection",
+   "entree"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree"
+  ],
+  "serves": "",
+  "ingredients": [
+   "2 lbs chuck roast",
+   "1 lb bone in short rib",
+   "0.5 white onion",
+   "0.5 garlic bulb",
+   "0.5 carrot, cut in 2 pieces",
+   "3 bay leaves",
+   "4 guajillo chiles, stems and seeds removed",
+   "About 4 cups hot water",
+   "1.5 tbsp chicken bouillon",
+   "0.5 tsp Mexican oregano",
+   "0.5 tsp cumin",
+   "0.5 tsp salt",
+   "About 1 tsp chili powder"
+  ],
+  "steps": [
+   {
+    "t": "Add the meat, onion, garlic, carrot, bay leaves, chiles, and hot water to a pot."
+   },
+   {
+    "t": "Add the bouillon, oregano, cumin, and salt."
+   },
+   {
+    "t": "After 30 minutes, skim the foam and impurities."
+   },
+   {
+    "t": "Take the chiles out and blend smooth, adding up to ¼ cup broth to help the consistency."
+   },
+   {
+    "t": "Stir the chile purée back into the broth and add about 1 tsp chili powder."
+   },
+   {
+    "t": "Cover and simmer 3 hours or until the meat is tender, stirring every 40 minutes."
+   },
+   {
+    "t": "Skim and save the grease from the top."
+   },
+   {
+    "t": "Remove the onion, garlic, carrot, and bay leaves. Finish."
+   }
+  ],
+  "tip": "",
+  "cover": "https://giveitsomethyme.com/wp-content/uploads/2022/02/birria-recipe.jpg"
+ },
+ {
+  "id": "n-blue-coconut-cloud-smoothie",
+  "name": "Blue Coconut Cloud Smoothie",
+  "origin": "Drinks",
+  "cuisine": [
+   "collection",
+   "drinks"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "drinks"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Malk almond milk",
+   "Zuma Valley coconut cream",
+   "Avocado",
+   "Almond butter",
+   "Banana",
+   "Blue Majik",
+   "Pineapple",
+   "Vanilla collagen",
+   "Vanilla stevia"
+  ],
+  "steps": [
+   {
+    "t": "Layer from the bottom up. Coconut cream first, then the Blue Majik, then the blended mixture, then more coconut cream on top."
+   }
+  ],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-chai",
+  "name": "Chai",
+  "origin": "Drinks",
+  "cuisine": [
+   "collection",
+   "drinks"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "drinks"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Longan",
+   "Goji berries",
+   "Dried coconut",
+   "4 tbsp Assam black tea",
+   "3 cinnamon sticks",
+   "3 star anise",
+   "12 whole cloves",
+   "8 green cardamom pods",
+   "1 tbsp black peppercorns",
+   "¼ tsp ground nutmeg",
+   "⅓ cup ginger root",
+   "¼ tsp vanilla extract",
+   "¼ cup sugar",
+   "Molasses",
+   "Honey"
+  ],
+  "steps": [
+   {
+    "t": "Crush the whole spices."
+   },
+   {
+    "t": "Toast the spices on low for 2 to 3 minutes."
+   },
+   {
+    "t": "Add 5 cups water, then the ginger and nutmeg."
+   },
+   {
+    "t": "Bring to a boil, then simmer 5 to 10 minutes."
+   },
+   {
+    "t": "Add the tea and steep 3 to 5 minutes."
+   },
+   {
+    "t": "Strain."
+   }
+  ],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-butterfly-tea-latte",
+  "name": "Butterfly Tea Latte",
+  "origin": "Drinks",
+  "cuisine": [
+   "collection",
+   "drinks"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "drinks"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-strawberry-milk",
+  "name": "Strawberry Milk",
+  "origin": "Drinks",
+  "cuisine": [
+   "collection",
+   "drinks"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "drinks"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-poke-nachos",
+  "name": "Poke Nachos",
+  "origin": "Appetizer",
+  "cuisine": [
+   "collection",
+   "appetizer"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "appetizer"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Salmon or tuna",
+   "Marinade: 1 tbsp soy sauce",
+   "1.5 tbsp oyster sauce",
+   "1 tbsp sesame oil",
+   "1 tbsp sambal oelek",
+   "1 tsp grated ginger",
+   "Toasted sesame seeds",
+   "Sriracha mayo: sesame oil, sriracha, lime, mayo",
+   "Wonton chips",
+   "Cilantro",
+   "Avocado",
+   "Jalapeno",
+   "Seaweed"
+  ],
+  "steps": [
+   {
+    "t": "Cube the fish and toss with the marinade."
+   },
+   {
+    "t": "Make the sriracha mayo."
+   },
+   {
+    "t": "Fry the wonton chips at 350F."
+   },
+   {
+    "t": "Pile the chips with fish, then top with avocado, jalapeno, cilantro, seaweed, and the sriracha mayo."
+   }
+  ],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-char-siu-chicken-banh-mi",
+  "name": "Char Siu Chicken (Banh Mi)",
+  "origin": "Entree, Indio",
+  "cuisine": [
+   "collection",
+   "entree",
+   "indio"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree",
+   "indio"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Garlic clove",
+   "Chinese five spice",
+   "Ketchup",
+   "Hoisin",
+   "Soy sauce",
+   "1 tsp honey",
+   "Sesame oil"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://foodisafourletterword.com/wp-content/uploads/2020/11/Vietnamese_Chicken_Banh_Mi_Recipe_Banh_Mi_Ga_Roti.jpg"
+ },
+ {
+  "id": "n-chocolate-xiao-long-bao",
+  "name": "Chocolate Xiao Long Bao",
+  "origin": "Dim Sum",
+  "cuisine": [
+   "collection",
+   "dim-sum"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dim sum"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 cup all purpose flour",
+   "6 tbsp warm water"
+  ],
+  "steps": [
+   {
+    "t": "Knead the flour and water for 15 to 20 minutes."
+   },
+   {
+    "t": "Cover with a cloth."
+   },
+   {
+    "t": "Rest 30 minutes."
+   }
+  ],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-miso-caramel",
+  "name": "Miso Caramel",
+  "origin": "Dessert",
+  "cuisine": [
+   "collection",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "¾ cup granulated sugar",
+   "¼ cup water",
+   "½ cup heavy cream",
+   "2 tbsp white miso"
+  ],
+  "steps": [
+   {
+    "t": "Melt the sugar into the water."
+   },
+   {
+    "t": "Stir until golden brown, then remove from the heat."
+   },
+   {
+    "t": "Pour in the heavy cream slowly."
+   },
+   {
+    "t": "Whisk in the miso."
+   },
+   {
+    "t": "Store in the fridge."
+   }
+  ],
+  "tip": "",
+  "cover": "https://takestwoeggs.com/wp-content/uploads/2022/01/Miso-Caramel-Sauce-Takestwoeggs-FINAL-sq.jpg"
+ },
+ {
+  "id": "n-lush-pie",
+  "name": "Lush Pie",
+  "origin": "Indio",
+  "cuisine": [
+   "collection",
+   "indio"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-ny-cheesecake",
+  "name": "NY Cheesecake",
+  "origin": "Dessert",
+  "cuisine": [
+   "collection",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "240g biscuits",
+   "120g melted butter",
+   "800g cream cheese",
+   "240g sugar",
+   "400g sour cream",
+   "300ml heavy cream",
+   "4 eggs",
+   "4 tbsp cornstarch",
+   "3 tbsp vanilla bean",
+   "½ lemon, juiced"
+  ],
+  "steps": [
+   {
+    "t": "Crumble the biscuits and mix with the melted butter. Press into the pan."
+   },
+   {
+    "t": "Rub the pan sides with butter, line with parchment, and wrap the bottom in foil."
+   },
+   {
+    "t": "Mix the cream cheese and sugar. Then mix in the sour cream, then the heavy cream, then the eggs, then the cornstarch, then the vanilla bean and lemon juice."
+   },
+   {
+    "t": "Pour into the pan and flatten the top."
+   },
+   {
+    "t": "Bake 30 minutes at 356F, then lower to 302F for 30 minutes."
+   },
+   {
+    "t": "Leave in the switched off oven for 1 hour."
+   },
+   {
+    "t": "Refrigerate 6 hours."
+   }
+  ],
+  "tip": "",
+  "cover": "https://static01.nyt.com/images/2021/11/02/dining/dg-Tall-and-Creamy-Cheesecake/dg-Tall-and-Creamy-Cheesecake-articleLarge.jpg"
+ },
+ {
+  "id": "n-chai-tea",
+  "name": "Chai Tea",
+  "origin": "Indio, Drinks",
+  "cuisine": [
+   "collection",
+   "indio",
+   "drinks"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio",
+   "drinks"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Cinnamon",
+   "Star anise",
+   "Fennel",
+   "Cloves",
+   "Black pepper",
+   "Cardamom",
+   "Ginger",
+   "Oat milk",
+   "Demerara",
+   "Tea bags"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://www.marthastewart.com/thmb/j3FECcOrun86Gxv1GqcSraT7JGE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/chai-masala-spices-getty-0122-2000-77ba9e2c22a24be6b7c3a0cb6e8387b1.jpg"
+ },
+ {
+  "id": "n-pickled-radish",
+  "name": "Pickled Radish",
+  "origin": "Appetizer, Indio",
+  "cuisine": [
+   "collection",
+   "appetizer",
+   "indio"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "appetizer",
+   "indio"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Daikon",
+   "Carrot",
+   "Sugar",
+   "Salt",
+   "½ cup sugar",
+   "Water",
+   "Vinegar"
+  ],
+  "steps": [
+   {
+    "t": "Salt and sugar the daikon and carrot. Rinse when bendy."
+   },
+   {
+    "t": "Mix the sugar, water, and vinegar, whisk, and pour over."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.thespruceeats.com/thmb/35GX2VbuAvD1XR5isErhRjFhdKU=/3000x2000/filters:fill(auto,1)/vietnamese-pickled-carrot-and-radish-recipe-3030353-hero-01-0084ee3590a54c2180e1d50e281c9f61.jpg"
+ },
+ {
+  "id": "n-sisig",
+  "name": "Sisig",
+  "origin": "Entree",
+  "cuisine": [
+   "collection",
+   "entree"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 pound pork belly, sliced half inch thick",
+   "Salt and pepper",
+   "3 pieces chicken liver",
+   "1 big red onion, finely chopped",
+   "½ lemon or 3 to 4 kalamansi, juiced",
+   "1 to 2 chili peppers, minced, or ¼ tbsp chili flakes",
+   "½ tbsp soy sauce",
+   "⅛ tsp ground black pepper"
+  ],
+  "steps": [
+   {
+    "t": "Boil the pork belly with bay leaves, peppercorns, and onions."
+   },
+   {
+    "t": "Crisp the pork belly in oil or the air fryer."
+   }
+  ],
+  "tip": "",
+  "noPhoto": true,
+  "clip": "https://www.tiktok.com/@iankewks/video/7205600043678649606"
+ },
+ {
+  "id": "n-kogi-vinaigrette",
+  "name": "Kogi Vinaigrette",
+  "origin": "Sauce",
+  "cuisine": [
+   "collection",
+   "sauce"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "sauce"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 two inch knob of ginger",
+   "4 garlic cloves, peeled",
+   "3 scallions, roughly chopped",
+   "¼ cup gochugaru",
+   "¼ cup sugar",
+   "1 tbsp kosher salt",
+   "2 tsp black pepper",
+   "1 cup soy sauce",
+   "2 cups unseasoned rice vinegar",
+   "½ cup toasted sesame oil",
+   "1 cup neutral oil"
+  ],
+  "steps": [
+   {
+    "t": "Scrape the ginger and cut into discs."
+   },
+   {
+    "t": "Add everything to a blender and blend."
+   },
+   {
+    "t": "Pour into a jar. Good for 3 months."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.masterclass.com/course-images/attachments/2rmub9gg5zd0nbmreuhib2wo5r0t"
+ },
+ {
+  "id": "n-shrimp-har-gow",
+  "name": "Shrimp Har Gow",
+  "origin": "Dim Sum",
+  "cuisine": [
+   "collection",
+   "dim-sum"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dim sum"
+  ],
+  "serves": "40pc",
+  "ingredients": [
+   "100g shrimp",
+   "½ tsp salt (for the shrimp)",
+   "40g wild rice stem or bamboo shoots",
+   "20g pork fat",
+   "½ tsp salt",
+   "1 tsp cornstarch",
+   "1 tsp sugar",
+   "¼ tsp MSG",
+   "White pepper powder",
+   "1 tsp sesame oil",
+   "1 tsp lard",
+   "Wrapper: 225g wheat starch",
+   "1 tsp salt",
+   "350g boiled water",
+   "25g cornstarch",
+   "8g lard"
+  ],
+  "steps": [
+   {
+    "t": "Salt the shrimp with ½ tsp salt and set aside 5 minutes. Run under cold water at least 15 minutes."
+   },
+   {
+    "t": "Dice the wild rice stem or bamboo shoots. Blanch the pork fat, rinse with the shrimp, and fine dice the fat."
+   },
+   {
+    "t": "Rough mince the shrimp to soybean size. Add salt, cornstarch, sugar, MSG, and white pepper. Stir until streaks form on the side of the bowl."
+   },
+   {
+    "t": "Add the pork fat, sesame oil, lard, and the wild rice stem or bamboo. Chill in the freezer."
+   },
+   {
+    "t": "Wrapper. Sift the wheat starch with 1 tsp salt. Add the boiled water gradually and mix with the tip of a rolling pin. Cover with a plate and sit 5 minutes."
+   },
+   {
+    "t": "Add the cornstarch bit by bit, fold and knead 3 minutes, then add the lard. Roll into a log about 1.5 inches wide, split into 7 pieces, and rest covered in a lightly oiled bowl 10 minutes."
+   },
+   {
+    "t": "Cut into 10g pieces, roll into balls, and keep covered with wrap."
+   },
+   {
+    "t": "With a flat oiled knife flatten each ball into a circle. Add 1 tsp filling, fold into a taco shape, pinch one side, and pleat the thin side at least 9 times. Press above the filling and trim the excess."
+   },
+   {
+    "t": "Place on a lightly oiled plate in a basket and steam on max flame for 4 minutes."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.themanual.com/wp-content/uploads/sites/9/2019/11/steamed-shrimp-dumpling-peter-garritano.jpg?p=1"
+ },
+ {
+  "id": "n-creamy-udon",
+  "name": "Creamy Udon",
+  "origin": "Entree",
+  "cuisine": [
+   "collection",
+   "entree"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Frozen udon",
+   "Heavy cream",
+   "Paprika",
+   "Chili powder",
+   "Parsley",
+   "Minced garlic",
+   "Chicken bouillon",
+   "Cayenne",
+   "Salt"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://okonomikitchen.com/wp-content/uploads/2021/06/vegan-kimchi-udon-noodle-recipe-1-of-2.jpg"
+ },
+ {
+  "id": "n-salsa-verde",
+  "name": "Salsa Verde",
+  "origin": "Sauce",
+  "cuisine": [
+   "collection",
+   "sauce"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "sauce"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 tbsp cooking oil, plus more as needed",
+   "2 large tomatillos, peeled and rinsed",
+   "3 garlic cloves, peeled",
+   "6 scallions",
+   "2 jalapeños",
+   "2 serrano chilies",
+   "1 bunch cilantro with stems, roughly chopped (about 1½ cups)",
+   "2 limes",
+   "½ cup rice vinegar",
+   "3 large pinches kosher salt",
+   "2 large pinches black pepper"
+  ],
+  "steps": [
+   {
+    "t": "Drizzle oil in a skillet."
+   },
+   {
+    "t": "Add the tomatillos, garlic, scallions, jalapeños, and serranos."
+   },
+   {
+    "t": "Char slowly on all sides, turning often, until blistered and blackened in spots, 10 to 15 minutes."
+   },
+   {
+    "t": "Move to a board and cool slightly. Remove the chile stems."
+   },
+   {
+    "t": "Blend the charred vegetables with the cilantro, lime juice, rice vinegar, salt, and pepper until smooth. Add water or oil if needed."
+   },
+   {
+    "t": "Good for 1 week."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.masterclass.com/course-images/attachments/e3w5fzzcy6qh775iitozmnz8uyvb"
+ },
+ {
+  "id": "n-pretzel-bites",
+  "name": "Pretzel Bites",
+  "origin": "Appetizer, Indio",
+  "cuisine": [
+   "collection",
+   "appetizer",
+   "indio"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "appetizer",
+   "indio"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1.5 cups warm water",
+   "1.5 tbsp light brown sugar",
+   "1 package active dry yeast",
+   "4.75 cups flour, divided",
+   "2 tbsp unsalted butter",
+   "2 tsp salt",
+   "1 tbsp vegetable oil",
+   "¼ cup baking soda (for the boil)",
+   "1 egg",
+   "Flaky salt",
+   "Cheese sauce: 1 tbsp butter, 1 tbsp flour, 1 cup whole milk, 1 cup cheese, ½ tsp salt"
+  ],
+  "steps": [
+   {
+    "t": "Combine the warm water, yeast, and brown sugar. Rest 5 minutes until frothy."
+   },
+   {
+    "t": "With the paddle, mix 360g (3 cups) flour, the salt, and melted butter until shaggy."
+   },
+   {
+    "t": "Switch to the dough hook. Add 210g (1.75 cups) flour ¼ cup at a time. Mix 5 minutes, then do a window pane test and knead 1 minute."
+   },
+   {
+    "t": "Oil a large bowl, toss the dough to coat, cover, and rise 1 hour."
+   },
+   {
+    "t": "Boil water. Divide the dough into 4, roll and stretch each to 22 inches, and cut into 1.5 inch pieces. Preheat the oven to 425F."
+   },
+   {
+    "t": "Add the baking soda to the water. Boil the pieces 30 seconds, then move to a baking tray."
+   },
+   {
+    "t": "Egg wash, sprinkle with flaky salt, and bake 15 to 18 minutes until deep golden."
+   },
+   {
+    "t": "Cheese sauce. Melt the butter, whisk in the flour and milk until thick, turn off the heat, then whisk in the cheese and salt."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.modernhoney.com/wp-content/uploads/2020/05/Homemade-Soft-Pretzel-Bites-5-scaled.jpg"
+ },
+ {
+  "id": "n-banana-pudding",
+  "name": "Banana Pudding",
+  "origin": "Dessert",
+  "cuisine": [
+   "collection",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 can condensed milk (7 oz)",
+   "1.5 cups cold water",
+   "1 box (3.4 oz) vanilla pudding mix",
+   "3 cups heavy cream",
+   "4 bananas",
+   "1 box mini Nilla Wafers"
+  ],
+  "steps": [
+   {
+    "t": "Whisk the condensed milk, cold water, and pudding mix. Chill 6 hours or until firm."
+   },
+   {
+    "t": "Whip the cold heavy cream to stiff peaks without turning it to butter."
+   },
+   {
+    "t": "Fold the pudding into the whipped cream in small portions without deflating it."
+   },
+   {
+    "t": "Layer cups with wafers, pudding, and bananas, and repeat."
+   }
+  ],
+  "tip": "",
+  "cover": "https://shewearsmanyhats.com/wp-content/uploads/2011/07/banana-pudding-1bb2new.jpg"
+ },
+ {
+  "id": "n-chocolate-chip-walnut-cookies",
+  "name": "Chocolate Chip Walnut Cookies",
+  "origin": "Dessert",
+  "cuisine": [
+   "collection",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 cup unsalted butter",
+   "1.5 cups sugar",
+   "1 tbsp molasses",
+   "2 eggs",
+   "1.5 cups cake flour",
+   "1.5 cups all purpose flour",
+   "1 tsp cornstarch",
+   "¾ tsp salt",
+   "¾ tsp baking soda",
+   "1 cup semi sweet chocolate chips",
+   "1 cup chopped chocolate",
+   "2 cups walnuts"
+  ],
+  "steps": [
+   {
+    "t": "Beat the butter, sugar, and molasses with the paddle until pale. Keep it cold and do not overbeat."
+   },
+   {
+    "t": "Add one egg and mix until homogenous. Add the second egg and mix until combined."
+   },
+   {
+    "t": "Preheat the oven to 410F."
+   },
+   {
+    "t": "Mix the cake flour, flour, cornstarch, salt, and baking soda in another bowl."
+   },
+   {
+    "t": "Add the dry mix to the butter mixture in parts, just until combined."
+   },
+   {
+    "t": "Fold in the chocolate chips and chopped chocolate by hand, then the walnuts."
+   },
+   {
+    "t": "Roll into balls. About 110g each for smaller cookies, or split into 8 for giant ones. Press a chunk of chocolate on top."
+   },
+   {
+    "t": "Bake on parchment around 11 minutes until the top is golden brown. A dark bottom means overbaked."
+   },
+   {
+    "t": "Cool so the inside firms up."
+   },
+   {
+    "t": "No mixer? Beat with a wooden spoon, whisk the dry ingredients, and finish by hand."
+   }
+  ],
+  "tip": "",
+  "cover": "https://media-cldnry.s-nbcnews.com/image/upload/rockcms/2022-03/Levain-bakery-mc-220307-06-copy-65334b.jpg"
+ },
+ {
+  "id": "n-orzo-salad",
+  "name": "Orzo Salad",
+  "origin": "Salad",
+  "cuisine": [
+   "collection",
+   "salad"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "salad"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Dressing: EVOO and red wine vinegar",
+   "Garlic",
+   "Parsley",
+   "Basil",
+   "Lemon",
+   "Honey",
+   "Oregano",
+   "Pepper",
+   "Salad: arugula",
+   "Orzo",
+   "Wild rice",
+   "Red onion",
+   "Red pepper",
+   "Green pepper",
+   "Corn",
+   "Almonds",
+   "Currants",
+   "Parsley",
+   "Basil"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://www.simplyscratch.com/wp-content/uploads/2016/04/J.-Alexanders-Wild-Rice-and-Orzo-Salad-l-SimplyScratch.com-27.jpg"
+ },
+ {
+  "id": "n-watermelon-radish-ahi-tuna",
+  "name": "Watermelon Radish Ahi Tuna",
+  "origin": "Salad, Indio",
+  "cuisine": [
+   "collection",
+   "salad",
+   "indio"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "salad",
+   "indio"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 tbsp soy sauce",
+   "1.5 tsp red wine vinegar",
+   "1 tsp honey",
+   "½ tsp Dijon mustard",
+   "½ tsp sesame oil",
+   "1.5 tsp white sesame seeds",
+   "1 garlic clove",
+   "1 inch ginger, grated",
+   "¾ cup canola oil",
+   "Tuna",
+   "1 tbsp salt",
+   "8 oz snap peas",
+   "¼ cup mint",
+   "1 tsp black sesame seeds",
+   "2 watermelon radish"
+  ],
+  "steps": [
+   {
+    "t": "Puree the soy sauce, vinegar, honey, mustard, sesame oil, garlic, and ginger."
+   },
+   {
+    "t": "Drizzle in ½ cup canola oil while mixing."
+   },
+   {
+    "t": "Cook the tuna."
+   },
+   {
+    "t": "Add the dressing, tuna, snap peas, mint, and watermelon radish to a bowl."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.saveur.com/uploads/2019/02/08/EMTUC42CJCEG6FWHCEYEKTARSM.jpg"
+ },
+ {
+  "id": "n-brownies",
+  "name": "Brownies",
+  "origin": "Dessert",
+  "cuisine": [
+   "collection",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 oz semi sweet chocolate",
+   "3 oz dark chocolate",
+   "10 tbsp (140g) unsalted butter",
+   "2 room temp eggs",
+   "¾ cup sugar",
+   "1 tsp instant coffee",
+   "1 tbsp hot water",
+   "½ cup flour",
+   "½ tsp salt",
+   "⅓ cup cocoa powder",
+   "2 oz chocolate chips (semi and milk)"
+  ],
+  "steps": [
+   {
+    "t": "Melt the chocolates with the butter."
+   },
+   {
+    "t": "Mix the eggs and sugar, then add the melted chocolate."
+   },
+   {
+    "t": "Dissolve the coffee in the hot water and add it with the flour, salt, and cocoa. Fold in the chocolate chips."
+   },
+   {
+    "t": "Pour into the pan and bake at 335F for 20 to 25 minutes."
+   }
+  ],
+  "tip": "",
+  "cover": "https://sallysbakingaddiction.com/wp-content/uploads/2016/12/homemade-fudge-brownies-3.jpg"
+ },
+ {
+  "id": "n-roasted-sesame-dressing",
+  "name": "Roasted Sesame Dressing",
+  "origin": "Indio, Sauce",
+  "cuisine": [
+   "collection",
+   "indio",
+   "sauce"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio",
+   "sauce"
+  ],
+  "serves": "",
+  "ingredients": [
+   "3 tbsp canola oil",
+   "3 tbsp Kewpie",
+   "Water",
+   "1.5 tbsp soy sauce",
+   "2 tsp brown sugar",
+   "Sesame seeds",
+   "1 tbsp rice vinegar",
+   "Salt",
+   "Egg yolk"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://hot-thai-kitchen.com/wp-content/uploads/2021/01/Sesame-Dressing-Blog-1-720x494.jpg"
+ },
+ {
+  "id": "n-pizza-bao",
+  "name": "Pizza Bao",
+  "origin": "Dim Sum",
+  "cuisine": [
+   "collection",
+   "dim-sum"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dim sum"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Wrapper: 300g lukewarm water",
+   "2.5 tsp active dry yeast",
+   "1 tsp sugar",
+   "600g all purpose flour",
+   "2 tbsp room temperature butter"
+  ],
+  "steps": [
+   {
+    "t": "Add the yeast and sugar to the water and sit until foamy."
+   },
+   {
+    "t": "Add the flour and knead into a rough dough. Move to the mixer, add the butter, and knead 8 minutes."
+   },
+   {
+    "t": "Cover and rest 1.5 hours until doubled."
+   },
+   {
+    "t": "Punch the dough down. Knead 6 to 8 minutes, using the palm to spread it out, pulling it back and repeating."
+   },
+   {
+    "t": "Roll into a log and divide into 16 pieces. Sprinkle with flour and cover with a bowl."
+   },
+   {
+    "t": "Roll each with a rolling pin, thick in the middle and thin at the ends."
+   }
+  ],
+  "tip": "",
+  "cover": "https://cdn.shopify.com/s/files/1/0599/2454/5734/files/bg_Responsive.jpg?v=1686251250"
+ },
+ {
+  "id": "n-chocolate-pot-de-creme",
+  "name": "Chocolate Pot de Creme",
+  "origin": "Dessert",
+  "cuisine": [
+   "collection",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-monte-cristo",
+  "name": "Monte Cristo",
+  "origin": "Indio, Appetizer",
+  "cuisine": [
+   "collection",
+   "indio",
+   "appetizer"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio",
+   "appetizer"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Hawaiian rolls",
+   "Ham",
+   "Turkey",
+   "Swiss",
+   "Dijon mustard",
+   "Egg",
+   "Powdered sugar",
+   "Berry preserves",
+   "Melted butter"
+  ],
+  "steps": [
+   {
+    "t": "Heat the oven to 350F and slice the rolls in half."
+   },
+   {
+    "t": "Spread Dijon, then layer cheese, ham, turkey, cheese, and the top bread."
+   },
+   {
+    "t": "Brush the tops with melted butter mixed with egg and cover with foil."
+   },
+   {
+    "t": "Bake 15 minutes, remove the foil, and bake 10 minutes more until golden."
+   },
+   {
+    "t": "Dust with powdered sugar and serve with berry preserves on the side."
+   }
+  ],
+  "tip": "",
+  "cover": "https://karylskulinarykrusade.com/wp-content/uploads/2019/01/Baked-Monte-Cristo-Sliders.jpg.webp"
+ },
+ {
+  "id": "n-pozole",
+  "name": "Pozole",
+  "origin": "Entree",
+  "cuisine": [
+   "collection",
+   "entree"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree"
+  ],
+  "serves": "",
+  "ingredients": [
+   "4 oz guajillo and ancho chiles",
+   "1 can (108 oz) hominy",
+   "3 pounds pork shoulder",
+   "8 cloves garlic",
+   "3 bay leaves",
+   "1 tsp ground cumin",
+   "2 tbsp dried oregano",
+   "Chicken stock",
+   "Small cabbage",
+   "1 bunch cilantro",
+   "1 onion",
+   "Avocados",
+   "Limes",
+   "Red radishes",
+   "Tostada shells"
+  ],
+  "steps": [
+   {
+    "t": "Boil 5 quarts total of water and chicken stock. Destem and seed the chiles, char them, boil until soft, remove from heat, and soak 15 to 20 minutes."
+   },
+   {
+    "t": "Cube the pork and brown it in olive oil. Add 4 chopped garlic cloves near the end and cook about 1 minute."
+   },
+   {
+    "t": "Add the pork, bay, cumin, oregano, salt, and hominy to a large pot. Simmer and heat 15 minutes."
+   },
+   {
+    "t": "Puree the chiles with 2.5 cups soaking liquid, 1 tsp salt, and 4 cloves garlic. Strain into the pot."
+   },
+   {
+    "t": "Cook 2 to 3 hours. Serve with cabbage, cilantro, onion, avocado, lime, radish, and tostadas."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.simplyrecipes.com/thmb/LTT_n67UUN-3_mpo4Jg2Cu6462E=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2011__10__posole-rojo-vertical-b2-1600-b92c7f3ea7394957b10b0a1d4862f00f.jpg"
+ },
+ {
+  "id": "n-deep-fried-dumplings-ham-sui-gok",
+  "name": "Deep Fried Dumplings Ham Sui Gok",
+  "origin": "Dim Sum",
+  "cuisine": [
+   "collection",
+   "dim-sum"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dim sum"
+  ],
+  "serves": "14 to 16pc",
+  "ingredients": [
+   "Wrapper: 3 oz wheat starch",
+   "8 oz glutinous rice flour",
+   "4 oz hot water",
+   "1.5 oz sugar",
+   "2 oz lard",
+   "5 oz cold water",
+   "Filling: 0.5 oz dried shrimp",
+   "4 oz pork butt",
+   "½ tsp salt",
+   "1 tbsp cornstarch",
+   "2 tbsp water",
+   "1 oz dried turnip",
+   "0.5 oz dried shiitake",
+   "2 cloves garlic",
+   "1 oz celery",
+   "Green onion",
+   "Cilantro",
+   "Seasoning: ½ tsp salt",
+   "1 tbsp oyster sauce",
+   "2 tsp light soy sauce",
+   "½ tsp white pepper",
+   "2 tbsp water",
+   "1 tsp cornstarch",
+   "1 dash sesame oil"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://cdn.sanity.io/images/2r0kdewr/production/321ed8ae1fbc97f3bb7f56f25b5a5d41b401dfdd-1000x667.jpg?w=600&fm=webp&q=50"
+ },
+ {
+  "id": "n-taro-puff",
+  "name": "Taro Puff",
+  "origin": "Dim Sum",
+  "cuisine": [
+   "collection",
+   "dim-sum"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dim sum"
+  ],
+  "serves": "20pc",
+  "ingredients": [
+   "Wrapper: 400g taro",
+   "200g water",
+   "½ tsp salt",
+   "1 tsp sugar",
+   "160g wheat starch",
+   "130g lard or butter",
+   "Filling: 1 tbsp oil",
+   "114g ground pork",
+   "40g Cantonese sausage",
+   "3 dried shiitake, soaked 2 hours",
+   "60g carrot, minced",
+   "114g shrimp, diced",
+   "1 tbsp Chinese cooking wine",
+   "½ tsp black pepper",
+   "2 tsp oyster sauce",
+   "2.5 tsp soy sauce",
+   "1 tsp dark soy sauce",
+   "2.5 tsp cornstarch",
+   "2.5 tbsp mushroom soaking liquid",
+   "¼ cup scallion, diced",
+   "2 to 3 cups oil for deep frying"
+  ],
+  "steps": [
+   {
+    "t": "Slice the taro ¼ inch thick, then into strips. Add the salt, sugar, and water. Bring to a simmer on medium, then cook on low 8 minutes."
+   },
+   {
+    "t": "Remove from heat, add the wheat starch, and smash until crumbly. Knead on low speed to one dough, add the lard or butter, and chill in a container 24 hours."
+   },
+   {
+    "t": "Filling. Dice the shiitake, sausage, and carrot. Heat oil on high and cook the pork, shiitake, and sausage, breaking apart."
+   },
+   {
+    "t": "Turn to low. Add the carrot, cooking wine, pepper, soy sauce, oyster sauce, and dark soy. Stir until combined."
+   },
+   {
+    "t": "Mix the cornstarch with the mushroom liquid and pour in, adding more liquid if dry. Add the shrimp until no longer translucent, then the scallions."
+   },
+   {
+    "t": "Knead the wrapper a few minutes. Take 35g, roll into a ball, shape a bowl, pack in 15g filling, and pinch the edges. Repeat 20 times."
+   },
+   {
+    "t": "Heat oil to 390 to 400F. A small test piece should turn porous in 20 seconds."
+   },
+   {
+    "t": "Set the puffs on a flat strainer with ½ inch between and press lightly. Fry until a honeycomb forms, then drain on paper towels."
+   },
+   {
+    "t": "Shaped dumplings freeze for up to a month."
+   }
+  ],
+  "tip": "",
+  "cover": "https://images.getrecipekit.com/20230307163358-how-to-make-cantonese-taro-puff-dumpling-wu-gok-recipe.png?aspect_ratio=16:9&quality=90&"
+ },
+ {
+  "id": "n-dong-po-rou",
+  "name": "Dong Po Rou",
+  "origin": "Entree",
+  "cuisine": [
+   "collection",
+   "entree"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree"
+  ],
+  "serves": "",
+  "ingredients": [
+   "2.75 lb (1.25 kg) pork belly",
+   "2½ cups (600 ml) Chinese rice wine",
+   "2 tbsp Shaoxing wine",
+   "5 to 6 tbsp dark soy sauce",
+   "2½ tbsp (37.5g) rock sugar",
+   "¼ cup (60 ml) water",
+   "2 tbsp neutral oil",
+   "6 slices ginger, divided",
+   "2 stalks leek, green and white parts divided",
+   "2 whole star anise",
+   "1 cinnamon stick",
+   "3 dried bay leaves",
+   "Mash: 3 large Yukon potatoes",
+   "¼ cup whole milk or heavy cream",
+   "½ cup braising liquid",
+   "1 tbsp white pepper",
+   "2 tbsp kosher salt, to taste",
+   "2 pieces fried broccoli",
+   "15g fried leek"
+  ],
+  "steps": [
+   {
+    "t": "Torch or sear the pork belly skin to burn off hair and debris, then scrape with a knife."
+   },
+   {
+    "t": "In a pot, add the leek greens, 3 slices ginger, and cold water to cover the pork. Boil, then simmer 10 minutes."
+   },
+   {
+    "t": "Shock in an ice bath. Cut into 4 inch pieces and tie with butcher's twine."
+   },
+   {
+    "t": "Sauté 3 slices ginger, the leek whites, and the star anise until fragrant. Add the rock sugar and water and dissolve."
+   },
+   {
+    "t": "Add the rice wine, Shaoxing, dark soy, cinnamon, and bay leaves and bring to a simmer, adding water to submerge the pork."
+   },
+   {
+    "t": "Braise the pork skin side up 1 hour, then skin side down 30 minutes. Steam skin side up 1 hour."
+   },
+   {
+    "t": "Save the braising liquid and add some to the mash. Reduce the rest by half to a glaze and baste the pork."
+   }
+  ],
+  "tip": "",
+  "cover": "https://hungrysaurus.com/wp-content/uploads/2020/07/img_4827a.jpg?w=1000",
+  "clip": "https://www.tiktok.com/@willhkwong/video/7423156703044078853"
+ },
+ {
+  "id": "n-tiramisu",
+  "name": "Tiramisu",
+  "origin": "Dessert",
+  "cuisine": [
+   "collection",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "100g sugar",
+   "4 eggs",
+   "500g mascarpone",
+   "Espresso",
+   "Lady fingers"
+  ],
+  "steps": [
+   {
+    "t": "Separate the eggs."
+   },
+   {
+    "t": "Whisk the yolks with the sugar until pale."
+   },
+   {
+    "t": "Whip the room temperature mascarpone and add it to the yolks."
+   },
+   {
+    "t": "Beat the whites to firm peaks."
+   },
+   {
+    "t": "Fold the whites in, in sections."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.livewellbakeoften.com/wp-content/uploads/2021/01/Tiramisu-8s-500x500.jpg"
+ },
+ {
+  "id": "n-pie-crust",
+  "name": "Pie Crust",
+  "origin": "Indio",
+  "cuisine": [
+   "collection",
+   "indio"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-sesame-dressing",
+  "name": "Sesame Dressing",
+  "origin": "Indio, Sauce",
+  "cuisine": [
+   "collection",
+   "indio",
+   "sauce"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio",
+   "sauce"
+  ],
+  "serves": "",
+  "ingredients": [
+   "¼ cup rice wine vinegar",
+   "3 tbsp sugar",
+   "1 tbsp water",
+   "⅓ cup vegetable or olive oil",
+   "2 tbsp sesame oil",
+   "⅓ tsp salt",
+   "¼ tsp pepper"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://www.manilaspoon.com/wp-content/uploads/2024/04/Exclusive-Asian-Salad-with-Sesame-Dressing-8741-1440x2157.jpg"
+ },
+ {
+  "id": "n-focaccia-bread",
+  "name": "Focaccia Bread",
+  "origin": "Entree, Indio",
+  "cuisine": [
+   "collection",
+   "entree",
+   "indio"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree",
+   "indio"
+  ],
+  "serves": "",
+  "ingredients": [
+   "4 cups (512g) flour",
+   "2 tsp (10g) salt",
+   "2 tsp instant yeast",
+   "2 cups (455g) lukewarm water",
+   "Butter",
+   "Olive oil",
+   "Flaky sea salt"
+  ],
+  "steps": [
+   {
+    "t": "In a large bowl whisk the yeast and water. Add the flour and salt with a rubber spatula."
+   },
+   {
+    "t": "Turn into a ball, place in a bowl coated with olive oil, and rest overnight."
+   },
+   {
+    "t": "Coat the pans, use forks to deflate each corner of the dough, add to the pan, coat, and rest 2 to 3 hours."
+   },
+   {
+    "t": "Preheat the oven to 425F. Drizzle with olive oil, dimple, and top with sea salt."
+   },
+   {
+    "t": "Bake 25 to 30 minutes."
+   }
+  ],
+  "tip": "",
+  "cover": "https://alexandracooks.com/wp-content/uploads/2021/09/focacciavertical_alexandraskitchen.jpg"
+ },
+ {
+  "id": "n-tart-crust",
+  "name": "Tart Crust",
+  "origin": "Indio, Dessert",
+  "cuisine": [
+   "collection",
+   "indio",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio",
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Version one: 100g unsalted butter, room temperature",
+   "Pinch of salt",
+   "72g powdered sugar",
+   "20g almond powder",
+   "30g cornstarch",
+   "170g cake flour",
+   "Version two: ½ cup powdered sugar",
+   "1 cup unsalted butter",
+   "1 egg",
+   "Pinch of salt",
+   "1.5 cups flour"
+  ],
+  "steps": [
+   {
+    "t": "Version one. Beat the butter lightly, add the salt, and sift in the powdered sugar, almond flour, and cornstarch. Add eggs gradually, then the cake flour. Roll out between parchment and rest 1 to 2 hours."
+   },
+   {
+    "t": "Version two. Cream the butter and sugar, add the egg, then paddle in the salt and flour. Refrigerate 1 hour."
+   },
+   {
+    "t": "Roll out the dough and line the pan. Freeze 30 minutes."
+   },
+   {
+    "t": "Blind bake at 350F for 10 minutes with beans. Cool."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.onceuponachef.com/images/2021/06/Pate-Sucree-8-scaled.jpg"
+ },
+ {
+  "id": "n-hwa-chae",
+  "name": "Hwa Chae",
+  "origin": "Indio, Dessert",
+  "cuisine": [
+   "collection",
+   "indio",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio",
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Watermelon",
+   "Strawberry",
+   "Blueberries",
+   "Peaches",
+   "Cherries",
+   "Strawberry syrup",
+   "Ice",
+   "Milk",
+   "Squirt",
+   "Coconut jelly"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://yummynotes.net/wp-content/uploads/2024/03/Hwachae-Recipe-Korean-Watermelon-Punch.jpg"
+ },
+ {
+  "id": "n-truffle-mushroom-mac-and-cheese",
+  "name": "Truffle Mushroom Mac & Cheese",
+  "origin": "Entree",
+  "cuisine": [
+   "collection",
+   "entree"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Extra virgin olive oil",
+   "½ lb shiitake",
+   "2 tbsp unsalted butter",
+   "½ lb bella mushrooms",
+   "3 tbsp sherry",
+   "Salt",
+   "1 lb cavatappi or shell pasta",
+   "3 oz truffle butter",
+   "½ cup flour",
+   "1 qt whole milk",
+   "12 oz gruyere",
+   "8 oz extra sharp cheddar",
+   "Pepper",
+   "Nutmeg",
+   "Garlic cloves",
+   "Parsley",
+   "1.5 cups panko",
+   "Shallots",
+   "Parmesan"
+  ],
+  "steps": [
+   {
+    "t": "Heat the butter and olive oil. Sauté the garlic and shallots, then the mushrooms. Add the sherry and cook until absorbed."
+   },
+   {
+    "t": "Boil salted water and cook the pasta."
+   },
+   {
+    "t": "Melt the truffle butter, whisk in the flour, then whisk in hot milk."
+   },
+   {
+    "t": "When creamy, add the cheese, salt, nutmeg, and pepper."
+   },
+   {
+    "t": "Combine the pasta, sauce, and mushrooms and add to a pan."
+   },
+   {
+    "t": "Top with breadcrumbs, parmesan, and parsley. Bake at 375F for 35 to 45 minutes."
+   },
+   {
+    "t": "Optional truffle shavings on top."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.gordonramsayrestaurants.com/assets/Uploads/_resampled/CroppedFocusedImage108081050-50-truffle-mac-and-cheese.jpg"
+ },
+ {
+  "id": "n-malasada-donut-dupe",
+  "name": "Malasada Donut Dupe",
+  "origin": "Dessert",
+  "cuisine": [
+   "collection",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Canned biscuit dough",
+   "Cinnamon",
+   "Sugar",
+   "Toasted ground sesame seeds"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://justcookwithmichael.com/wp-content/uploads/2020/05/Malasadas-scaled.jpg"
+ },
+ {
+  "id": "n-bbq-kalbi",
+  "name": "BBQ Kalbi",
+  "origin": "Entree",
+  "cuisine": [
+   "collection",
+   "entree"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree"
+  ],
+  "serves": "",
+  "ingredients": [
+   "2 cups Kalbi Marinade",
+   "4 lb flanken short ribs",
+   "1 white onion"
+  ],
+  "steps": [
+   {
+    "t": "Cover the ribs in marinade and massage it in."
+   },
+   {
+    "t": "Refrigerate 2 hours to 1 day."
+   },
+   {
+    "t": "Heat a grill pan on medium and brush or spray with oil."
+   },
+   {
+    "t": "Grill the ribs about 4 minutes per side."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.masterclass.com/course-images/attachments/ijdguv1rfsw21i50hx531q1y7j5b"
+ },
+ {
+  "id": "n-kalbi-marinade",
+  "name": "Kalbi Marinade",
+  "origin": "Sauce",
+  "cuisine": [
+   "collection",
+   "sauce"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "sauce"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 large onion, peeled and roughly chopped",
+   "1 cup peeled garlic cloves",
+   "1 bunch scallions (about 8), roughly chopped",
+   "2 cups soy sauce",
+   "5 tbsp toasted sesame seeds",
+   "1 cup sugar",
+   "2 large kiwifruits",
+   "1 cup mirin, apple juice, or water",
+   "2 cups fresh orange juice",
+   "1 cup toasted sesame oil"
+  ],
+  "steps": [
+   {
+    "t": "Blend everything in a blender."
+   },
+   {
+    "t": "Pour into a jar. Good for 1 week."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.masterclass.com/course-images/attachments/mn6kq8wqc2gydhmq6illr907v495"
+ },
+ {
+  "id": "n-baked-char-siu-pork-buns",
+  "name": "Baked Char Siu Pork Buns",
+  "origin": "Dim Sum",
+  "cuisine": [
+   "collection",
+   "dim-sum"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dim sum"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-pozole-verde",
+  "name": "Pozole Verde",
+  "origin": "Entree",
+  "cuisine": [
+   "collection",
+   "entree"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 gallon water",
+   "6 garlic cloves",
+   "2 sprigs cilantro",
+   "½ onion",
+   "Generous pinch of kosher salt",
+   "3 chicken thighs",
+   "4 chicken legs",
+   "2 breasts",
+   "Oregano",
+   "Epazote leaves",
+   "2 cans hominy (about 4 cups)",
+   "Sauce: 1 lb tomatillos",
+   "2 poblano peppers",
+   "2 serrano peppers"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://images.squarespace-cdn.com/content/v1/5a4a6787aeb62568c8de8626/1634582614130-1TW1EI7WD5YFM4BUZL3W/GettyImages-1035414572.jpg?format=2500w",
+  "clip": "https://www.tiktok.com/t/ZTFQwpVxs/"
+ },
+ {
+  "id": "n-braised-leeks",
+  "name": "Braised Leeks",
+  "origin": "Appetizer",
+  "cuisine": [
+   "collection",
+   "appetizer"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "appetizer"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Leeks",
+   "1 lemon",
+   "Thyme",
+   "Chicken stock",
+   "Olive oil",
+   "Salt"
+  ],
+  "steps": [
+   {
+    "t": "Heat the oven to 350F and cut the leek ends."
+   },
+   {
+    "t": "Split the leeks down the middle and lay in a pan cut side up."
+   },
+   {
+    "t": "Add chicken stock and olive oil to fill about a third of the pan."
+   },
+   {
+    "t": "Add salt, thyme, and lemon slices, cover with foil, and bake 45 minutes."
+   }
+  ],
+  "tip": "",
+  "cover": "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F39%2F2021%2F10%2F05%2Fbutter-braised-leeks-RU347872.jpg&q=60"
+ },
+ {
+  "id": "n-xiao-long-bao",
+  "name": "Xiao Long Bao",
+  "origin": "Dim Sum",
+  "cuisine": [
+   "collection",
+   "dim-sum"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dim sum"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-fruit-tart",
+  "name": "Fruit Tart",
+  "origin": "Indio, Dessert",
+  "cuisine": [
+   "collection",
+   "indio",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio",
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "cover": "https://natashaskitchen.com/wp-content/uploads/2022/08/Fruit-Tart-SQ.jpg"
+ },
+ {
+  "id": "n-strawberry-mojito",
+  "name": "Strawberry Mojito",
+  "origin": "Indio, Drinks",
+  "cuisine": [
+   "collection",
+   "indio",
+   "drinks"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio",
+   "drinks"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Mint and fruit",
+   "1 oz syrup",
+   "2 oz rum",
+   "1 oz lime",
+   "Ice",
+   "Tonic water or cider"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://mindfulmocktail.com/wp-content/uploads/2022/02/strawberry-mint-mojito.jpg"
+ },
+ {
+  "id": "n-bingsoo",
+  "name": "Bingsoo",
+  "origin": "Indio",
+  "cuisine": [
+   "collection",
+   "indio"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-mayo",
+  "name": "Mayo",
+  "origin": "Sauce",
+  "cuisine": [
+   "collection",
+   "sauce"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "sauce"
+  ],
+  "serves": "",
+  "ingredients": [
+   "1 egg",
+   "Splash of lemon",
+   "1 tsp Dijon",
+   "1 cup avocado or vegetable oil"
+  ],
+  "steps": [
+   {
+    "t": "Add everything to a jar and immersion blend."
+   }
+  ],
+  "tip": "",
+  "cover": "https://jessicainthekitchen.com/wp-content/uploads/2020/05/Vegan-Mayo-13-500x375.jpg"
+ },
+ {
+  "id": "n-thai-tea",
+  "name": "Thai Tea",
+  "origin": "Indio, Drinks",
+  "cuisine": [
+   "collection",
+   "indio",
+   "drinks"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio",
+   "drinks"
+  ],
+  "serves": "",
+  "ingredients": [
+   "8 cups water",
+   "2 cups Thai tea",
+   "1 cup sugar",
+   "Oat milk"
+  ],
+  "steps": [],
+  "tip": "",
+  "cover": "https://www.foxandbriar.com/wp-content/uploads/2022/07/thai-iced-tea-square-1-of-1.jpg"
+ },
+ {
+  "id": "n-brussel-sprouts-salad",
+  "name": "Brussel Sprouts Salad",
+  "origin": "Salad",
+  "cuisine": [
+   "collection",
+   "salad"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "salad"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Pickled onions: red onion",
+   "1 cup water",
+   "½ cup vinegar",
+   "½ cup apple cider vinegar",
+   "1 tbsp sugar",
+   "2 tsp salt",
+   "½ tsp red pepper flakes",
+   "Dressing: 3 tbsp olive oil",
+   "3 tbsp apple cider vinegar",
+   "1 tbsp miso",
+   "2 tsp Dijon mustard",
+   "½ tsp salt",
+   "1 tbsp mango chutney",
+   "Thinly sliced brussels sprouts",
+   "Dried cherries",
+   "Walnuts",
+   "Blue cheese"
+  ],
+  "steps": [
+   {
+    "t": "Pickle the onions. Add thinly sliced red onion to a jar and pour the boiled water, vinegars, sugar, salt, and pepper flakes mixture on top."
+   },
+   {
+    "t": "Whisk the dressing."
+   },
+   {
+    "t": "Build in this order. Pickled onions, brussels sprouts, dried cherries, walnuts, blue cheese, dressing."
+   }
+  ],
+  "tip": "",
+  "cover": "https://images.squarespace-cdn.com/content/v1/594a8fc04f14bcf90f3a113d/1590021515609-TKM1MBPFI44QKZ4OPUJZ/DSC00178.jpg?format=1000w"
+ },
+ {
+  "id": "n-brown-butter-bread",
+  "name": "Brown Butter Bread",
+  "origin": "Dessert",
+  "cuisine": [
+   "collection",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "⅓ cup brown butter",
+   "1 cup warm milk",
+   "¼ cup sugar",
+   "1 egg",
+   "Vanilla paste",
+   "1 tsp salt",
+   "3.5 cups flour",
+   "2 tsp yeast"
+  ],
+  "steps": [
+   {
+    "t": "Mix the brown butter, milk, sugar, egg, and vanilla. Add the salt, flour, and yeast with the dough attachment."
+   },
+   {
+    "t": "Proof 1 hour."
+   },
+   {
+    "t": "Knead and cut into 4 balls. Roll and fold twice, then roll and place like brioche."
+   },
+   {
+    "t": "Proof 30 minutes, then butter the top."
+   },
+   {
+    "t": "Bake at 350F for 20 to 25 minutes."
+   }
+  ],
+  "tip": "",
+  "cover": "https://foolproofliving.com/wp-content/uploads/2014/09/Homemade-brioche-recipe.jpg"
+ },
+ {
+  "id": "n-mushroom-and-scallop-risotto",
+  "name": "Mushroom & Scallop Risotto",
+  "origin": "Entree",
+  "cuisine": [
+   "collection",
+   "entree"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-brazilian-bread",
+  "name": "Brazilian Bread",
+  "origin": "Appetizer, Indio",
+  "cuisine": [
+   "collection",
+   "appetizer",
+   "indio"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "appetizer",
+   "indio"
+  ],
+  "serves": "12pcs",
+  "ingredients": [
+   "⅔ cup whole milk",
+   "⅓ cup olive oil",
+   "1 egg",
+   "1 tsp salt",
+   "½ cup mozzarella",
+   "½ cup cheddar",
+   "1.5 cups tapioca flour"
+  ],
+  "steps": [
+   {
+    "t": "Blend everything in a blender."
+   },
+   {
+    "t": "Bake at 400F for 12 minutes."
+   }
+  ],
+  "tip": "",
+  "cover": "https://rasamalaysia.com/wp-content/uploads/2017/04/brazilian-cheese-puffs-thumb.jpg"
+ },
+ {
+  "id": "n-pecan-crust",
+  "name": "Pecan Crust",
+  "origin": "Indio",
+  "cuisine": [
+   "collection",
+   "indio"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ },
+ {
+  "id": "n-pastry-cream",
+  "name": "Pastry Cream",
+  "origin": "Indio, Dessert",
+  "cuisine": [
+   "collection",
+   "indio",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "indio",
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [
+   "2 cups milk",
+   "1.5 tbsp vanilla bean",
+   "6 egg yolks",
+   "⅔ cup (135g) sugar",
+   "¼ cup (37g) cornstarch",
+   "Butter"
+  ],
+  "steps": [
+   {
+    "t": "Heat the milk with the vanilla bean."
+   },
+   {
+    "t": "Mix the egg yolks and sugar until paler, then add the cornstarch."
+   },
+   {
+    "t": "Drizzle the milk into the egg mixture gradually to temper."
+   },
+   {
+    "t": "Strain back into the pot and heat until thickened."
+   },
+   {
+    "t": "Add the butter and mix. Strain and move to a piping bag."
+   }
+  ],
+  "tip": "",
+  "cover": "https://confessionsofabakingqueen.com/wp-content/uploads/2019/06/how-to-make-pastry-cream-12-of-12-1.jpg"
+ },
+ {
+  "id": "n-pork-bossam-korean-wraps",
+  "name": "Pork Bossam Korean Wraps",
+  "origin": "Entree",
+  "cuisine": [
+   "collection",
+   "entree"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "entree"
+  ],
+  "serves": "",
+  "ingredients": [
+   "Pork belly",
+   "1 onion in big chunks",
+   "Salt",
+   "Handful of garlic",
+   "Peppercorns",
+   "Ginger slices",
+   "Bay leaf",
+   "A few cloves",
+   "2 scoops white miso",
+   "Sugar",
+   "Cinnamon",
+   "Napa cabbage, scrubbed in salt",
+   "Sliced daikon, salted and rinsed",
+   "Green onion",
+   "Crushed red peppers",
+   "Minced garlic",
+   "Shrimp",
+   "Sesame oil",
+   "Gochujang",
+   "Special leaves",
+   "Sliced garlic",
+   "Sliced jalapenos",
+   "Sesame seeds"
+  ],
+  "steps": [
+   {
+    "t": "Boil water with the onion, salt, garlic, peppercorns, ginger, bay leaf, cloves, miso, sugar, cinnamon, and pork belly."
+   },
+   {
+    "t": "Scrub the napa cabbage in salt. Salt and rinse the sliced daikon."
+   },
+   {
+    "t": "Make the radish kimchi filling with green onion, crushed red pepper, minced garlic, shrimp, sesame oil, and gochujang."
+   },
+   {
+    "t": "Serve the sliced pork with leaves, sliced garlic, jalapenos, and sesame seeds."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.seriouseats.com/thmb/ZiVpnKqpmJHKEPJOux11pweQmGg=/1500x1125/filters:fill(auto,1)/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__2018__12__20181204-bossam-vicky-wasik-9-cda3a2aec3584316b47a152857a435ff.jpg"
+ },
+ {
+  "id": "n-scallion-dipping-sauce",
+  "name": "Scallion Dipping Sauce",
+  "origin": "Sauce",
+  "cuisine": [
+   "collection",
+   "sauce"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "sauce"
+  ],
+  "serves": "",
+  "ingredients": [
+   "2 tbsp crushed toasted sesame seeds",
+   "2 cups soy sauce",
+   "3 tbsp gochugaru",
+   "½ cup toasted sesame oil",
+   "¾ cup rice vinegar",
+   "2 tbsp sugar",
+   "1 bunch scallions (about 8), trimmed and thinly sliced"
+  ],
+  "steps": [
+   {
+    "t": "Combine everything in a large bowl and whisk."
+   },
+   {
+    "t": "Adjust to taste, adding water if needed."
+   },
+   {
+    "t": "Pour into a jar. Good for 3 months."
+   }
+  ],
+  "tip": "",
+  "cover": "https://www.masterclass.com/course-images/attachments/g5uhm97z7tb5vrv8a8tg2sgb2rvj"
+ },
+ {
+  "id": "n-egg-tarts",
+  "name": "Egg Tarts",
+  "origin": "Dessert",
+  "cuisine": [
+   "collection",
+   "dessert"
+  ],
+  "time": null,
+  "cal": null,
+  "pro": null,
+  "carb": null,
+  "fat": null,
+  "spice": 0,
+  "tags": [
+   "dessert"
+  ],
+  "serves": "",
+  "ingredients": [],
+  "steps": [],
+  "tip": "",
+  "noPhoto": true
+ }
 ];
+NOTION_RECIPES.forEach(n => RECIPES.push(n));
+/* =========================================================
+   Class guide recipes: Roy Choi Teaches Intuitive Cooking and Gordon Ramsay Teaches Cooking (MasterClass).
+   Ingredients follow the guides; methods are condensed in our own words. Macros are our estimates.
+   ========================================================= */
+const RC_CREDIT = "From Roy Choi's MasterClass class guide. Ingredients follow the guide; the method is condensed here, so check the guide for every detail.";
+const GR_CREDIT = "From Gordon Ramsay's MasterClass class guide. Ingredients follow the guide; the method is condensed here, so check the guide for every detail.";
+const RC = (o) => Object.assign({ chef: "Roy Choi", source: "guide", credit: RC_CREDIT, spice: 1, tags: [], tip: "" }, o);
+const GR = (o) => Object.assign({ chef: "Gordon Ramsay", source: "guide", credit: GR_CREDIT, spice: 0, tags: [], tip: "" }, o);
+const CLASS_RECIPES = [
+  RC({ id: "rc-kogi-short-rib-tacos", name: "Kogi Short Rib Tacos", origin: "The World Famous Kogi taco", image: "rc-kogi-short-rib-tacos",
+    time: 30, serves: 4, cal: 460, pro: 26, carb: 24, fat: 28, tags: ["tacos"],
+    ingredients: ["Relish: ½ medium white onion finely chopped, ¼ cup cilantro finely chopped, juice of ½ lime (about 1 tbsp), salt and pepper",
+      "Slaw: Kogi Vinaigrette to taste, 6 scallions sliced thin on the diagonal, ½ cup thinly sliced green cabbage, ½ cup thinly sliced romaine, pinch of salt and pepper",
+      "Salsa Verde, to taste", "Neutral oil, to coat the pan", "8 corn tortillas (4½ inches)",
+      "1 lb cooked BBQ Kalbi, chopped small (bones removed), or 1 lb grilled BBQ Mixed Vegetables", "Lime wedges"],
+    steps: [{ t: "Stir the onion, cilantro and lime juice together and season with salt and pepper." },
+      { t: "Toss the scallions, cabbage and romaine with salt, pepper and a few big spoonfuls of Kogi Vinaigrette. It should be well dressed with a little pool at the bottom." },
+      { t: "Warm the tortillas on a lightly oiled griddle until soft and just crisping, about 30 seconds a side.", min: 1 },
+      { t: "Stack the tortillas two high. Put the chopped kalbi on the griddle until it caramelizes at the edges. Roy calls it double-caramelized.", min: 2 },
+      { t: "Top each double tortilla with kalbi, salsa verde, relish and slaw. Squeeze lime over and eat right away." }],
+    tip: "Short rib is rich. Use one tortilla per taco and pile on extra slaw to keep it near 400 calories." }),
+  RC({ id: "rc-bbq-vegetables", name: "BBQ Mixed Vegetables", origin: "Korean BBQ, meat-free", image: "rc-bbq-vegetables",
+    time: 45, serves: 6, cal: 190, pro: 6, carb: 24, fat: 9, spice: 0, tags: ["vegetarian", "grill"],
+    ingredients: ["2 cups Kalbi Marinade, Kogi Vinaigrette, or a mix of the two", "4 lb young seasonal vegetables (asparagus, carrots, baby bok choy, fennel, onion, gem lettuce)", "1 large white onion, thinly sliced, to serve", "High-heat oil for the grill"],
+    steps: [{ t: "Trim the vegetables and halve or quarter them so they are all about the same size." },
+      { t: "Toss them gently in the marinade or vinaigrette and let them sit while the grill heats.", min: 25 },
+      { t: "Heat a grill or grill pan to medium-high and oil the grates." },
+      { t: "Grill in batches, turning once, until charred all over but still with some bite.", min: 12 },
+      { t: "Lay them on sliced onions in a hot cast-iron pan and eat right away." }],
+    tip: "Swap these in for the kalbi in the Kogi tacos for a lighter, vegetarian taco." }),
+  RC({ id: "rc-kimchi-paste", name: "All-Purpose Kimchi Paste", origin: "The base for every kimchi", image: "rc-kimchi-paste",
+    time: 10, serves: "about 4 cups", cal: null, pro: null, carb: null, fat: null, spice: 2, tags: ["pantry"],
+    ingredients: ["15 garlic cloves, peeled", "¼ cup peeled, roughly chopped ginger (a 4-inch knob)", "1 tbsp salted fermented shrimp (optional)", "2 tbsp kosher salt", "2 tbsp sugar", "1 cup gochugaru (Korean chili flakes)", "1 large white or yellow onion, roughly chopped", "¼ cup fish sauce", "1 tbsp soy sauce", "2 tbsp unseasoned rice vinegar", "2 tbsp oyster sauce", "½ cup water"],
+    steps: [{ t: "Blend everything until smooth, adding a few spoonfuls of water if it is too thick to turn over." },
+      { t: "Use it right away or seal it in a container. It keeps in the fridge more or less forever and the flavor deepens." }],
+    tip: "No fermented shrimp? Fish sauce plus oyster sauce still gives the briny depth." }),
+  RC({ id: "rc-napa-kimchi", name: "Napa Cabbage Kimchi", origin: "Classic, with quick and radish versions", image: "rc-napa-kimchi",
+    time: null, serves: "1 gallon jar", cal: 25, pro: 1, carb: 4, fat: 0, spice: 2, tags: ["fermented"],
+    ingredients: ["All-Purpose Kimchi Paste, as needed", "2 tbsp kosher salt", "2 quarts water", "1 large napa cabbage (about 3 lb), quartered lengthwise", "½ bunch Asian chives or 6 scallions, cut in 2-inch pieces"],
+    steps: [{ t: "Dissolve the salt in the water and soak the cabbage quarters at room temperature for at least 3 hours, or overnight." },
+      { t: "Drain the slightly wilted cabbage well." },
+      { t: "Wearing gloves, rub paste deep between every leaf, then all over the outside." },
+      { t: "Tuck chives between the layers, roll each quarter into a log and pack them stem side down into a gallon jar. Leave a few inches of headroom and seal." },
+      { t: "Leave it out of direct sun for 2 days, then refrigerate. It is ready in 1 to 2 weeks." }],
+    tip: "Quick kimchi: cut the cabbage in 2-inch pieces, soak 1 to 2 hours, then toss with about 2 cups paste and eat right away. Radish kimchi: use 1-inch daikon cubes the same way." }),
+  RC({ id: "rc-kimchi-tuna-melt", name: "Kimchi Tuna Melt", origin: "Diner classic, Koreatown style", image: "rc-kimchi-tuna-melt",
+    time: 15, serves: 2, cal: 880, pro: 54, carb: 42, fat: 56, tags: ["sandwich"],
+    ingredients: ["2 cans flaked tuna in water, drained", "1 stalk celery, diced", "2 scallions, thinly sliced", "Japanese mayonnaise, yellow mustard and Tabasco, to taste", "Salt and pepper", "2 large spoonfuls Napa Cabbage Kimchi, chopped", "4 slices sourdough or white bread", "Softened butter", "Neutral oil", "8 slices sharp cheddar"],
+    steps: [{ t: "Mix the tuna, celery and scallions with just enough mayo, mustard and hot sauce to bind. Season to taste." },
+      { t: "Butter one side of each slice of bread all the way to the crust." },
+      { t: "Warm the tuna in a lightly oiled pan, add the kimchi and toss.", min: 1 },
+      { t: "Put the bread butter side down in an oiled pan. Lay 2 slices of cheese on each, pile the tuna on two of them and close the sandwiches." },
+      { t: "Press and flip until both sides are deeply browned.", min: 3 },
+      { t: "Rest a minute, then cut on the diagonal." }],
+    tip: "Two slices of cheese per sandwich and half Greek yogurt in the tuna salad bring it to about 600 calories with almost the same protein." }),
+  RC({ id: "rc-mung-bean-pancakes", name: "Savory Mung Bean Pancakes", origin: "Bindaetteok meets gamjajeon", image: "rc-mung-bean-pancakes",
+    time: 30, serves: 4, cal: 320, pro: 10, carb: 52, fat: 8, spice: 0, tags: ["vegetarian"],
+    ingredients: ["Scallion Dipping Sauce", "½ cup split yellow mung beans, soaked overnight in 1½ cups water (keep the water)", "½ cup thinly sliced chives", "1 cup tempura flour mix or self-rising flour", "1 tsp kosher salt", "½ white onion, roughly chopped", "¼ cup water", "1 large russet potato, peeled and kept in cold water", "2 scallions, thinly sliced", "Neutral oil", "Black pepper"],
+    steps: [{ t: "Blend the beans with their soaking water, the chives, flour, salt, onion and water into a smooth batter." },
+      { t: "Finely grate the potato into a bowl, add the scallions and stir in the batter." },
+      { t: "Coat a pan with oil over medium heat and fry a small test pancake. Taste and season the batter." },
+      { t: "Pour in about ⅓ cup batter per pancake. Flip when bubbles show at the edges, and cook until both sides are crisp and golden.", min: 4 },
+      { t: "Drain on paper towels and serve hot with Scallion Dipping Sauce." }],
+    tip: "Stir chopped shrimp or leftover kalbi into the batter to turn these into a one-pan dinner with more protein." }),
+  RC({ id: "rc-3pm-dumplings", name: "3 p.m. Dumplings", origin: "Pork, beef and tofu, or mushroom", image: "rc-dumplings-2",
+    time: 60, serves: 5, cal: 440, pro: 24, carb: 56, fat: 12, tags: ["freezer friendly"],
+    ingredients: ["Filling: ½ cup finely chopped napa cabbage, 1 bunch scallions sliced, 2 tbsp minced ginger, 2 tbsp minced garlic, 1 tsp gochugaru, 1 tbsp crushed toasted sesame seeds", "2 tbsp oyster sauce, 2 tsp toasted sesame oil, 1 tbsp soy sauce, 1 tbsp rice vinegar, 1 egg", "4 oz ground pork, 4 oz ground beef, 4 oz firm tofu crumbled (or a mushroom duxelles: 8 oz button and 5 oz shiitake mushrooms, 1 shallot, ½ cup white wine, chives)", "50 to 60 round dumpling wrappers", "Flour for dusting, beaten egg or water to seal", "Scallion Dipping Sauce or chili oil, to serve"],
+    steps: [{ t: "Mix all the filling ingredients with the meat and tofu and season with salt and pepper. For the veggie version, cook the chopped mushrooms and shallot until dry, deglaze with wine, add chives, cool, then mix." },
+      { t: "Put a heaping teaspoon of filling on each wrapper, wet the edge and seal: half-fold for boiling, crimp or pinch into a purse for frying." },
+      { t: "Boil in batches of about 10 until they float and the skins turn translucent.", min: 4 },
+      { t: "Or fry in 2 to 3 inches of hot oil, 4 or 5 at a time, until golden.", min: 3 },
+      { t: "Drizzle with dipping sauce or chili oil and scatter scallions over." }],
+    tip: "Freeze them on a tray, then bag them. Boiled dumplings are much lighter than fried." }),
+  RC({ id: "rc-carnitas", name: "Large-Format Carnitas with Pork-Fat Cilantro Rice", origin: "Slow-roasted pork shoulder for a crowd", image: "rc-carnitas",
+    time: 360, serves: 8, cal: 1050, pro: 56, carb: 57, fat: 64, spice: 0, tags: ["feeds a crowd"],
+    ingredients: ["Salsa Verde", "1 boneless pork shoulder (about 5 lb)", "3 tbsp kosher salt, 1½ tbsp black pepper", "4 garlic cloves", "¼ cup neutral oil", "3 radishes quartered and 4 lime wedges, to serve", "Rice: 3 cups short-grain white rice", "6 medium tomatillos, 1 garlic clove", "Juice of 3 limes", "1 bunch cilantro and 1 bunch flat-leaf parsley", "½ cup water", "1 cup rendered pork fat from the carnitas"],
+    steps: [{ t: "Heat the oven to 225°F. Season the shoulder heavily, stuff the garlic into the crevices, drizzle with oil and seal it in a lidded Dutch oven." },
+      { t: "Roast undisturbed until it collapses under a spoon and fat has pooled in the pot.", min: 330 },
+      { t: "Meanwhile rinse the rice about 5 times until the water runs clear, then cook it." },
+      { t: "Blanch the tomatillos and garlic for 1 to 2 minutes, chill in ice water, then blend with lime juice, most of the herbs, salt, pepper and ½ cup water.", min: 2 },
+      { t: "Rest the pork 20 minutes before uncovering. Stir ½ cup cilantro sauce and 1 cup of the rendered fat into the rice.", min: 20 },
+      { t: "Spread the rice on a platter, top with chunks of carnitas, spoon the cilantro sauce and salsa verde around, and finish with herbs, radishes and lime." }],
+    tip: "Use half the pork fat in the rice and serve smaller scoops over shredded cabbage to bring a plate under 700 calories." }),
+  RC({ id: "rc-carnitas-burrito", name: "Carnitas and Pork-Fat Rice Burrito", origin: "Para llevar, from the leftovers", image: "rc-carnitas-burrito",
+    time: 10, serves: 1, cal: 1190, pro: 50, carb: 105, fat: 60, spice: 0, tags: ["leftovers"],
+    ingredients: ["Salsa Verde (optional)", "1 12-inch flour tortilla", "2 heaping spoonfuls warm pork-fat cilantro rice", "1 to 2 heaping spoonfuls warm carnitas", "½ white or yellow onion, diced", "Shredded cheddar", "Leftover cilantro sauce (optional)"],
+    steps: [{ t: "Warm the tortilla on a griddle until soft and lightly browned on both sides." },
+      { t: "Spread the rice in the center, add the carnitas, onion and cheese, and spoon on salsa verde or cilantro sauce." },
+      { t: "Fold the sides in, then roll tightly away from you, keeping the sides tucked." },
+      { t: "Roll it up in foil, tucking the ends, then slice in half or save it for tomorrow." }],
+    tip: "Make it a bowl instead of a burrito and skip the tortilla to save about 300 calories." }),
+  RC({ id: "rc-grilled-fish-ponzu", name: "Whole Grilled Fish with Ponzu", origin: "Branzino, herbs and scallion slaw", image: "rc-grilled-fish",
+    time: 30, serves: 3, cal: 290, pro: 31, carb: 8, fat: 14, tags: ["seafood", "grill"],
+    ingredients: ["Scallion Slaw", "1 whole branzino (1½ to 2 lb), scaled and gutted, or snapper or sea bass", "Kosher salt and black pepper", "1 lemon, halved lengthwise", "A big handful of mixed fresh herbs", "Neutral oil or spray", "Ponzu: ¼ cup soy sauce, ¼ cup rice vinegar, juice and zest of 1 lime, 1 tbsp grated ginger, 1 sliced jalapeño, ¼ cup water"],
+    steps: [{ t: "Pat the fish dry and cut 3 deep slashes on each side." },
+      { t: "Season inside and out, then stuff the cavity with lemon slices and herbs." },
+      { t: "Heat a grill or grill pan to medium-high and stir the ponzu together." },
+      { t: "Oil the grates and the fish. Grill without moving it until the skin releases.", min: 7 },
+      { t: "Flip with two spatulas and cook until the flesh by the gills turns opaque.", min: 5 },
+      { t: "Serve whole on a bed of herbs, or lift off the fillets, with ponzu and Scallion Slaw." }],
+    tip: "One of the best protein-for-calorie dinners on the site." }),
+  RC({ id: "rc-fruit-kimchi", name: "Asian Pear and Watermelon Kimchis", origin: "Fresh fruit panchan", image: "rc-fruit-kimchi",
+    time: 10, serves: 4, cal: 90, pro: 1, carb: 20, fat: 1, tags: ["panchan"],
+    ingredients: ["2 tbsp All-Purpose Kimchi Paste, plus more to taste", "2 large Asian pears or 1 small seedless watermelon (or both), in 1½-inch cubes", "Salt and pepper", "Crushed toasted sesame seeds"],
+    steps: [{ t: "Toss the fruit with the paste, tasting and adding more as you go." },
+      { t: "Season, sprinkle with sesame seeds and eat right away." }] }),
+  RC({ id: "rc-namul", name: "Blanched Vegetables (Namul)", origin: "Broccoli, bean sprout or spinach", image: "rc-namul",
+    time: 10, serves: 3, cal: 80, pro: 4, carb: 8, fat: 5, tags: ["panchan", "vegetarian"],
+    ingredients: ["Ice water", "4 quarts water and 2 big pinches salt", "1 lb broccoli florets (or 2 cups bean sprouts or 4 cups spinach)", "Black pepper", "1 tbsp toasted sesame oil", "1 tsp rice vinegar", "1 tbsp crushed toasted sesame seeds", "Pinch of gochugaru"],
+    steps: [{ t: "Boil the salted water and cook the broccoli just until bright green.", min: 2 },
+      { t: "Shock it in ice water for about a minute, then drain well.", min: 1 },
+      { t: "Season with salt and pepper and toss with the sesame oil, vinegar, sesame seeds and gochugaru." }],
+    tip: "For spinach, squeeze out the water after the ice bath and before seasoning." }),
+  RC({ id: "rc-pickled-cucumbers", name: "Quick-Pickled Cucumbers", origin: "Sesame and chili panchan", image: "rc-pickled-cucumbers",
+    time: 40, serves: 4, cal: 60, pro: 1, carb: 6, fat: 4, tags: ["panchan", "vegetarian"],
+    ingredients: ["2 star anise pods (optional)", "1 tbsp sesame oil", "4 Persian cucumbers, in ½-inch rounds", "1 tbsp crushed toasted sesame seeds", "2 tsp gochugaru", "2 tsp sugar", "1 tsp black pepper", "2 tsp kosher salt", "2 tbsp rice vinegar", "¼ cup water"],
+    steps: [{ t: "Toast the star anise in a dry pan until fragrant.", min: 2 },
+      { t: "Add the sesame oil, then the cucumbers and everything else. Bring to a boil and cook until the cucumbers just soften.", min: 2 },
+      { t: "Move to a jar and chill at least 30 minutes. Keeps 2 weeks.", min: 30 }] }),
+  RC({ id: "rc-next-day-rice-bowls", name: "Next-Day Rice Bowls", origin: "Leftovers, Roy style", image: "rc-next-day-bowl",
+    time: 10, serves: "1 to 100", cal: null, pro: null, carb: null, fat: null, tags: ["leftovers"],
+    ingredients: ["Leftover rice", "Pineapple Pizza Bowl: spicy rice cakes, teriyaki Spam, canned lychees and pineapple, Kogi Vinaigrette, sesame seeds, cotija, chives", "K-Drama Bowl: rice, pork and beans, bacon, BBQ Kalbi, grilled vegetables, Scallion Dipping Sauce, Salsa Verde, sesame seeds, furikake, chives"],
+    steps: [{ t: "Warm the rice and whatever leftovers you have." },
+      { t: "Build a bowl with something rich, something fresh, something crunchy and at least one sauce." },
+      { t: "Finish with sesame seeds or furikake. Roy suggests eating the K-Drama bowl in sweatpants." }],
+    tip: "Leftover kalbi or grilled fish over rice with namul and pickles makes a balanced high-protein bowl." }),
+  GR({ id: "gr-mushroom-toast-egg", name: "Wild Mushrooms and Bacon on Brioche with a Poached Egg", origin: "Breakfast, the Ramsay way", image: "gr-mushroom-toast-egg",
+    time: 30, serves: 4, cal: 470, pro: 19, carb: 32, fat: 25,
+    ingredients: ["1 cup diced thick-cut smoked bacon (or ½ cup shallots and ½ cup sun-dried tomatoes)", "4 cups roughly chopped wild mushrooms (chanterelle, oyster, hen of the woods, trumpet)", "2 tbsp butter", "4 thick slices toasted brioche", "2 tbsp white wine vinegar", "4 eggs", "Salt and pepper"],
+    steps: [{ t: "Bring a pot of water to a gentle boil." },
+      { t: "Brown the bacon in a large skillet.", min: 3 },
+      { t: "Add the mushrooms, season and cook until their moisture is gone.", min: 5 },
+      { t: "Add the butter and let it brown with the mushrooms, then drain on paper towels.", min: 2 },
+      { t: "Press the brioche into the pan fat and plate it, topped with the mushrooms and bacon." },
+      { t: "Salt the water, add the vinegar, stir it into a whirl and slide in the eggs from small bowls. Poach on a simmer until just firm.", min: 2 },
+      { t: "Drain the eggs, season, set one on each toast and spoon over the pan juices." }],
+    tip: "The bowl trick keeps the yolk intact: lower the egg in from a small bowl instead of cracking it straight into the water." }),
+  GR({ id: "gr-scrambled-eggs", name: "Elevated Scrambled Eggs", origin: "With sea urchin and truffle", image: "gr-scrambled-eggs",
+    time: 10, serves: 2, cal: 320, pro: 18, carb: 2, fat: 26,
+    ingredients: ["5 eggs", "2 tbsp butter", "5 sea urchin tongues (optional)", "1 tsp chopped chives", "1 tsp crème fraîche", "Salt and black pepper", "Shaved white truffle or truffle oil (optional)"],
+    steps: [{ t: "Crack the eggs into a cold nonstick pan. Don't beat or season them yet. Add the butter and set over medium heat." },
+      { t: "Stir constantly with a spatula. Go on the heat, off for 20 seconds, back on for 90, until soft but not runny.", min: 4 },
+      { t: "Stir in 1 sea urchin tongue, the chives, crème fraîche, salt and pepper." },
+      { t: "Plate over a sea urchin tongue, top with the rest and finish with truffle." }],
+    tip: "For Gordon's plain version, skip the uni and truffle. Season only at the end so the eggs stay tender." }),
+  GR({ id: "gr-chicken-supreme", name: "Chicken Suprême with Root Vegetables", origin: "Butter-basted, with a brandy pan sauce", image: "gr-chicken-supreme",
+    time: 65, serves: 4, cal: 620, pro: 52, carb: 22, fat: 34,
+    ingredients: ["12 baby carrots, 8 baby turnips, 4 baby golden beets, 4 baby red beets", "1 small bunch rosemary, ½ bunch thyme, 1 bunch parsley, sea salt", "4 boneless skin-on chicken breasts, at room temperature", "3 tbsp grapeseed oil", "4 garlic cloves crushed and the remaining thyme", "1 stick butter, divided", "2 shallots, thinly sliced", "¼ cup brandy (or apple juice)", "¾ cup veal demi-glace"],
+    steps: [{ t: "Heat the oven to 425°F. Lay the vegetables on a bed of herbs in a roasting pan, salt them and seal with foil." },
+      { t: "Warm the pan on the stove until it crackles, then roast until knife-tender.", min: 35 },
+      { t: "Sear the seasoned chicken skin side down with garlic and thyme in hot oil without moving it.", min: 4 },
+      { t: "Flip, add 6 tbsp butter and baste continuously until golden.", min: 3 },
+      { t: "Turn skin side down again and finish in the oven, then rest.", min: 10 },
+      { t: "Caramelize the shallots in the remaining butter, deglaze with brandy, add the demi-glace, strain and reduce.", min: 9 },
+      { t: "Slice the chicken, plate with the halved vegetables and spoon the sauce around without wetting the skin." }],
+    tip: "Never cook chicken straight from the fridge. Room temperature meat cooks evenly and stays juicy." }),
+  GR({ id: "gr-salmon-minestrone", name: "Salmon with Shellfish Minestrone", origin: "Mussels, cockles and spring vegetables", image: "gr-salmon-minestrone",
+    time: 70, serves: 4, cal: 600, pro: 46, carb: 30, fat: 28, tags: ["seafood"],
+    ingredients: ["10 oz mussels and 10 oz cockles or littleneck clams", "2 tbsp olive oil", "1 rib celery, 1 carrot and 1 shallot, diced", "1 sprig lemon thyme, 1 lemon", "1½ cups dry white wine", "2 cups unsalted chicken stock", "1 small zucchini and 1 small fennel bulb, diced small", "⅔ cup peas, ⅔ cup canned white beans", "½ cup elbow macaroni", "4 skin-on salmon fillets (4½ to 5 oz each)", "Salt, pepper and olive oil to finish"],
+    steps: [{ t: "Scrub the shellfish under cold water and debeard the mussels.", min: 10 },
+      { t: "Sweat the diced vegetables with thyme and a lemon slice, add the shellfish, then the wine, then the stock, covering after each.", min: 1 },
+      { t: "Cook covered on high until the shells open, then strain the broth and pick out the meat.", min: 6 },
+      { t: "Blanch the zucchini, fennel and peas, then cook the macaroni until al dente.", min: 8 },
+      { t: "Score the salmon skin, season, and cook skin side down in a hot nonstick pan.", min: 7 },
+      { t: "Bring the broth back up, add fennel fronds, lemon zest, shellfish, vegetables, beans and pasta just to warm. Ladle into bowls and top with the salmon." }],
+    tip: "Light, brothy and packed with protein. Skip the pasta to drop about 50 calories a bowl." }),
+  GR({ id: "gr-lobster-ravioli", name: "Lobster Ravioli", origin: "Still on his three-Michelin-star menu", image: "gr-lobster-ravioli",
+    time: 150, serves: 4, cal: 560, pro: 32, carb: 50, fat: 24, tags: ["seafood", "project"],
+    ingredients: ["Filling: ¼ lb skinless salmon, 1 egg white, 1 cup cooked lobster meat (shells kept), 1 tbsp sliced basil, zest and juice of 1 lemon", "Stock: lobster shells, 2 tbsp olive oil, 1 carrot, 1 onion, 1 celery stick, 1 garlic clove, 1 stalk lemongrass, 1 tsp tomato paste, 1 tbsp brandy, 2 cups veal stock, 4 cups chicken stock, 1 to 2 tbsp heavy cream", "Chutney: 4 plum tomatoes, olive oil, basil", "Vinaigrette: 1 tbsp lemon juice, 4 tbsp olive oil, salt", "Pasta: 2 cups 00 flour, 1 tsp olive oil, 4 eggs plus 2 yolks, salt", "1 egg yolk for sealing, microgreens"],
+    steps: [{ t: "Pulse the salmon with the egg white into a mousse, fold in the lobster, basil and lemon, season and chill.", min: 10 },
+      { t: "Roast the lobster shells at 400°F until dry.", min: 20 },
+      { t: "Sweat the vegetables and lemongrass, add the shells and tomato paste, flambé with brandy, add both stocks and simmer.", min: 35 },
+      { t: "Strain. Keep half for poaching and reduce the rest until thick, then stir in the cream.", min: 30 },
+      { t: "Peel and dice the tomatoes and stew them in olive oil, then finish with basil.", min: 20 },
+      { t: "Make the pasta dough, knead until elastic, rest, roll thin and cut 10 cm rounds.", min: 30 },
+      { t: "Fill, seal with yolk and press out the air. Poach in the stock, toss in vinaigrette and serve on the chutney with sauce.", min: 2 }],
+    tip: "A weekend project. Uses the less glamorous claw and knuckle meat." }),
+  GR({ id: "gr-beef-wellington", name: "Beef Wellington", origin: "The showstopper", image: "gr-beef-wellington",
+    time: 105, serves: 5, cal: 680, pro: 34, carb: 40, fat: 42, tags: ["special occasion"],
+    ingredients: ["Duxelles: 3 tbsp olive oil, 2 portobellos finely diced (about 4 cups), 1 tsp thyme leaves, salt and pepper", "Chive crepes: 2 eggs, 1 cup flour, 1 cup milk, 1 tsp chives, 1 tsp thyme flowers, pinch of salt, cooking spray", "1 lb center-cut beef tenderloin, at room temperature", "1 tbsp grapeseed oil, 1 tbsp Dijon mustard", "4 slices prosciutto", "1 sheet puff pastry (9.6 oz)", "2 egg yolks"],
+    steps: [{ t: "Cook the mushrooms with thyme until all the moisture is gone, then cool.", min: 10 },
+      { t: "Whisk the crepe batter and chill.", min: 30 },
+      { t: "Make thin crepes in a nonstick pan, about 30 seconds a side, without browning. Stack between parchment." },
+      { t: "Season and roll the beef into a cylinder. Sear in a hot cast-iron pan, then brush all over with Dijon while hot.", min: 4 },
+      { t: "On plastic wrap, lay out crepes, prosciutto and duxelles, add the beef and roll into a tight log. Chill.", min: 20 },
+      { t: "Heat the oven to 450°F (425°F convection). Roll the pastry to ⅛ inch, wrap the beef, seal, egg wash and score. Chill briefly.", min: 5 },
+      { t: "Bake until golden, then rest before slicing.", min: 20 }],
+    tip: "Rich but worth it for a celebration. A thin slice with a big green salad keeps it reasonable." })
+];
+CLASS_RECIPES.forEach(r => RECIPES.push(r));
+
+/* Roy Choi recipes that were already in the Notion collection: credit him and use the guide photos. */
+const RC_NOTION = { "n-kogi-vinaigrette": "rc-sauce-jars", "n-salsa-verde": "rc-salsa-verde", "n-bbq-kalbi": "rc-bbq-kalbi", "n-kalbi-marinade": "rc-kalbi-closeup", "n-scallion-dipping-sauce": "rc-dumplings" };
+Object.keys(RC_NOTION).forEach(id => { const r = RECIPES.find(x => x.id === id); if (r) { r.chef = "Roy Choi"; r.image = RC_NOTION[id]; r.credit = RC_CREDIT + " Saved in your Notion recipes."; } });
+/* Roy's original kimchi fried rice from the guide replaces the earlier lighter take. */
+(function () {
+  const r = RECIPES.find(x => x.id === "roy-choi-kimchi-fried-rice"); if (!r) return;
+  Object.assign(r, { image: "rc-kimchi-fried-rice", serves: 3, cal: 660, pro: 14, carb: 82, fat: 31, source: "guide",
+    credit: "Roy's own recipe from his MasterClass class guide (the video above is the class preview). Ingredients follow the guide; the method is condensed here.",
+    ingredients: ["2 tsp All-Purpose Kimchi Paste (optional)", "3 tbsp Scallion Dipping Sauce, plus more to taste", "4 tbsp neutral oil, divided", "1½ cups roughly chopped Napa Cabbage Kimchi, divided", "Pinch of kosher salt", "¼ cup butter, divided, plus 2 tsp", "Large pinch of crushed toasted sesame seeds, plus more to garnish", "¼ cup water, soju, sake or dry white wine", "3½ cups cooked short-grain rice (day-old is best)", "6 scallions in 2-inch pieces, plus 2 thinly sliced", "4 eggs", "Furikake and shredded nori, to garnish"],
+    steps: [{ t: "Cook ¾ cup kimchi with a pinch of salt in 1 tbsp hot oil until its liquid is gone.", min: 2 },
+      { t: "Lower to medium, add 2 tbsp butter and the sesame seeds, and cook until the kimchi caramelizes at the edges.", min: 3 },
+      { t: "Deglaze with the water, soju, sake or wine, scrape up the crispy bits and set it aside." },
+      { t: "Fry 4 eggs in oil and 2 tsp butter until the whites set and the bottoms crisp, yolks runny.", min: 3 },
+      { t: "Crumble the rice into 2 tbsp hot oil in an even layer and leave it alone until a golden crust forms. Listen for the crackle.", min: 3 },
+      { t: "Flip and break it up until heated through.", min: 2 },
+      { t: "Stir in the caramelized kimchi, the rest of the fresh kimchi and its juice, scallion pieces, kimchi paste, 2 tbsp butter and the dipping sauce." },
+      { t: "Serve with the crispy bits, topped with fried eggs, sliced scallions, furikake, sesame and nori." }],
+    tip: "For a fitness version, halve the butter and fold in 8 oz diced cooked chicken. That lands near 575 calories and 47g protein per serving." });
+})();
+
+/* =========================================================
+   One clean taxonomy: course + cuisine, plus chef and source.
+   ========================================================= */
+const COURSES = [
+  { id: "mains", label: "Mains" }, { id: "bites", label: "Small plates & sides" }, { id: "dumplings", label: "Dim sum & dumplings" },
+  { id: "breakfast", label: "Breakfast" }, { id: "salads", label: "Salads" }, { id: "sauces", label: "Sauces & pantry" },
+  { id: "sweets", label: "Desserts & baking" }, { id: "drinks", label: "Drinks" }
+];
+const REGIONS = [
+  { id: "korean", label: "Korean" }, { id: "chinese", label: "Chinese" }, { id: "taiwanese", label: "Taiwanese" }, { id: "japanese", label: "Japanese" },
+  { id: "sea", label: "Southeast Asian" }, { id: "mexican", label: "Mexican" }, { id: "fusion", label: "Fusion" }, { id: "western", label: "American & European" }
+];
+const TAXONOMY = {
+  "taiwanese-popcorn-chicken": "mains taiwanese", "three-cup-chicken": "mains taiwanese", "lu-rou-fan": "mains taiwanese", "korean-beef-bowl": "mains korean",
+  "thai-basil-chicken": "mains sea", "miso-salmon": "mains japanese", "shrimp-fried-rice": "mains chinese", "honey-garlic-chicken": "mains chinese",
+  "gochujang-chicken": "mains korean", "peanut-noodles": "mains sea", "korean-beef-tacos": "mains fusion", "chicken-burrito-bowl": "mains mexican",
+  "shrimp-tacos": "mains mexican", "sheet-pan-fajitas": "mains mexican", "cod-fish-tacos": "mains mexican", "roy-choi-kogi-steak-tacos": "mains fusion",
+  "roy-choi-kimchi-fried-rice": "mains korean", "ramsay-egg-fried-noodles": "mains chinese", "ramsay-wasabi-beef-tacos": "mains fusion",
+  "n-birria": "mains mexican", "n-blue-coconut-cloud-smoothie": "drinks", "n-chai": "drinks", "n-butterfly-tea-latte": "drinks sea", "n-strawberry-milk": "drinks",
+  "n-poke-nachos": "bites fusion", "n-char-siu-chicken-banh-mi": "mains sea", "n-chocolate-xiao-long-bao": "dumplings chinese", "n-miso-caramel": "sauces fusion",
+  "n-lush-pie": "sweets western", "n-ny-cheesecake": "sweets western", "n-chai-tea": "drinks", "n-pickled-radish": "bites sea", "n-sisig": "mains sea",
+  "n-kogi-vinaigrette": "sauces korean", "n-shrimp-har-gow": "dumplings chinese", "n-creamy-udon": "mains japanese", "n-salsa-verde": "sauces mexican",
+  "n-pretzel-bites": "bites western", "n-banana-pudding": "sweets western", "n-chocolate-chip-walnut-cookies": "sweets western", "n-orzo-salad": "salads western",
+  "n-watermelon-radish-ahi-tuna": "salads fusion", "n-brownies": "sweets western", "n-roasted-sesame-dressing": "sauces japanese", "n-pizza-bao": "dumplings fusion",
+  "n-chocolate-pot-de-creme": "sweets western", "n-monte-cristo": "bites western", "n-pozole": "mains mexican", "n-deep-fried-dumplings-ham-sui-gok": "dumplings chinese",
+  "n-taro-puff": "dumplings chinese", "n-dong-po-rou": "mains chinese", "n-tiramisu": "sweets western", "n-pie-crust": "sweets western", "n-sesame-dressing": "sauces japanese",
+  "n-focaccia-bread": "sweets western", "n-tart-crust": "sweets western", "n-hwa-chae": "drinks korean", "n-truffle-mushroom-mac-and-cheese": "mains western",
+  "n-malasada-donut-dupe": "sweets western", "n-bbq-kalbi": "mains korean", "n-kalbi-marinade": "sauces korean", "n-baked-char-siu-pork-buns": "dumplings chinese",
+  "n-pozole-verde": "mains mexican", "n-braised-leeks": "bites western", "n-xiao-long-bao": "dumplings chinese", "n-fruit-tart": "sweets western",
+  "n-strawberry-mojito": "drinks", "n-bingsoo": "sweets korean", "n-mayo": "sauces", "n-thai-tea": "drinks sea", "n-brussel-sprouts-salad": "salads western",
+  "n-brown-butter-bread": "sweets western", "n-mushroom-and-scallop-risotto": "mains western", "n-brazilian-bread": "bites", "n-pecan-crust": "sweets western",
+  "n-pastry-cream": "sweets western", "n-pork-bossam-korean-wraps": "mains korean", "n-scallion-dipping-sauce": "sauces korean", "n-egg-tarts": "dumplings chinese",
+  "rc-kogi-short-rib-tacos": "mains fusion", "rc-bbq-vegetables": "mains korean", "rc-kimchi-paste": "sauces korean", "rc-napa-kimchi": "bites korean",
+  "rc-kimchi-tuna-melt": "mains fusion", "rc-mung-bean-pancakes": "bites korean", "rc-3pm-dumplings": "dumplings korean", "rc-carnitas": "mains mexican",
+  "rc-carnitas-burrito": "mains mexican", "rc-grilled-fish-ponzu": "mains fusion", "rc-fruit-kimchi": "bites korean", "rc-namul": "bites korean",
+  "rc-pickled-cucumbers": "bites korean", "rc-next-day-rice-bowls": "mains fusion",
+  "gr-mushroom-toast-egg": "breakfast western", "gr-scrambled-eggs": "breakfast western", "gr-chicken-supreme": "mains western", "gr-salmon-minestrone": "mains western",
+  "gr-lobster-ravioli": "mains western", "gr-beef-wellington": "mains western"
+};
+/* Photos for Notion recipes: covers downloaded from the web pages they linked to, or Unsplash where Notion had none. */
+const UNSPLASH_EXTRA = {
+  "gr-beef-wellington": ["Loija Nguyen", "Lf2dvyS-d2E"], "gr-scrambled-eggs": ["Imad 786", "LA0nKKY-SFo"], "gr-mushroom-toast-egg": ["Bakd&Raw by Karolin Baitinger", "3a95bnXHHOI"],
+  "gr-chicken-supreme": ["Narek Petrosyan", "5lFfglgMaao"], "gr-salmon-minestrone": ["Victoria Shes", "90Z4qIxWc8Y"], "gr-lobster-ravioli": ["Toa Heftiba", "vqTkZZ1JtOU"],
+  "n-sisig": ["SJ", "Q4aFSPmYjNE"], "n-xiao-long-bao": ["Jonathan Lim", "brHBuAIS_TU"], "n-chocolate-xiao-long-bao": ["Jungjin Moon", "cT3Hyyd2lvc"],
+  "n-baked-char-siu-pork-buns": ["Christine Zhang", "zF0Ry7C4xuw"], "n-egg-tarts": ["Nick Fewings", "odX7I9pFFTU"], "n-bingsoo": ["Seungmin Yoon", "BZDvXJ9blUQ"],
+  "n-poke-nachos": ["Stephanie Hau", "8QJ6Z-s-53c"], "n-chai": ["Ananthan Chithiraikani", "DPBWHb2X81w"], "n-butterfly-tea-latte": ["Abhishek Sapkal", "Qnop6E82XnE"],
+  "n-strawberry-milk": ["Sebastian Coman Photography", "rwBJaJdesGg"], "n-blue-coconut-cloud-smoothie": ["Sara Cervera", "cjiJUfFCoUs"],
+  "n-chocolate-pot-de-creme": ["Maria Dempsey", "gkZi1UZdXMY"], "n-mushroom-and-scallop-risotto": ["Max Griss", "D9fAmtjC284"], "n-pecan-crust": ["Keighla Exum", "wnn9GuvXIZ4"],
+  "n-pie-crust": ["Priscilla Du Preez", "HG1pJiQHXzs"], "n-lush-pie": ["Alonso Reyes", "6dzARthU17g"]
+};
+RECIPES.forEach(r => {
+  const t = (TAXONOMY[r.id] || "mains").split(" ");
+  r.course = t[0]; r.region = t[1] || null;
+  if (!r.source) r.source = r.id.indexOf("n-") === 0 ? "notion" : "site";
+  if (UNSPLASH_EXTRA[r.id]) r.photo = { by: UNSPLASH_EXTRA[r.id][0], url: "https://unsplash.com/photos/" + UNSPLASH_EXTRA[r.id][1] };
+  if (r.cover) { try { r.coverFrom = new URL(r.cover).hostname.replace(/^www\./, ""); } catch (e) { /* ignore */ } }
+  delete r.cover; delete r.noPhoto;
+});
+
+
 const FLAGS = [
-  { id: "quick", label: "20 min or less", test: r => r.time <= 20 },
+  { id: "quick", label: "20 min or less", test: r => r.time != null && r.time <= 20 },
   { id: "fit", label: "Fits my target", test: r => fitOf(r).ok },
   { id: "spicy", label: "Spicy", test: r => r.spice >= 1 },
   { id: "seafood", label: "Seafood", test: r => r.tags.includes("seafood") },
@@ -1106,29 +4055,24 @@ const FLAGS = [
   { id: "tiktok", label: "Has TikTok", test: r => !!r.tiktok },
   { id: "saved", label: "Saved", test: r => state.favs.has(r.id) }
 ];
-const CHEFS = ["Roy Choi", "Gordon Ramsay"];
-const FRIDGE = [
-  { id: "chicken", label: "Chicken", re: /chicken/ },
-  { id: "beef", label: "Beef", re: /beef|steak|sirloin|flank/ },
-  { id: "pork", label: "Pork", re: /pork/ },
-  { id: "shrimp", label: "Shrimp", re: /shrimp/ },
-  { id: "fish", label: "Salmon or cod", re: /salmon|cod/ },
-  { id: "eggs", label: "Eggs", re: /\begg/ },
-  { id: "rice", label: "Rice", re: /\brice\b(?! (wine|vinegar|noodles))/ },
-  { id: "noodles", label: "Noodles", re: /noodle|spaghetti/ },
-  { id: "tortillas", label: "Tortillas", re: /tortilla/ },
-  { id: "broccoli", label: "Broccoli", re: /broccoli/ },
-  { id: "cabbage", label: "Cabbage", re: /cabbage/ },
-  { id: "kimchi", label: "Kimchi", re: /kimchi/ }
+const CHEFS = [
+  { id: "Roy Choi", label: "Roy Choi", img: "rc-portrait", tag: "Kogi truck, L.A.", blurb: "Korean barbecue meets the taco truck. Sauces you make once and use all week.", color: "var(--pink)" },
+  { id: "Gordon Ramsay", label: "Gordon Ramsay", img: "gr-portrait", tag: "Michelin-star classics", blurb: "Technique first, from soft scrambled eggs to Beef Wellington.", color: "var(--teal)" },
+  { id: "notion", label: "Your Notion kitchen", img: "n-dong-po-rou", tag: "Your saved recipes", blurb: "Dim sum, family dinners, desserts and drinks from your Notion database.", color: "var(--lilac)" },
+  { id: "site", label: "Weeknight protein picks", img: "taiwanese-popcorn-chicken", tag: "35 minutes or less", blurb: "Fast high-protein dinners with cook-along videos.", color: "var(--orange)" }
 ];
-const fridgeHits = r => { const text = r.ingredients.join(" ").toLowerCase(); return FRIDGE.filter(f => state.fridge.has(f.id) && f.re.test(text)); };
+const chefOf = r => r.chef || (r.source === "notion" ? "notion" : "site");
+const chefLabel = id => (CHEFS.find(c => c.id === id) || {}).label || id;
+const courseLabel = r => (COURSES.find(c => c.id === r.course) || {}).label || "";
+const regionLabel = r => (REGIONS.find(c => c.id === r.region) || {}).label || "";
+const shuffle = a => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 /* =========================================================
    State + storage
    ========================================================= */
 const KEY = "wok-comal-v2";
-const state = { mode: "swipe", fridge: new Set(), cuisine: "all", chef: "all", flags: new Set(), q: "", sort: "fit", goal: "maintain", cal: 650, pro: 40, favs: new Set(), week: Array(7).fill(null), embedOk: false };
+const state = { mode: "swipe", course: "all", region: "all", chefView: "Roy Choi", chef: "all", flags: new Set(), q: "", sort: "fit", goal: "maintain", cal: 650, pro: 40, favs: new Set(), week: Array(7).fill(null), embedOk: false };
 const byId = id => RECIPES.find(r => r.id === id);
 function load() {
   try {
@@ -1152,18 +4096,27 @@ function save() {
    ========================================================= */
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const img = id => "img/" + id + ".jpg";
+const hasMacros = r => r.cal != null && r.pro != null;
+const PH_COLORS = ["#d9482b", "#c9792b", "#4f7f45", "#8c3b2a", "#2f6f7a", "#7a4f8c", "#a26a3a", "#3f5f8a"];
+function ph(name) {
+  const s = String(name || "Recipe").trim() || "Recipe"; let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + PH_COLORS[h % PH_COLORS.length] + '"/><stop offset="1" stop-color="#16181b"/></linearGradient></defs><rect width="800" height="600" fill="url(#g)"/><text x="400" y="360" font-family="Georgia,serif" font-size="220" fill="#ffffff" fill-opacity=".85" text-anchor="middle">' + esc(s.charAt(0).toUpperCase()) + '</text></svg>';
+  return "data:image/svg+xml;charset=utf8," + encodeURIComponent(svg);
+}
+const img = id => { const r = byId(id); return "img/" + ((r && r.image) || id) + ".jpg"; };
+document.addEventListener("error", e => { const t = e.target; if (t && t.tagName === "IMG" && !t.dataset.fb) { t.dataset.fb = "1"; t.src = ph(t.alt || "Recipe"); } }, true);
 const ytWatch = id => "https://www.youtube.com/watch?v=" + id;
 const ttWatch = t => "https://www.tiktok.com/@" + t.handle + "/video/" + t.id;
 const ttSearch = r => "https://www.tiktok.com/search?q=" + encodeURIComponent(r.name + " recipe");
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 function fitOf(r) {
+  if (!hasMacros(r)) return { ok: false, none: true, text: "No macros yet" };
   const calOk = r.cal <= state.cal, proOk = r.pro >= Math.round(state.pro * 0.85);
   if (calOk && proOk) return { ok: true, text: "Fits your target" };
   if (!calOk) return { ok: false, text: (r.cal - state.cal) + " cal over" };
   return { ok: false, text: (state.pro - r.pro) + "g short on protein" };
 }
-function cuisineLabel(r) { return r.cuisine.includes("taiwanese") ? "Taiwanese" : r.cuisine[0] === "fusion" ? "Fusion" : r.cuisine[0] === "asian" ? "Asian" : "Mexican"; }
+function cuisineLabel(r) { return [regionLabel(r), courseLabel(r)].filter(Boolean).join(", "); }
 let toastT;
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2400); }
 function hydrateIcons() { document.querySelectorAll("[data-icon]").forEach(el => { if (!el.firstChild) { el.setAttribute("aria-hidden", "true"); el.innerHTML = '<svg viewBox="0 0 256 256" fill="currentColor">' + (ICONS[el.dataset.icon] || "") + "</svg>"; } }); }
@@ -1174,49 +4127,47 @@ function hydrateIcons() { document.querySelectorAll("[data-icon]").forEach(el =>
 function filtered() {
   const q = state.q.trim().toLowerCase();
   const list = RECIPES.filter(r => {
-    if (state.cuisine !== "all" && !r.cuisine.includes(state.cuisine)) return false;
-    if (state.chef !== "all" && r.chef !== state.chef) return false;
+    if (state.course !== "all" && r.course !== state.course) return false;
+    if (state.region !== "all" && r.region !== state.region) return false;
+    if (state.chef !== "all" && chefOf(r) !== state.chef) return false;
     for (const f of FLAGS) if (state.flags.has(f.id) && !f.test(r)) return false;
-    if (state.fridge.size && !fridgeHits(r).length) return false;
-    if (q && !(r.name + " " + (r.chef || "") + " " + r.origin + " " + r.tags.join(" ") + " " + r.ingredients.join(" ")).toLowerCase().includes(q)) return false;
+    if (q && !(r.name + " " + (r.chef || "") + " " + r.origin + " " + courseLabel(r) + " " + regionLabel(r) + " " + r.tags.join(" ") + " " + r.ingredients.join(" ")).toLowerCase().includes(q)) return false;
     return true;
   });
   const by = {
-    fit: (a, b) => (fitOf(b).ok - fitOf(a).ok) || (b.pro / b.cal - a.pro / a.cal),
-    protein: (a, b) => b.pro - a.pro, cal: (a, b) => a.cal - b.cal, time: (a, b) => a.time - b.time || b.pro - a.pro
+    fit: (a, b) => (fitOf(b).ok - fitOf(a).ok) || ((b.pro || 0) / (b.cal || 1) - (a.pro || 0) / (a.cal || 1)),
+    protein: (a, b) => (b.pro || 0) - (a.pro || 0), cal: (a, b) => (a.cal == null ? 1e9 : a.cal) - (b.cal == null ? 1e9 : b.cal), time: (a, b) => (a.time == null ? 1e9 : a.time) - (b.time == null ? 1e9 : b.time) || (b.pro || 0) - (a.pro || 0)
   }[state.sort];
-  if (state.fridge.size) return list.sort((a, b) => (fridgeHits(b).length - fridgeHits(a).length) || by(a, b));
   return list.sort(by);
 }
 function renderChips() {
-  $("#cuisine-chips").innerHTML = CUISINES.map(c => '<button class="chip" type="button" data-cuisine="' + c.id + '" aria-pressed="' + (state.cuisine === c.id) + '">' + esc(c.label) + '</button>').join("");
+  const cnt = (k, v) => RECIPES.filter(r => r[k] === v).length;
+  $("#course-chips").innerHTML = [{ id: "all", label: "All" }].concat(COURSES).map(c => '<button class="chip" type="button" data-course="' + c.id + '" aria-pressed="' + (state.course === c.id) + '">' + esc(c.label) + (c.id === "all" ? "" : ' <span class="num">' + cnt("course", c.id) + '</span>') + '</button>').join("");
+  $("#region-chips").innerHTML = [{ id: "all", label: "Any" }].concat(REGIONS).map(c => '<button class="chip" type="button" data-region="' + c.id + '" aria-pressed="' + (state.region === c.id) + '">' + esc(c.label) + (c.id === "all" ? "" : ' <span class="num">' + cnt("region", c.id) + '</span>') + '</button>').join("");
   $("#flag-chips").innerHTML = FLAGS.map(f => '<button class="chip" type="button" data-flag="' + f.id + '" aria-pressed="' + state.flags.has(f.id) + '">' + esc(f.label) + (f.id === "saved" && state.favs.size ? ' <span class="num">' + state.favs.size + '</span>' : "") + '</button>').join("");
-  $("#fridge-chips").innerHTML = FRIDGE.map(f => '<button class="chip food" type="button" data-food="' + f.id + '" aria-pressed="' + state.fridge.has(f.id) + '">' + esc(f.label) + '</button>').join("");
-  $("#fridge-note").textContent = state.fridge.size ? "Showing dishes that use at least one of these, best matches first." : "Tap what you have and the best matches move to the front.";
-  $("#chef-chips").innerHTML = CHEFS.map(c => '<button class="chip" type="button" data-chef="' + esc(c) + '" aria-pressed="' + (state.chef === c) + '">' + esc(c) + '</button>').join("");
+  $("#chef-chips").innerHTML = CHEFS.map(c => '<button class="chip" type="button" data-chef="' + esc(c.id) + '" aria-pressed="' + (state.chef === c.id) + '">' + esc(c.label) + ' <span class="num">' + RECIPES.filter(r => chefOf(r) === c.id).length + '</span></button>').join("");
 }
 function renderTarget() {
   document.querySelectorAll("#goal-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.goal === state.goal)));
   if (document.activeElement !== $("#cal-input")) $("#cal-input").value = state.cal;
   if (document.activeElement !== $("#pro-input")) $("#pro-input").value = state.pro;
-  const fits = RECIPES.filter(r => fitOf(r).ok).length;
-  const best = RECIPES.slice().sort((a, b) => b.pro / b.cal - a.pro / a.cal)[0];
-  $("#target-line").innerHTML = '<strong>' + fits + ' of ' + RECIPES.length + '</strong> dinners fit ' + state.cal + ' calories with about ' + state.pro + 'g protein. Best protein for the calories: ' + esc(best.name) + ', ' + best.pro + 'g in ' + best.cal + ' cal.';
+  const M = RECIPES.filter(hasMacros);
+  const fits = M.filter(r => fitOf(r).ok).length;
+  const best = M.slice().sort((a, b) => b.pro / b.cal - a.pro / a.cal)[0];
+  $("#target-line").innerHTML = '<strong>' + fits + ' of ' + M.length + '</strong> dinners fit ' + state.cal + ' calories with about ' + state.pro + 'g protein. Best protein for the calories: ' + esc(best.name) + ', ' + best.pro + 'g in ' + best.cal + ' cal.';
 }
 function cardHTML(r, i) {
   const fit = fitOf(r), fav = state.favs.has(r.id);
-  const hits = state.fridge.size ? fridgeHits(r) : [];
   return '<article class="card" data-id="' + r.id + '" style="--i:' + Math.min(i, 12) + '">' +
-    '<button class="card-photo" type="button" data-open="' + r.id + '" aria-label="Open ' + esc(r.name) + '"><img src="' + img(r.id) + '" alt="' + esc(r.name) + '" loading="lazy" width="800" height="600"></button>' +
+    '<button class="card-photo" type="button" data-open="' + r.id + '" aria-label="Open ' + esc(r.name) + '"><img src="' + img(r.id) + '" alt="' + esc(r.name) + '" loading="lazy" width="800" height="600" referrerpolicy="no-referrer"></button>' +
     '<div class="card-body">' +
-      '<div class="card-meta"><span>' + esc(cuisineLabel(r)) + '</span><span class="sep"></span>' + ic("clock") + '<span class="num">' + r.time + ' min</span>' +
+      '<div class="card-meta"><span>' + esc(cuisineLabel(r)) + '</span>' + (r.time != null ? '<span class="sep"></span>' + ic("clock") + '<span class="num">' + r.time + ' min</span>' : "") +
         (r.spice ? '<span class="sep"></span><span class="spice" title="Spicy">' + ic("fire").repeat(r.spice) + '</span>' : "") + '</div>' +
       '<h3><button class="card-title" type="button" data-open="' + r.id + '">' + esc(r.name) + '</button></h3>' +
-      (r.chef ? '<div class="chef">' + esc(r.chef) + '</div>' : "") +
-      (hits.length ? '<div class="uses">Uses your ' + esc(hits.map(h => h.label.toLowerCase()).join(", ")) + '</div>' : "") +
-      '<dl class="macros"><div><dt>cal</dt><dd>' + r.cal + '</dd></div><div class="pro"><dt>protein</dt><dd>' + r.pro + 'g</dd></div><div><dt>carbs</dt><dd>' + r.carb + 'g</dd></div><div><dt>fat</dt><dd>' + r.fat + 'g</dd></div></dl>' +
-      '<div class="card-foot"><span class="fit ' + (fit.ok ? "ok" : "warn") + '">' + (fit.ok ? ic("check") : "") + esc(fit.text) + '</span>' +
-        '<span class="card-actions"><span class="media-tags" title="' + (r.tiktok ? "YouTube and TikTok videos" : "YouTube video") + '">' + ic("youtube-logo") + (r.tiktok ? ic("tiktok-logo") : "") + '</span>' +
+      (r.chef ? '<div><span class="chef-tag ' + (r.chef === "Roy Choi" ? "rc" : "gr") + '">' + esc(r.chef) + '</span></div>' : "") +
+      (hasMacros(r) ? '<dl class="macros"><div><dt>cal</dt><dd>' + r.cal + '</dd></div><div class="pro"><dt>protein</dt><dd>' + r.pro + 'g</dd></div><div><dt>carbs</dt><dd>' + r.carb + 'g</dd></div><div><dt>fat</dt><dd>' + r.fat + 'g</dd></div></dl>' : '<p class="nomacros">' + (r.ingredients.length ? r.ingredients.length + ' ingredients' : 'Recipe not written yet') + '</p>') +
+      '<div class="card-foot">' + (fit.none ? '<span></span>' : '<span class="fit ' + (fit.ok ? "ok" : "warn") + '">' + (fit.ok ? ic("check") : "") + esc(fit.text) + '</span>') +
+        '<span class="card-actions">' + (r.video ? '<span class="media-tags" title="' + (r.tiktok ? "YouTube and TikTok videos" : "YouTube video") + '">' + ic("youtube-logo") + (r.tiktok ? ic("tiktok-logo") : "") + '</span>' : "") +
         '<button class="icon-btn" type="button" data-fav="' + r.id + '" aria-pressed="' + fav + '" aria-label="' + (fav ? "Remove from saved" : "Save recipe") + '">' + ic(fav ? "heart-fill" : "heart") + '</button></span></div>' +
     '</div></article>';
 }
@@ -1238,11 +4189,10 @@ function renderGrid() {
     });
   }
   gridRenders++;
-  if (wheel) wheel.setList(list.length ? list : RECIPES);
   syncDeck(list);
 }
 function renderTaiwanese() {
-  $("#tw-list").innerHTML = RECIPES.filter(r => r.cuisine.includes("taiwanese")).map(r =>
+  $("#tw-list").innerHTML = RECIPES.filter(r => r.region === "taiwanese").map(r =>
     '<button class="feature-item" type="button" data-open="' + r.id + '"><img src="' + img(r.id) + '" alt="" loading="lazy" width="800" height="600"><span><b>' + esc(r.name) + '</b><small><span class="num">' + r.time + '</span> min, <span class="num">' + r.pro + 'g</span> protein, <span class="num">' + r.cal + '</span> cal</small></span>' + ic("arrow-right") + '</button>').join("");
 }
 function renderWeekCount() { $("#week-count").textContent = state.week.filter(Boolean).length; }
@@ -1262,6 +4212,7 @@ function posterHTML(r, kind) {
   return '<a class="poster" href="' + (isTT ? ttWatch(r.tiktok) : ytWatch(r.video.id)) + '" target="_blank" rel="noopener" aria-label="Watch ' + esc(title) + '">' + inner + '</a>';
 }
 function mediaHTML(r) {
+  if (!r.video) return '<div class="media">' + (r.clip ? '<div class="watch-row"><a class="btn btn-sm" href="' + esc(r.clip) + '" target="_blank" rel="noopener">' + ic("tiktok-logo") + 'Watch the TikTok saved with this recipe</a></div>' : "") + (r.credit ? '<p class="credit">' + esc(r.credit) + '</p>' : "") + '</div>';
   const tabs = r.tiktok ? '<div class="tabs" role="tablist" aria-label="Video source">' +
     '<button type="button" role="tab" data-tab="yt" aria-selected="' + (mediaTab === "yt") + '">' + ic("youtube-logo") + 'YouTube</button>' +
     '<button type="button" role="tab" data-tab="tt" aria-selected="' + (mediaTab === "tt") + '">' + ic("tiktok-logo") + 'TikTok</button></div>' : "";
@@ -1286,27 +4237,27 @@ function openRecipe(id, keep) {
   const fit = fitOf(r), fav = state.favs.has(id);
   $("#sheet").innerHTML =
     '<div class="sheet-head"><div>' +
-      '<div class="sheet-kicker"><span>' + esc(r.chef ? r.chef + ", " + r.origin : r.origin) + '</span><span class="fit ' + (fit.ok ? "ok" : "warn") + '">' + (fit.ok ? ic("check") : "") + esc(fit.text) + '</span></div>' +
+      '<div class="sheet-kicker">' + (r.chef ? '<span class="chef-tag ' + (r.chef === "Roy Choi" ? "rc" : "gr") + '">' + esc(r.chef) + '</span>' : '') + '<span>' + esc([cuisineLabel(r), r.origin].filter(Boolean).join(", ")) + '</span>' + (fit.none ? "" : '<span class="fit ' + (fit.ok ? "ok" : "warn") + '">' + (fit.ok ? ic("check") : "") + esc(fit.text) + '</span>') + '</div>' +
       '<h2 id="sheet-title">' + esc(r.name) + '</h2></div>' +
       '<button class="icon-btn" type="button" data-action="close" aria-label="Close recipe">' + ic("x") + '</button></div>' +
     '<div class="sheet-body">' + mediaHTML(r) +
-      '<div class="nutrition">' + donutHTML(r) + '<div class="stats">' +
-        '<div><b>' + r.time + '</b><span>minutes</span></div><div><b>' + r.serves + '</b><span>servings</span></div><div><b>' + r.cal + '</b><span>cal per serving</span></div>' +
-        '<div class="pro"><b>' + r.pro + 'g</b><span>protein</span></div><div><b>' + r.carb + 'g</b><span>carbs</span></div><div><b>' + r.fat + 'g</b><span>fat</span></div></div></div>' +
+      (hasMacros(r) ? '<div class="nutrition">' + donutHTML(r) + '<div class="stats">' +
+        '<div><b>' + (r.time != null ? r.time : "Varies") + '</b><span>minutes</span></div><div><b>' + esc(r.serves) + '</b><span>servings</span></div><div><b>' + r.cal + '</b><span>cal per serving</span></div>' +
+        '<div class="pro"><b>' + r.pro + 'g</b><span>protein</span></div><div><b>' + r.carb + 'g</b><span>carbs</span></div><div><b>' + r.fat + 'g</b><span>fat</span></div></div></div>' : '<p class="nomacros">' + (r.serves ? 'Makes ' + esc(r.serves) + '. ' : '') + 'Macros are not set for this one yet.</p>') +
       '<div class="cols">' +
         '<div><h3>Ingredients <small>' + r.ingredients.length + ' items</small></h3><ul class="ing">' +
           r.ingredients.map((x, i) => '<li><label><input type="checkbox" id="ing-' + r.id + '-' + i + '"><span>' + esc(x) + '</span></label></li>').join("") + '</ul></div>' +
         '<div><h3>Steps <small>Timers run while you cook</small></h3><ol class="steps">' +
-          r.steps.map((s, i) => '<li><div><p>' + esc(s.t) + '</p>' + (s.min ? '<button class="timer-btn" type="button" data-timer="' + r.id + '|' + i + '|' + s.min + '">' + ic("timer") + 'Start ' + s.min + ' min timer</button>' : "") + '</div></li>').join("") + '</ol></div>' +
+          (r.steps.length ? r.steps : [{ t: "No steps written yet. Add them in Notion and they will show here." }]).map((s, i) => '<li><div><p>' + esc(s.t) + '</p>' + (s.min ? '<button class="timer-btn" type="button" data-timer="' + r.id + '|' + i + '|' + s.min + '">' + ic("timer") + 'Start ' + s.min + ' min timer</button>' : "") + '</div></li>').join("") + '</ol></div>' +
       '</div>' +
-      '<div class="tip"><b>Fitness tip.</b> ' + esc(r.tip) + '</div>' +
+      (r.tip ? '<div class="tip"><b>Fitness tip.</b> ' + esc(r.tip) + '</div>' : "") +
       '<div class="sheet-foot">' +
         '<label class="toggle"><input type="checkbox" id="wake-toggle"' + (wakeLock ? " checked" : "") + '> Keep screen on while cooking</label>' +
         '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-sm" type="button" data-fav="' + r.id + '" aria-pressed="' + fav + '">' + ic(fav ? "heart-fill" : "heart") + (fav ? "Saved" : "Save") + '</button>' +
         '<button class="btn btn-sm" type="button" data-addweek="' + r.id + '">' + ic("plus") + 'Add to this week</button>' +
-        '<button class="btn btn-sm btn-primary" type="button" data-cook="' + r.id + '">' + ic("cooking-pot") + 'Start cooking mode</button></div>' +
+        (r.steps.length ? '<button class="btn btn-sm btn-primary" type="button" data-cook="' + r.id + '">' + ic("cooking-pot") + 'Start cooking mode</button>' : "") + '</div>' +
       '</div>' +
-      '<p class="photo-credit">Photo by <a href="' + r.photo.url + '" target="_blank" rel="noopener">' + esc(r.photo.by) + '</a> on Unsplash.</p>' +
+      (r.photo ? '<p class="photo-credit">Photo by <a href="' + r.photo.url + '" target="_blank" rel="noopener">' + esc(r.photo.by) + '</a> on Unsplash.</p>' : String(r.image || "").indexOf("rc-") === 0 ? '<p class="photo-credit">Photo from Roy Choi\'s MasterClass class guide.</p>' : r.coverFrom ? '<p class="photo-credit">Cover photo from ' + esc(r.coverFrom) + ', saved with your Notion recipe.</p>' : "") +
     '</div>';
   $("#sheet-wrap").hidden = false;
   document.body.style.overflow = "hidden";
@@ -1395,13 +4346,13 @@ function shoppingText() {
 }
 function renderDrawer() {
   const planned = state.week.filter(Boolean).map(byId);
-  const avg = k => planned.length ? Math.round(planned.reduce((s, r) => s + r[k], 0) / planned.length) : 0;
+  const avg = k => planned.length ? Math.round(planned.reduce((s, r) => s + (r[k] || 0), 0) / Math.max(1, planned.filter(hasMacros).length)) : 0;
   $("#drawer-body").innerHTML =
     '<p style="margin:0;color:var(--muted);font-size:14px">Use "Add to this week" on any recipe. It fills the next open day.</p>' +
     '<ul class="days">' + DAYS.map((d, i) => {
       const r = state.week[i] && byId(state.week[i]);
       return '<li class="day"><span class="day-name">' + d + '</span>' +
-        (r ? '<button class="day-recipe" type="button" data-open="' + r.id + '"><img src="' + img(r.id) + '" alt=""><span><b>' + esc(r.name) + '</b><small>' + r.cal + ' cal, ' + r.pro + 'g protein</small></span></button><button class="icon-btn" type="button" data-unplan="' + i + '" aria-label="Remove ' + esc(r.name) + ' from ' + d + '">' + ic("x") + '</button>'
+        (r ? '<button class="day-recipe" type="button" data-open="' + r.id + '"><img src="' + img(r.id) + '" alt=""><span><b>' + esc(r.name) + '</b><small>' + (hasMacros(r) ? r.cal + ' cal, ' + r.pro + 'g protein' : esc(r.tags[0] || "Recipe")) + '</small></span></button><button class="icon-btn" type="button" data-unplan="' + i + '" aria-label="Remove ' + esc(r.name) + ' from ' + d + '">' + ic("x") + '</button>'
            : '<span class="day-empty">Open</span><span></span>') + '</li>';
     }).join("") + '</ul>' +
     '<div class="week-sum"><div><b>' + planned.length + '</b><span>dinners</span></div><div><b style="color:var(--ok)">' + avg("pro") + 'g</b><span>avg protein</span></div><div><b>' + avg("cal") + '</b><span>avg calories</span></div></div>' +
@@ -1424,8 +4375,9 @@ document.addEventListener("click", e => {
   const t = e.target.closest("button, a");
   if (!t) { if (e.target === $("#sheet-wrap")) closeRecipe(); if (e.target === $("#drawer-wrap")) closeDrawer(); return; }
   const d = t.dataset;
-  if (d.cuisine) { state.cuisine = d.cuisine; renderChips(); renderGrid(); }
-  else if (d.food) { if (state.fridge.has(d.food)) state.fridge.delete(d.food); else state.fridge.add(d.food); renderChips(); renderGrid(); }
+  if (d.course) { state.course = d.course; renderChips(); renderGrid(); }
+  else if (d.region) { state.region = d.region; renderChips(); renderGrid(); }
+  else if (d.chefView) { state.chefView = d.chefView; renderChefs(true); }
   else if (d.mode) setMode(d.mode);
   else if (d.cook) openCook(d.cook);
   else if (d.cookNav) stepCook(Number(d.cookNav));
@@ -1443,7 +4395,7 @@ document.addEventListener("click", e => {
   else if (d.tab) { mediaTab = d.tab; openRecipe(openId, true); }
   else if (d.play) playInline(d.play);
   else if (d.action === "close") closeRecipe();
-  else if (d.action === "clear") { state.cuisine = "all"; state.chef = "all"; state.flags.clear(); state.fridge.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
+  else if (d.action === "clear") { state.course = "all"; state.region = "all"; state.chef = "all"; state.flags.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
   else if (d.action === "copy") {
     const ta = $("#shop-text"), ok = () => toast("Shopping list copied"), fb = () => { ta.focus(); ta.select(); toast("List selected. Use your copy shortcut."); };
     try { navigator.clipboard.writeText(ta.value).then(ok, fb); } catch (err) { fb(); }
@@ -1486,226 +4438,29 @@ function probeEmbeds() {
   const im = new Image(); let done = false;
   const fin = ok => { if (done) return; done = true; if (ok) { state.embedOk = true; if (openId) openRecipe(openId, true); } };
   im.onload = () => fin(im.naturalWidth > 0); im.onerror = () => fin(false); setTimeout(() => fin(false), 5000);
-  im.src = "https://i.ytimg.com/vi/" + RECIPES[0].video.id + "/default.jpg";
+  im.src = "https://i.ytimg.com/vi/" + RECIPES.find(r => r.video).video.id + "/default.jpg";
 }
 
 /* =========================================================
-   Three.js: lazy susan dinner picker
+   Hero mode (kept so saved state still loads)
    ========================================================= */
-let wheel = null;
-function wheelCard(r) {
-  const fit = fitOf(r);
-  $("#wheel-card").innerHTML = '<img src="' + img(r.id) + '" alt=""><div><b>' + esc(r.name) + '</b><small><span class="num">' + r.time + '</span> min, <span class="num">' + r.pro + 'g</span> protein, <span class="num">' + r.cal + '</span> cal' + (fit.ok ? "" : ", " + esc(fit.text)) + '</small></div>' +
-    '<button class="btn btn-sm btn-primary" type="button" data-open="' + r.id + '">Open recipe' + ic("arrow-right") + '</button>';
-}
-function pickFrom(list) {
-  const pool = list.filter(r => fitOf(r).ok);
-  const from = pool.length ? pool : list;
-  return from[Math.floor(Math.random() * from.length)];
-}
-function initWheel() {
-  const stage = $("#wheel"), canvas = $("#wheel-canvas");
-  let list = RECIPES.slice(0, 8), selected = -1;
-  const fallback = () => {
-    canvas.hidden = true; $(".wheel-arrows").hidden = true;
-    const f = document.createElement("div"); f.className = "wheel-fallback";
-    f.innerHTML = ["taiwanese-popcorn-chicken", "miso-salmon", "shrimp-tacos"].map(id => '<img src="' + img(id) + '" alt="">').join("");
-    stage.appendChild(f);
-    $(".wheel-hint").textContent = "Tap Spin for dinner and it picks one that fits your target.";
-    const api = { setList(l) { list = l.slice(0, 8); wheelCard(list[0]); }, spin() { const p = pickFrom(list); wheelCard(p); return Promise.resolve(p); } };
-    api.setList(list); return api;
-  };
-  if (!window.THREE) return fallback();
-  let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch (e) { return fallback(); }
-  if (!renderer.getContext()) return fallback();
-  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
-  renderer.outputEncoding = THREE.sRGBEncoding;
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0xc4cac2, 0.85));
-  const sun = new THREE.DirectionalLight(0xffffff, 0.6); sun.position.set(3, 9, 6); scene.add(sun);
-
-  /* Turntable */
-  const table = new THREE.Group(); scene.add(table);
-  const R = 4.1;
-  table.add(new THREE.Mesh(new THREE.CylinderGeometry(R, R, 0.22, 96), new THREE.MeshStandardMaterial({ color: 0xf4f5f2, roughness: 0.55 })));
-  const edge = new THREE.Mesh(new THREE.TorusGeometry(R, 0.06, 10, 128), new THREE.MeshStandardMaterial({ color: 0xcf4527, roughness: 0.45 }));
-  edge.rotation.x = Math.PI / 2; edge.position.y = 0.1; table.add(edge);
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(1.3, 1.6, 0.5, 48), new THREE.MeshStandardMaterial({ color: 0xd9ddd6, roughness: 0.7 }));
-  base.position.y = -0.36; scene.add(base);
-  const shCan = document.createElement("canvas"); shCan.width = shCan.height = 128;
-  const sg = shCan.getContext("2d"); const grd = sg.createRadialGradient(64, 64, 10, 64, 64, 64);
-  grd.addColorStop(0, "rgba(30,36,30,.32)"); grd.addColorStop(1, "rgba(30,36,30,0)"); sg.fillStyle = grd; sg.fillRect(0, 0, 128, 128);
-  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(R * 2.6, R * 2.6), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shCan), transparent: true, depthWrite: false }));
-  shadow.rotation.x = -Math.PI / 2; shadow.position.y = -0.62; scene.add(shadow);
-
-  const manager = new THREE.LoadingManager(); const loader = new THREE.TextureLoader(manager), texCache = {};
-  const tex = id => { if (!texCache[id]) { const t = loader.load(img(id), () => kick()); t.encoding = THREE.sRGBEncoding; t.anisotropy = 4; t.repeat.set(0.54, 0.72); t.offset.set(0.23, 0.14); texCache[id] = t; } return texCache[id]; };
-  const plateMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.35 });
-  let plates = [], step = 1;
-
-  function build() {
-    plates.forEach(p => { table.remove(p); p.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material && o.material !== plateMat) o.material.dispose(); }); });
-    plates = [];
-    const n = list.length; step = Math.PI * 2 / n;
-    const ringR = n <= 3 ? 2.1 : 2.85;
-    const pr = Math.min(1.12, Math.PI * ringR / n * 0.86);
-    const prof = [[0, 0], [pr * 0.72, 0], [pr * 0.8, 0.03], [pr, 0.12], [pr * 0.97, 0.15], [pr * 0.82, 0.07], [pr * 0.78, 0.05], [0, 0.05]].map(p => new THREE.Vector2(p[0], p[1]));
-    list.forEach((r, i) => {
-      const g = new THREE.Group();
-      g.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 48), plateMat));
-      const food = new THREE.Mesh(new THREE.CircleGeometry(pr * 0.76, 48), new THREE.MeshStandardMaterial({ map: tex(r.id), roughness: 0.75 }));
-      food.rotation.x = -Math.PI / 2; food.position.y = 0.056; g.add(food);
-      const a = i * step;
-      g.position.set(Math.sin(a) * ringR, 0.12, Math.cos(a) * ringR);
-      g.rotation.y = a;
-      g.userData = { i, lift: 0 };
-      table.add(g); plates.push(g);
-    });
-  }
-  /* rot is the table angle. Plate i sits at the front (facing the camera) when rot = -i * step. */
-  let rot = 0, vel = 0, dragging = false, anim = null;
-  const TAU = Math.PI * 2;
-  const norm = a => ((a % TAU) + TAU) % TAU;
-  const frontIndex = () => Math.round(norm(-rot) / step) % list.length;
-  function setSelected(i) { if (i !== selected) { selected = i; wheelCard(list[i]); } }
-  function animateTo(target, ms) {
-    return new Promise(res => {
-      vel = 0;
-      if (reduceMotion) { rot = target; anim = null; kick(); res(); return; }
-      const from = rot, t0 = performance.now();
-      anim = { tick(now) { const k = Math.min(1, (now - t0) / ms); rot = from + (target - from) * (1 - Math.pow(1 - k, 4)); if (k >= 1) { anim = null; res(); } } };
-      kick();
-    });
-  }
-  function goTo(i) {
-    const cur = norm(-rot) / step, n = list.length;
-    let delta = (((i - cur) % n) + n) % n; if (delta > n / 2) delta -= n;
-    return animateTo(rot - delta * step, 650);
-  }
-  function resize() {
-    const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
-    renderer.setSize(w, h, false); camera.aspect = w / h;
-    const dist = camera.aspect < 1.15 ? 13.6 : 11.2;
-    camera.position.set(0, dist * 0.5, dist * 0.87); camera.lookAt(0, -0.2, 0.9);
-    camera.updateProjectionMatrix(); kick();
-  }
-
-  /* Pointer: drag to turn, tap a plate to bring it forward, tap the front plate to open it */
-  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
-  let downX = 0, downY = 0, lastX = 0, moved = 0, hovered = null;
-  function hit(ev) {
-    const b = canvas.getBoundingClientRect();
-    ndc.set(((ev.clientX - b.left) / b.width) * 2 - 1, -((ev.clientY - b.top) / b.height) * 2 + 1);
-    ray.setFromCamera(ndc, camera);
-    const h = ray.intersectObjects(plates, true)[0]; if (!h) return null;
-    let o = h.object; while (o && plates.indexOf(o) === -1) o = o.parent; return o;
-  }
-  canvas.addEventListener("pointerdown", ev => { dragging = true; anim = null; moved = 0; downX = lastX = ev.clientX; downY = ev.clientY; kick(); });
-  canvas.addEventListener("pointermove", ev => {
-    if (dragging) {
-      const dx = ev.clientX - lastX; lastX = ev.clientX;
-      moved = Math.max(moved, Math.abs(ev.clientX - downX) + Math.abs(ev.clientY - downY));
-      if (moved > 5) { canvas.classList.add("dragging"); const d = dx * 0.006; rot += d; vel = d; kick(); }
-    } else if (ev.pointerType === "mouse") {
-      const h = hit(ev); if (h !== hovered) { hovered = h; canvas.classList.toggle("hovering", !!h); kick(); }
-    }
-  });
-  const end = ev => {
-    if (!dragging) return; dragging = false; canvas.classList.remove("dragging");
-    if (moved <= 5 && ev.type === "pointerup") {
-      const h = hit(ev);
-      if (h) { const i = h.userData.i; if (i === frontIndex()) openRecipe(list[i].id); else goTo(i); }
-    }
-    kick();
-  };
-  canvas.addEventListener("pointerup", end);
-  canvas.addEventListener("pointercancel", end);
-  canvas.addEventListener("pointerleave", ev => { end(ev); if (hovered) { hovered = null; canvas.classList.remove("hovering"); kick(); } });
-
-  /* Render loop: runs while something moves, then sleeps */
-  let running = false, visible = true, idle = 0;
-  if (window.IntersectionObserver) new IntersectionObserver(es => { visible = es[0].isIntersecting; kick(); }).observe(stage);
-  function kick() { idle = 0; if (!running && visible) { running = true; requestAnimationFrame(frame); } }
-  function frame(now) {
-    if (anim) anim.tick(now);
-    else if (!dragging) {
-      if (Math.abs(vel) > 0.0008 && !reduceMotion) { rot += vel; vel *= 0.93; }
-      else { vel = 0; const target = -Math.round(-rot / step) * step; rot += (target - rot) * (reduceMotion ? 1 : 0.14); }
-    }
-    table.rotation.y = rot;
-    const f = frontIndex();
-    let settling = false;
-    plates.forEach((p, i) => {
-      const want = i === f ? 1 : (p === hovered ? 0.4 : 0);
-      p.userData.lift += (want - p.userData.lift) * 0.16;
-      if (Math.abs(want - p.userData.lift) > 0.002) settling = true;
-      p.position.y = 0.12 + p.userData.lift * 0.38;
-      p.scale.setScalar(1 + p.userData.lift * 0.16);
-    });
-    if (!dragging && !anim) setSelected(f);
-    renderer.render(scene, camera);
-    const snapTarget = -Math.round(-rot / step) * step;
-    const moving = dragging || anim || Math.abs(vel) > 0.0008 || Math.abs(rot - snapTarget) > 0.0005 || settling;
-    idle = moving ? 0 : idle + 1;
-    if (visible && idle < 20) requestAnimationFrame(frame); else running = false;
-  }
-  $("#wheel-prev").addEventListener("click", () => goTo((frontIndex() - 1 + list.length) % list.length));
-  $("#wheel-next").addEventListener("click", () => goTo((frontIndex() + 1) % list.length));
-  if (window.ResizeObserver) new ResizeObserver(resize).observe(stage); else window.addEventListener("resize", resize);
-  build(); setSelected(0); resize();
-
-  return {
-    setList(l) {
-      const next = l.slice(0, 8);
-      if (next.map(r => r.id).join() === list.map(r => r.id).join() && plates.length) return;
-      list = next; rot = 0; vel = 0; anim = null; selected = -1; build(); setSelected(0); kick();
-    },
-    spin() {
-      const pick = list.indexOf(pickFrom(list));
-      const cur = norm(-rot) / step, n = list.length;
-      let delta = (((pick - cur) % n) + n) % n;
-      return animateTo(rot - (delta + n * 2) * step, 2600).then(() => { setSelected(frontIndex()); return list[frontIndex()]; });
-    }
-  };
-}
-$("#spin-btn").addEventListener("click", () => {
-  if (!wheel) return;
-  const b = $("#spin-btn"); b.disabled = true;
-  if (state.mode !== "spin") setMode("spin");
-  const rect = $("#wheel").getBoundingClientRect();
-  if (rect.top < 60 || rect.bottom > innerHeight) $("#wheel").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
-  setTimeout(() => wheel.spin().then(r => { b.disabled = false; toast("Tonight: " + r.name); }), 120);
-});
-
-
-/* =========================================================
-   Hero mode: swipe deck or 3D spin
-   ========================================================= */
-function setMode(m) {
-  state.mode = m; save();
-  document.querySelectorAll("[data-mode]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.mode === m)));
-  $("#deck-wrap").hidden = m !== "swipe";
-  $("#wheel-wrap").hidden = m !== "spin";
-  $("#stage-hint").textContent = m === "swipe" ? "Swipe right to save, left to skip" : "Drag the table, tap a plate";
-}
+function setMode(m) { state.mode = m; }
 
 /* =========================================================
    Swipe deck
    ========================================================= */
-const deck = { order: [], idx: 0, saved: [], busy: false };
+const deck = { order: [], key: "", idx: 0, saved: [], busy: false };
 function syncDeck(list) {
   const ids = list.map(r => r.id);
-  if (ids.join() === deck.order.join()) return;
-  deck.order = ids; deck.idx = 0; renderDeck();
+  if (ids.slice().sort().join() === deck.key) return;
+  deck.key = ids.slice().sort().join(); deck.order = shuffle(ids); deck.idx = 0; renderDeck();
 }
 function swipeCardHTML(r, k) {
   return '<div class="swipe-card" data-id="' + r.id + '" style="z-index:' + (10 - k) + ';transform:translateY(' + (k * 16) + 'px) scale(' + (1 - k * 0.05) + ')"' + (k ? ' aria-hidden="true"' : '') + '>' +
     '<img src="' + img(r.id) + '" alt="' + esc(r.name) + '" draggable="false">' +
     '<span class="swipe-shade"></span><span class="stamp save">SAVE</span><span class="stamp skip">SKIP</span>' +
     '<div class="swipe-info"><span class="where">' + esc(r.chef ? r.chef + ", " + cuisineLabel(r) : r.origin) + '</span><h3>' + esc(r.name) + '</h3>' +
-    '<div class="facts"><span><b>' + r.time + '</b>min</span><span><b>' + r.pro + 'g</b>protein</span><span><b>' + r.cal + '</b>cal</span><span><b>' + r.serves + '</b>servings</span></div></div></div>';
+    '<div class="facts">' + (hasMacros(r) ? '<span><b>' + (r.time != null ? r.time : "?") + '</b>min</span><span><b>' + r.pro + 'g</b>protein</span><span><b>' + r.cal + '</b>cal</span><span><b>' + r.serves + '</b>servings</span>' : '<span>' + esc(r.tags[0] || "Recipe") + '</span>' + (r.ingredients.length ? '<span><b>' + r.ingredients.length + '</b>ingredients</span>' : "")) + '</div></div></div>';
 }
 function renderDeck() {
   const el = $("#deck"), ids = deck.order.slice(deck.idx, deck.idx + 3);
@@ -1713,7 +4468,7 @@ function renderDeck() {
     el.innerHTML = '<div class="deck-empty"><strong>' + (deck.order.length ? "That's every dish" : "No dishes match your filters") + '</strong><span>' +
       (deck.saved.length ? "You saved " + deck.saved.length + ". Tap one below, or start over." : "Start over, or loosen the filters below.") + '</span>' +
       (deck.order.length ? '<button class="btn btn-sm" type="button" id="deck-restart">' + ic("arrow-left") + 'Start over</button>' : '') + '</div>';
-    const rb = $("#deck-restart"); if (rb) rb.addEventListener("click", () => { deck.idx = 0; renderDeck(); });
+    const rb = $("#deck-restart"); if (rb) rb.addEventListener("click", () => { deck.order = shuffle(deck.order); deck.idx = 0; renderDeck(); });
     return;
   }
   el.innerHTML = ids.map((id, k) => swipeCardHTML(byId(id), k)).reverse().join("");
@@ -1863,14 +4618,131 @@ function renderCookTimer() {
   if (btn.dataset.label !== label) { btn.dataset.label = label; btn.innerHTML = ic(t && !t.done ? "pause" : "timer") + label; }
 }
 
+
+/* =========================================================
+   Coverflow hero
+   ========================================================= */
+let FEATURED = [];
+function pickFeatured() { FEATURED = shuffle(RECIPES).slice(0, 7); }
+pickFeatured();
+const heroLine = r => hasMacros(r) ? r.pro + "g protein" + (r.time != null ? ", " + r.time + " min" : "") : [chefOf(r) === "notion" || chefOf(r) === "site" ? courseLabel(r) : chefLabel(chefOf(r)), regionLabel(r)].filter(Boolean).join(", ");
+const cf = { n: 0, timer: null, hover: false, drag: null, moved: false };
+function cfBuild() {
+  $("#cf-stage").innerHTML = FEATURED.map(r => '<button class="cf-card" type="button" aria-label="' + esc(r.name) + '"><img src="' + img(r.id) + '" alt="" draggable="false"><span class="cf-shade"></span><span class="cf-label"><b>' + esc(r.name) + '</b><small>' + esc(heroLine(r)) + '</small></span></button>').join("");
+  cfLayout();
+}
+function cfLayout() {
+  const N = FEATURED.length, half = Math.floor(N / 2), w = $("#cf").clientWidth || 560, step = Math.max(64, Math.min(130, w * 0.17));
+  document.querySelectorAll(".cf-card").forEach((el, j) => {
+    const r = ((j - cf.n + N + half) % N + N) % N - half, a = Math.abs(r);
+    el.style.transform = "translateX(" + (r * step) + "px) translateZ(" + (-a * 90) + "px) rotateY(" + (-r * 34) + "deg)";
+    el.style.zIndex = String(20 - a); el.style.opacity = a > 2 ? "0" : a > 1 ? ".7" : "1"; el.style.filter = a ? "brightness(" + (1 - a * 0.16) + ")" : "none";
+    el.style.pointerEvents = a > 2 ? "none" : "auto"; el.tabIndex = a === 0 ? 0 : -1;
+    el.setAttribute("aria-current", String(a === 0));
+  });
+  const r = FEATURED[cf.n];
+  $("#cf-caption").innerHTML = '<b>' + esc(r.name) + '</b>' + (hasMacros(r) ? '<span><span class="num">' + r.pro + 'g</span> protein</span><span><span class="num">' + r.cal + '</span> cal</span>' + (r.time != null ? '<span><span class="num">' + r.time + '</span> min</span>' : '') : '<span>' + esc(cuisineLabel(r)) + '</span>' + (r.chef ? '<span>' + esc(r.chef) + '</span>' : ''));
+}
+function cfGo(n) { cf.n = ((n % FEATURED.length) + FEATURED.length) % FEATURED.length; cfLayout(); cfRestart(); }
+function cfRestart() { clearInterval(cf.timer); if (reduceMotion) return; cf.timer = setInterval(() => { if (!cf.hover && !document.hidden) { if (cf.n === FEATURED.length - 1) { cfShuffle(); } else { cf.n++; cfLayout(); } } }, 3400); }
+function cfShuffle() { pickFeatured(); cf.n = 0; cfBuild(); storyReset(); }
+function cfInit() {
+  cfBuild(); cfRestart();
+  const box = $("#cf");
+  box.addEventListener("mouseenter", () => { cf.hover = true; }); box.addEventListener("mouseleave", () => { cf.hover = false; });
+  box.addEventListener("focusin", () => { cf.hover = true; }); box.addEventListener("focusout", () => { cf.hover = false; });
+  $("#cf-prev").addEventListener("click", () => cfGo(cf.n - 1)); $("#cf-next").addEventListener("click", () => cfGo(cf.n + 1));
+  $("#cf-shuffle").addEventListener("click", () => { cfShuffle(); cfRestart(); toast("Fresh picks from all " + RECIPES.length + " recipes"); });
+  $("#cf-open").addEventListener("click", () => openRecipe(FEATURED[cf.n].id));
+  $("#cf-stage").addEventListener("click", e => {
+    if (cf.moved) { cf.moved = false; return; }
+    const c = e.target.closest(".cf-card"); if (!c) return;
+    const j = [...document.querySelectorAll(".cf-card")].indexOf(c);
+    if (j === cf.n) openRecipe(FEATURED[j].id); else cfGo(j);
+  });
+  box.addEventListener("keydown", e => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); cfGo(cf.n - 1); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); cfGo(cf.n + 1); }
+  });
+  $("#cf-stage").addEventListener("pointerdown", e => { cf.drag = { x: e.clientX }; cf.moved = false; });
+  addEventListener("pointerup", e => { if (!cf.drag) return; const dx = e.clientX - cf.drag.x; cf.drag = null; if (Math.abs(dx) > 40) { cf.moved = true; cfGo(cf.n + (dx < 0 ? 1 : -1)); } });
+  addEventListener("resize", cfLayout);
+}
+
+/* =========================================================
+   Stories hero: counting macros, progress bars, tap zones
+   ========================================================= */
+const story = { i: 0, dur: 6000, raf: 0, held: false, list: shuffle(RECIPES).slice(0, 8) };
+function storyReset() { story.list = shuffle(RECIPES).slice(0, 8); $("#story-bars").innerHTML = story.list.map(() => '<span class="seg"><u></u></span>').join(""); }
+function storyGo(i) {
+  const N = story.list.length;
+  if (i >= N) { storyReset(); i = 0; }
+  story.i = ((i % N) + N) % N;
+  const r = story.list[story.i];
+  const segs = [...document.querySelectorAll("#story-bars .seg")];
+  segs.forEach((s, k) => { s.className = "seg" + (k < story.i ? " done" : ""); });
+  const cur = segs[story.i]; void cur.offsetWidth; cur.className = "seg cur"; cur.style.setProperty("--dur", story.dur + "ms");
+  const im = $("#story-img"); im.classList.remove("kb"); im.src = img(r.id); im.alt = r.name; void im.offsetWidth; if (!reduceMotion) im.classList.add("kb");
+  const st = hasMacros(r) ? [[r.pro, "g protein"], [r.cal, "calories"], [r.time != null ? r.time : r.carb, r.time != null ? "minutes" : "g carbs"]] : [[r.ingredients.length, "ingredients"], [r.steps.length, "steps"], [typeof r.serves === "number" ? r.serves : (parseInt(r.serves, 10) || 1), "servings"]];
+  $("#story-info").innerHTML = '<div><div class="where">' + esc([r.chef, cuisineLabel(r)].filter(Boolean).join(", ")) + '</div><h3>' + esc(r.name) + '</h3></div>' +
+    '<div class="story-stats"><div class="story-stat p"><b data-n="' + st[0][0] + '">0</b><span>' + st[0][1] + '</span></div><div class="story-stat c"><b data-n="' + st[1][0] + '">0</b><span>' + st[1][1] + '</span></div><div class="story-stat m"><b data-n="' + st[2][0] + '">0</b><span>' + st[2][1] + '</span></div></div>';
+  const id = ++story.raf;
+  document.querySelectorAll("#story-info .story-stat b").forEach(b => {
+    const to = Number(b.dataset.n), t0 = performance.now();
+    if (reduceMotion) { b.textContent = to; return; }
+    (function tick(t) { if (id !== story.raf) { b.textContent = to; return; } const k = Math.min(1, (t - t0) / 1000), e = 1 - Math.pow(1 - k, 3); b.textContent = Math.round(to * e); if (k < 1) requestAnimationFrame(tick); })(t0);
+  });
+}
+function storyInit() {
+  storyReset();
+  storyGo(0);
+  const box = $("#story");
+  const tap = fn => () => { if (story.held) { story.held = false; return; } fn(); };
+  $("#story-prev").addEventListener("click", tap(() => storyGo(story.i - 1)));
+  $("#story-next").addEventListener("click", tap(() => storyGo(story.i + 1)));
+  $("#story-open").addEventListener("click", tap(() => openRecipe(story.list[story.i].id)));
+  box.addEventListener("animationend", e => { if (e.animationName === "segfill") storyGo(story.i + 1); });
+  let hold, inView = false, holding = false;
+  const sync = () => box.classList.toggle("paused", !inView || holding || document.hidden || reduceMotion);
+  box.addEventListener("pointerdown", () => { story.held = false; hold = setTimeout(() => { holding = true; story.held = true; sync(); }, 260); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(ev => box.addEventListener(ev, () => { clearTimeout(hold); if (holding) { holding = false; sync(); } }));
+  box.addEventListener("keydown", e => { if (e.key === "ArrowLeft") storyGo(story.i - 1); else if (e.key === "ArrowRight") storyGo(story.i + 1); });
+  document.addEventListener("visibilitychange", sync);
+  if (window.IntersectionObserver) new IntersectionObserver(es => { inView = es[0].isIntersecting; sync(); }, { threshold: 0.35 }).observe(box); else { inView = true; sync(); }
+}
+
+/* =========================================================
+   Chef section: cards plus a shelf of the selected chef's dishes
+   ========================================================= */
+function renderChefs(scrollShelf) {
+  $("#chef-cards").innerHTML = CHEFS.map(c => {
+    const n = RECIPES.filter(r => chefOf(r) === c.id).length;
+    return '<button class="chef-card" type="button" data-chef-view="' + esc(c.id) + '" aria-pressed="' + (state.chefView === c.id) + '" style="--chef:' + c.color + '">' +
+      '<span class="pic"><img src="img/' + c.img + '.jpg" alt="" loading="lazy"><span class="tape">' + esc(c.tag) + '</span></span>' +
+      '<span class="txt"><b>' + esc(c.label) + '</b><small>' + esc(c.blurb) + '</small><span class="num">' + n + ' recipes</span></span></button>';
+  }).join("");
+  const list = RECIPES.filter(r => chefOf(r) === state.chefView).sort((a, b) => COURSES.findIndex(c => c.id === a.course) - COURSES.findIndex(c => c.id === b.course));
+  $("#shelf-title").textContent = chefLabel(state.chefView) + ": " + list.length + " dishes";
+  $("#shelf-all").innerHTML = ic("arrow-right") + "Show in the library";
+  $("#shelf").innerHTML = list.map(r => '<button class="shelf-item" type="button" role="listitem" data-open="' + r.id + '"><img src="' + img(r.id) + '" alt="" loading="lazy"><b>' + esc(r.name) + '</b><small>' + esc(cuisineLabel(r)) + (hasMacros(r) ? ", " + r.pro + "g protein" : "") + '</small></button>').join("");
+  $("#shelf").scrollLeft = 0;
+  if (scrollShelf) { const s = $(".shelf-wrap"); const b = s.getBoundingClientRect(); if (b.bottom > innerHeight) s.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" }); }
+}
+$("#shelf-all").addEventListener("click", () => {
+  state.chef = state.chefView; state.course = "all"; state.region = "all"; state.flags.clear();
+  renderChips(); renderGrid();
+  $("#recipes").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+});
+
 /* =========================================================
    Boot
    ========================================================= */
 load();
 hydrateIcons();
 renderTaiwanese();
-try { wheel = initWheel(); } catch (e) { wheel = null; }
-setMode(state.mode);
+renderChefs();
+cfInit();
+storyInit();
 renderShortlist();
 renderAll();
 probeEmbeds();
@@ -1878,5 +4750,5 @@ const start = location.hash.slice(1);
 if (byId(start)) openRecipe(start);
 })();
 </script>
-</body>
-</html>
+
+</body></html>
