@@ -1,0 +1,1525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wok &amp; Comal</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Quick, high-protein Asian, Mexican and fusion dinners, each with a cook-along video and the full recipe underneath.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: night-market hero (copy left, live 3D ingredients right), then a target bar and a card grid; each card opens a cook sheet with video on top and the recipe below. */
+:root {
+  --bg: #17121f;          /* eggplant ink */
+  --bg-raised: #201929;
+  --panel: #282034;
+  --line: #3b3149;
+  --fg: #f4efe7;
+  --muted: #b5aac2;
+  --masa: #f5b42a;        /* accent fill: toasted masa / turmeric */
+  --masa-ink: #f7c457;    /* accent as text */
+  --on-masa: #22170a;
+  --chili: #f06a45;
+  --lime: #9ed35e;
+  --plate: #e9e4da;
+  --glow-a: rgba(245, 180, 42, .16);
+  --glow-b: rgba(240, 106, 69, .12);
+  --shadow: 0 18px 40px rgba(0,0,0,.35);
+  --font-display: "Bagel Fat One", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #edf3f0; --bg-raised: #ffffff; --panel: #f6faf8; --line: #cddbd4;
+    --fg: #1e1a26; --muted: #575466; --masa: #f5b42a; --masa-ink: #8a5a00; --on-masa: #22170a;
+    --chili: #c2401f; --lime: #3f7d16; --plate: #ffffff;
+    --glow-a: rgba(245, 180, 42, .28); --glow-b: rgba(95, 168, 148, .25);
+    --shadow: 0 14px 34px rgba(40, 60, 52, .14);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #edf3f0; --bg-raised: #ffffff; --panel: #f6faf8; --line: #cddbd4;
+  --fg: #1e1a26; --muted: #575466; --masa: #f5b42a; --masa-ink: #8a5a00; --on-masa: #22170a;
+  --chili: #c2401f; --lime: #3f7d16; --plate: #ffffff;
+  --glow-a: rgba(245, 180, 42, .28); --glow-b: rgba(95, 168, 148, .25);
+  --shadow: 0 14px 34px rgba(40, 60, 52, .14);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  overflow-x: hidden;
+}
+.wrap {
+  max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--masa); outline-offset: 2px; border-radius: 6px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+a { color: var(--masa-ink); }
+.num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+.label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--fg); }
+.brand-mark { width: 34px; height: 34px; border-radius: 50%; background: conic-gradient(from 200deg, var(--masa), var(--chili), var(--lime), var(--masa)); box-shadow: inset 0 0 0 7px var(--bg); }
+.brand-name { font-family: var(--font-display); font-size: 22px; letter-spacing: .01em; }
+.top-actions { display: flex; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--bg-raised); color: var(--fg);
+  padding: 10px 16px; border-radius: 999px; font-weight: 600; font-size: 15px; text-decoration: none;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.btn:hover { border-color: var(--masa); }
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--masa); border-color: var(--masa); color: var(--on-masa); }
+.btn-primary:hover { filter: brightness(1.06); }
+.btn-small { padding: 7px 12px; font-size: 14px; }
+.count-badge { font-family: var(--font-data); background: var(--masa); color: var(--on-masa); border-radius: 999px; padding: 0 7px; font-size: 12px; line-height: 20px; min-width: 20px; text-align: center; }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center; gap: 24px; padding-block: 8px 28px;
+}
+.hero::before {
+  content: ""; position: absolute; inset: -40px 0 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(40% 60% at 75% 45%, var(--glow-a), transparent 70%), radial-gradient(35% 50% at 15% 80%, var(--glow-b), transparent 70%);
+}
+.hero-copy { display: grid; gap: 18px; min-width: 0; }
+.hero h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(42px, 6.4vw, 80px); line-height: .98; letter-spacing: -.01em; }
+.hero h1 em { font-style: normal; color: var(--masa-ink); }
+.hero p { margin: 0; max-width: 46ch; color: var(--muted); font-size: 18px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 10px; }
+.hero-facts { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--muted); font-size: 14px; }
+.hero-facts b { color: var(--fg); font-family: var(--font-data); font-weight: 600; }
+.stage { position: relative; min-width: 0; height: 460px; }
+#scene { width: 100%; height: 100%; display: block; touch-action: pan-y; cursor: grab; }
+#scene.is-hover { cursor: pointer; }
+#scene.is-drag { cursor: grabbing; }
+.stage-hint {
+  position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%);
+  background: var(--bg-raised); border: 1px solid var(--line); color: var(--muted);
+  padding: 6px 12px; border-radius: 999px; font-size: 13px; white-space: nowrap; pointer-events: none;
+  transition: color .2s ease, border-color .2s ease;
+}
+.stage-hint.on { color: var(--fg); border-color: var(--masa); }
+.stage-fallback { position: absolute; inset: 0; display: grid; place-items: center; }
+.stage-fallback .plate { width: min(360px, 80%); }
+
+/* ---------- target bar ---------- */
+.panel { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 22px; }
+.target {
+  display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 18px 28px; align-items: center;
+  padding: 18px 22px; margin-bottom: 18px;
+}
+.target h2 { font-size: 18px; font-weight: 700; }
+.target-sub { color: var(--muted); font-size: 14px; margin-top: 2px; }
+.seg { justify-self: start; display: inline-flex; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.seg button { border: 0; background: transparent; padding: 7px 14px; border-radius: 999px; font-weight: 600; font-size: 14px; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--masa); color: var(--on-masa); }
+.target-fields { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: flex-end; }
+.field { display: flex; align-items: center; gap: 8px; }
+.field label { font-size: 14px; color: var(--muted); }
+.field input { width: 84px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+.target-summary { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 15px; }
+.target-summary strong { font-family: var(--font-data); color: var(--lime); }
+
+/* ---------- filters ---------- */
+.filters { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-bottom: 18px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: transparent; color: var(--fg); padding: 7px 13px; border-radius: 999px; font-size: 14px; font-weight: 600; display: inline-flex; gap: 6px; align-items: center; }
+.chip:hover { border-color: var(--muted); }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+.filters-right { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+.search, .sort { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg-raised); font-size: 14px; }
+.search { width: 210px; max-width: 100%; }
+
+/* ---------- cards ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 18px; padding-bottom: 40px; }
+.card { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--masa) 50%, var(--line)); }
+.card-media { position: relative; border: 0; padding: 0; display: grid; place-items: center; aspect-ratio: 16 / 10; width: 100%; background: var(--band, var(--panel)); overflow: hidden; }
+.card-media .plate { width: 62%; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+.card:hover .card-media .plate { transform: rotate(28deg) scale(1.05); }
+.card-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.card:hover .card-media img { transform: scale(1.05); }
+.media-chip { position: absolute; left: 12px; top: 12px; background: rgba(20,14,26,.78); color: #fff; font-family: var(--font-data); font-size: 12px; padding: 4px 9px; border-radius: 999px; display: inline-flex; gap: 6px; align-items: center; }
+.media-chip.right { left: auto; right: 12px; }
+.card-body { padding: 16px 18px 18px; display: grid; gap: 10px; flex: 1; align-content: start; }
+.kicker { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.card-title { all: unset; cursor: pointer; font-size: 20px; font-weight: 700; line-height: 1.2; }
+.card-title:hover { color: var(--masa-ink); }
+.card-title:focus-visible { outline: 3px solid var(--masa); outline-offset: 2px; border-radius: 4px; }
+.macros { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.macro { background: var(--panel); border-radius: 10px; padding: 6px 8px; text-align: center; }
+.macro b { display: block; font-family: var(--font-data); font-variant-numeric: tabular-nums; font-size: 15px; }
+.macro span { font-size: 11px; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; }
+.macro.pro b { color: var(--lime); }
+.meter { height: 6px; border-radius: 6px; background: var(--panel); overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--lime); border-radius: 6px; transition: width .4s ease; }
+.card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 2px; }
+.fit { font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.fit::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+.fit-ok { color: var(--lime); }
+.fit-warn { color: var(--masa-ink); }
+.icon-btn { border: 1px solid var(--line); background: transparent; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); }
+.icon-btn:hover { color: var(--chili); border-color: var(--chili); }
+.icon-btn[aria-pressed="true"] { color: var(--chili); border-color: var(--chili); }
+.icon-btn svg { width: 18px; height: 18px; }
+.empty { grid-column: 1 / -1; text-align: center; padding: 50px 20px; border: 1px dashed var(--line); border-radius: 22px; color: var(--muted); display: grid; gap: 12px; justify-items: center; }
+
+/* ---------- plate illustration ---------- */
+.plate { position: relative; aspect-ratio: 1; max-width: 100%; border-radius: 50%; background: var(--plate); box-shadow: 0 10px 24px rgba(0,0,0,.28), inset 0 0 0 5px rgba(0,0,0,.05), inset 0 0 0 12px rgba(255,255,255,.35); }
+.plate span { position: absolute; transform: translate(-50%, -50%); }
+.plate .base { left: 50%; top: 50%; width: 74%; height: 74%; border-radius: 50%; }
+.plate .bit { border-radius: 46% 54% 40% 60%; }
+.plate .dot { border-radius: 50%; }
+
+/* ---------- cook sheet ---------- */
+.sheet-wrap { position: fixed; inset: 0; z-index: 40; background: rgba(10, 6, 14, .62); display: grid; place-items: start center; overflow-y: auto; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); backdrop-filter: blur(6px); }
+.sheet { width: min(1000px, 100%); background: var(--bg); border: 1px solid var(--line); border-radius: 26px; overflow: hidden; box-shadow: var(--shadow); animation: rise .35s cubic-bezier(.2,.8,.2,1); margin-block: 8px 40px; }
+@keyframes rise { from { transform: translateY(24px); opacity: .4; } to { transform: none; opacity: 1; } }
+.sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 20px 22px 14px; }
+.sheet-head h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 4vw, 42px); line-height: 1.05; }
+.sheet-head .kicker { margin-bottom: 6px; }
+.sheet-body { padding: 0 22px 26px; display: grid; gap: 22px; }
+.video { position: relative; aspect-ratio: 16 / 9; width: 100%; max-width: 100%; border-radius: 18px; overflow: hidden; background: var(--band, var(--panel)); display: grid; place-items: center; text-decoration: none; color: #fff; border: 0; padding: 0; }
+.video img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video .plate { width: min(46%, 300px); transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
+.video:hover .plate { transform: rotate(40deg); }
+.video-shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(12,8,16,.82), rgba(12,8,16,0) 55%); pointer-events: none; }
+.play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 74px; height: 74px; border-radius: 50%; background: var(--masa); color: var(--on-masa); display: grid; place-items: center; box-shadow: 0 10px 30px rgba(0,0,0,.4); transition: transform .2s ease; }
+.video:hover .play { transform: translate(-50%, -50%) scale(1.08); }
+.play svg { width: 30px; height: 30px; margin-left: 4px; }
+.video-meta { position: absolute; left: 18px; right: 18px; bottom: 14px; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; text-align: left; }
+.video-meta b { display: block; font-size: 16px; line-height: 1.25; }
+.video-meta small { opacity: .85; font-size: 13px; }
+.video-meta .num { background: rgba(0,0,0,.55); padding: 3px 8px; border-radius: 8px; font-size: 13px; flex-shrink: 0; }
+.watch-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.credit { font-size: 13px; color: var(--muted); margin: 0; max-width: 70ch; }
+.sheet-stats { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 8px; }
+.stat { background: var(--bg-raised); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; }
+.stat b { display: block; font-family: var(--font-data); font-variant-numeric: tabular-nums; font-size: 20px; }
+.stat span { font-size: 12px; color: var(--muted); }
+.stat.pro b { color: var(--lime); }
+.recipe-cols { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 22px; }
+.recipe-cols h3 { font-size: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.recipe-cols h3 small { font-size: 13px; color: var(--muted); font-weight: 500; }
+.ing { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.ing label { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; cursor: pointer; }
+.ing label:hover { background: var(--bg-raised); }
+.ing input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--lime); flex-shrink: 0; }
+.ing input:checked + span { text-decoration: line-through; color: var(--muted); }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: step; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 12px; background: var(--bg-raised); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+.steps li::before { content: counter(step); width: 34px; height: 34px; border-radius: 50%; background: var(--panel); border: 1px solid var(--line); display: grid; place-items: center; font-family: var(--font-data); font-weight: 600; }
+.steps p { margin: 0; }
+.timer-btn { margin-top: 10px; border: 1px dashed var(--masa); background: transparent; color: var(--masa-ink); border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 600; display: inline-flex; gap: 6px; align-items: center; }
+.timer-btn:hover { background: color-mix(in srgb, var(--masa) 14%, transparent); }
+.tip { border-radius: 16px; padding: 14px 16px; background: color-mix(in srgb, var(--lime) 12%, var(--bg-raised)); border: 1px solid color-mix(in srgb, var(--lime) 35%, var(--line)); }
+.tip b { color: var(--lime); }
+.sheet-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding-top: 6px; border-top: 1px solid var(--line); }
+.toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); cursor: pointer; }
+.toggle input { accent-color: var(--masa); width: 18px; height: 18px; }
+
+/* ---------- week drawer ---------- */
+.drawer-wrap { position: fixed; inset: 0; z-index: 45; background: rgba(10, 6, 14, .5); }
+.drawer { position: absolute; top: 0; right: 0; bottom: 0; width: min(440px, 100%); background: var(--bg); border-left: 1px solid var(--line); display: flex; flex-direction: column; animation: slide .3s cubic-bezier(.2,.8,.2,1); padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); padding-right: env(safe-area-inset-right, 0px); }
+@keyframes slide { from { transform: translateX(40px); opacity: .5; } to { transform: none; opacity: 1; } }
+.drawer-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+.drawer-head h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; }
+.drawer-body { padding: 16px 20px 24px; overflow-y: auto; display: grid; gap: 18px; align-content: start; }
+.days { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.day { display: grid; grid-template-columns: 44px minmax(0,1fr) auto; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-raised); }
+.day-name { font-family: var(--font-data); font-weight: 600; color: var(--muted); }
+.day-recipe { all: unset; cursor: pointer; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.day-recipe:hover { color: var(--masa-ink); }
+.day-empty { color: var(--muted); font-size: 14px; }
+.day .num { font-size: 12px; color: var(--muted); }
+.week-sum { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
+.shop { width: 100%; min-height: 220px; resize: vertical; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-raised); padding: 12px; font-family: var(--font-data); font-size: 13px; line-height: 1.6; }
+
+/* ---------- timers + toast ---------- */
+.timers { position: fixed; z-index: 60; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); display: grid; gap: 8px; justify-items: end; }
+.timer { display: flex; align-items: center; gap: 10px; background: var(--fg); color: var(--bg); border-radius: 999px; padding: 8px 8px 8px 16px; box-shadow: var(--shadow); font-weight: 600; font-size: 14px; max-width: min(360px, calc(100vw - 32px)); }
+.timer .num { font-size: 18px; }
+.timer .t-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.timer button { border: 0; background: var(--bg); color: var(--fg); border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+.timer.done { background: var(--masa); color: var(--on-masa); animation: pulse .8s ease-in-out infinite alternate; }
+@keyframes pulse { to { transform: scale(1.04); } }
+.toast { position: fixed; z-index: 70; left: 50%; bottom: max(20px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px); opacity: 0; background: var(--fg); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-weight: 600; font-size: 14px; transition: opacity .25s ease, transform .25s ease; pointer-events: none; max-width: calc(100vw - 32px); text-align: center; }
+.toast.show { opacity: 1; transform: translateX(-50%); }
+
+footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; padding-block: 22px 34px; }
+footer p { margin: 0; max-width: 80ch; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 960px) {
+  .target { grid-template-columns: minmax(0,1fr); }
+  .target-fields { justify-content: flex-start; }
+  .sheet-stats { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .recipe-cols { grid-template-columns: minmax(0,1fr); }
+}
+@media (max-width: 860px) {
+  .hero { grid-template-columns: minmax(0,1fr); padding-top: 0; }
+  .stage { order: -1; height: 330px; }
+  .filters-right { margin-left: 0; width: 100%; }
+  .search { flex: 1; }
+}
+@media (max-width: 520px) {
+  .top-actions .hide-sm { display: none; }
+  .sheet-head, .sheet-body { padding-left: 16px; padding-right: 16px; }
+  .sheet-wrap { padding: 0; }
+  .sheet { border-radius: 0; margin: 0; min-height: 100%; border: 0; }
+  .stage { height: 290px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#" aria-label="Wok and Comal home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">Wok &amp; Comal</span>
+    </a>
+    <div class="top-actions">
+      <button class="btn btn-small hide-sm" id="theme-btn" type="button" aria-label="Switch light or dark theme">Theme</button>
+      <button class="btn btn-small" id="week-btn" type="button">This week <span class="count-badge" id="week-count">0</span></button>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <span class="label">Asian · Mexican · Fusion · high protein</span>
+      <h1 id="hero-title">Dinner in <em>20 minutes</em>, protein on point.</h1>
+      <p>Twelve fast weeknight dinners built around lean protein. Each one has a cook-along video with the full recipe right underneath, so you never have to hunt for the amounts.</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary" id="pick-btn" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>
+          Pick tonight's dinner
+        </button>
+        <a class="btn" href="#recipes" id="browse-btn">Browse all 12</a>
+      </div>
+      <div class="hero-facts" id="hero-facts"></div>
+    </div>
+    <div class="stage" id="stage">
+      <canvas id="scene" aria-label="Floating 3D ingredients. Drag to spin, tap one to filter recipes." role="img"></canvas>
+      <div class="stage-hint" id="stage-hint">Drag to spin · tap an ingredient to filter</div>
+    </div>
+  </section>
+
+  <section class="panel target" aria-labelledby="target-title">
+    <div>
+      <h2 id="target-title">Your dinner target</h2>
+      <div class="target-sub">Pick a goal or type your own numbers.</div>
+    </div>
+    <div class="seg" role="group" aria-label="Fitness goal" id="goal-seg">
+      <button type="button" data-goal="lean">Lean out</button>
+      <button type="button" data-goal="maintain">Maintain</button>
+      <button type="button" data-goal="build">Build muscle</button>
+    </div>
+    <div class="target-fields">
+      <div class="field"><label for="cal-input">Max calories</label><input id="cal-input" type="number" min="250" max="1500" step="10" inputmode="numeric"></div>
+      <div class="field"><label for="pro-input">Protein (g)</label><input id="pro-input" type="number" min="10" max="120" step="1" inputmode="numeric"></div>
+    </div>
+    <div class="target-summary" id="target-summary"></div>
+  </section>
+
+  <section id="recipes" aria-label="Recipes">
+    <div class="filters">
+      <div class="chips" role="group" aria-label="Cuisine" id="cuisine-chips"></div>
+      <div class="chips" role="group" aria-label="Quick filters" id="flag-chips"></div>
+      <div class="filters-right">
+        <label class="sr" for="search" hidden>Search recipes</label>
+        <input class="search" id="search" type="search" placeholder="Search: salmon, tacos, rice…" aria-label="Search recipes">
+        <select class="sort" id="sort" aria-label="Sort recipes">
+          <option value="fit">Best for my target</option>
+          <option value="protein">Most protein</option>
+          <option value="cal">Fewest calories</option>
+          <option value="time">Fastest</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Macros are estimates per serving, worked out from standard nutrition values for the ingredients listed. Videos belong to their creators and play from YouTube. TikTok links open a TikTok search for the dish so you can find a short version.</p>
+  </div>
+</footer>
+
+<div class="sheet-wrap" id="sheet-wrap" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title"></div>
+</div>
+
+<div class="drawer-wrap" id="drawer-wrap" hidden>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+    <div class="drawer-head">
+      <h2 id="drawer-title">This week</h2>
+      <button class="icon-btn" type="button" id="drawer-close" aria-label="Close weekly plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="drawer-body" id="drawer-body"></div>
+  </aside>
+</div>
+
+<div class="timers" id="timers" aria-live="polite"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+"use strict";
+
+/* =========================================================
+   Recipe data. Macros are per serving.
+   ========================================================= */
+const RECIPES = [
+  {
+    id: "korean-beef-bowl", name: "Korean Beef Bowl", origin: "Korean", cuisine: ["asian"],
+    time: 20, serves: 4, cal: 450, pro: 31, carb: 42, fat: 15, spice: 1, tags: ["rice", "meal prep"],
+    colors: ["#f3eee2", "#7a3f24", "#6cbf45", "#2f4d44"],
+    video: { id: "GeTZ_b_75f8", title: "Korean Beef Bowl", channel: "Damn Delicious", len: "0:42" },
+    ingredients: [
+      "1¼ lb 93% lean ground beef (or ground turkey)",
+      "3 cloves garlic, minced",
+      "1 tbsp fresh ginger, grated",
+      "¼ cup low-sodium soy sauce",
+      "1 tbsp honey",
+      "1 tbsp gochujang (optional, for heat)",
+      "1 tsp toasted sesame oil",
+      "3 green onions, sliced",
+      "1 tsp sesame seeds",
+      "3 cups cooked brown rice (or half cauliflower rice)",
+      "1 cucumber, sliced, for serving"
+    ],
+    steps: [
+      { t: "Whisk the soy sauce, honey, gochujang and sesame oil in a small bowl." },
+      { t: "Brown the beef in a large skillet over medium-high heat, breaking it up as it cooks. Drain any fat.", min: 6 },
+      { t: "Push the beef aside, add the garlic and ginger to the pan and stir until fragrant.", min: 1 },
+      { t: "Pour in the sauce and simmer until it coats the beef and looks glossy.", min: 2 },
+      { t: "Spoon over rice with cucumber, then top with green onions and sesame seeds." }
+    ],
+    tip: "Cut the rice to ½ cup and add a big handful of cucumber and shredded carrot to drop about 60 calories without losing volume."
+  },
+  {
+    id: "thai-basil-chicken", name: "Thai Basil Chicken", origin: "Thai · pad kra pao", cuisine: ["asian"],
+    time: 15, serves: 2, cal: 520, pro: 46, carb: 40, fat: 18, spice: 2, tags: ["rice", "stir-fry"],
+    colors: ["#f5f1e6", "#c79a62", "#2f7d3a", "#3b3a5a"],
+    video: { id: "OV5fQ6EHFyk", title: "Thai basil chicken recipe (pad kra pao gai)", channel: "Mark Wiens", len: "4:41" },
+    ingredients: [
+      "1 lb ground chicken (or chopped boneless thighs)",
+      "4 cloves garlic",
+      "2–4 Thai bird's eye chilies",
+      "1 tbsp oyster sauce",
+      "1 tsp soy sauce",
+      "1 tsp fish sauce",
+      "1 tsp sugar",
+      "1 big handful holy basil or Thai basil",
+      "1 tbsp neutral oil",
+      "1½ cups cooked jasmine rice",
+      "2 eggs, fried (optional, +90 cal each)"
+    ],
+    steps: [
+      { t: "Pound or finely chop the garlic and chilies together into a rough paste." },
+      { t: "Heat the oil in a wok over high heat and fry the garlic-chili paste for a few seconds.", min: 1 },
+      { t: "Add the chicken and stir-fry, breaking it up, until cooked through.", min: 4 },
+      { t: "Add the oyster sauce, soy sauce, fish sauce and sugar, plus a splash of water to keep it saucy." },
+      { t: "Turn off the heat, fold in the basil until it wilts, and serve over rice with a fried egg." }
+    ],
+    tip: "Skip the fried egg and use extra basil and green beans in the stir-fry to stay near 430 calories."
+  },
+  {
+    id: "miso-salmon", name: "Miso Glazed Salmon", origin: "Japanese", cuisine: ["asian"],
+    time: 15, serves: 2, cal: 520, pro: 39, carb: 38, fat: 22, spice: 0, tags: ["seafood", "sheet pan"],
+    colors: ["#f2ede0", "#f08a5d", "#4d8f3a", "#3a4a63"],
+    video: { id: "cygJOv5tVz8", title: "Quick Miso Glazed Salmon in 10 Minutes", channel: "Sudachi (Yuto Omura)", len: "3:05" },
+    ingredients: [
+      "2 salmon fillets (6 oz each)",
+      "1½ tbsp white miso",
+      "1 tbsp mirin",
+      "1 tsp low-sodium soy sauce",
+      "1 tsp honey",
+      "1 bunch broccolini, trimmed",
+      "1 tsp oil",
+      "1 cup cooked rice",
+      "Sliced green onion and sesame seeds"
+    ],
+    steps: [
+      { t: "Heat the broiler with a rack about 6 inches from the top. Line a sheet pan with foil." },
+      { t: "Stir the miso, mirin, soy sauce and honey into a smooth glaze." },
+      { t: "Pat the salmon dry, set it on the pan with the broccolini (tossed in oil), and brush the glaze over the fish." },
+      { t: "Broil until the glaze bubbles and browns and the salmon flakes. Watch it so the glaze doesn't burn.", min: 8 },
+      { t: "Serve with rice, topped with green onion and sesame seeds." }
+    ],
+    tip: "Salmon brings omega-3 fats. Keep it under 450 calories by swapping the rice for a bigger pile of broccolini."
+  },
+  {
+    id: "shrimp-fried-rice", name: "Shrimp Fried Rice", origin: "Chinese-American", cuisine: ["asian"],
+    time: 15, serves: 2, cal: 480, pro: 38, carb: 52, fat: 12, spice: 0, tags: ["seafood", "rice", "leftovers"],
+    colors: ["#efe2b8", "#f4a07a", "#7cc04f", "#4a3f2e"],
+    video: { id: "y8R4QiUObPs", title: "10-Min Shrimp Fried Rice Recipe", channel: "CiCi Li, Asian Home Cooking", len: "3:08" },
+    ingredients: [
+      "10 oz shrimp, peeled and deveined",
+      "2 cups cold cooked rice (day-old works best)",
+      "1 cup cauliflower rice",
+      "2 eggs plus 2 egg whites, beaten",
+      "1 cup frozen peas and carrots",
+      "3 green onions, sliced",
+      "2 cloves garlic, minced",
+      "1½ tbsp low-sodium soy sauce",
+      "1 tsp sesame oil",
+      "1 tbsp neutral oil"
+    ],
+    steps: [
+      { t: "Heat half the oil in a wok over high heat. Cook the shrimp until pink, then move them to a plate.", min: 2 },
+      { t: "Scramble the eggs in the same pan until just set, then push them to the side.", min: 1 },
+      { t: "Add the remaining oil, garlic, peas and carrots, and stir-fry briefly.", min: 1 },
+      { t: "Add both rices and press them against the hot pan so they toast a little.", min: 3 },
+      { t: "Return the shrimp, add soy sauce, sesame oil and green onions, and toss together." }
+    ],
+    tip: "Half rice, half cauliflower rice keeps the fried-rice texture and saves about 120 calories a plate."
+  },
+  {
+    id: "honey-garlic-chicken", name: "Honey Garlic Chicken Stir-Fry", origin: "Chinese-American", cuisine: ["asian"],
+    time: 25, serves: 4, cal: 420, pro: 42, carb: 36, fat: 10, spice: 0, tags: ["stir-fry", "meal prep"],
+    colors: ["#f4efe3", "#d9913a", "#3e8f3e", "#47354f"],
+    video: { id: "Outg16HkCcM", title: "Easy Honey Garlic Chicken Stir Fry", channel: "Natasha's Kitchen", len: "5:57" },
+    ingredients: [
+      "1½ lb chicken breast, cut in bite-size pieces",
+      "2 tbsp cornstarch",
+      "1 large head broccoli, in florets",
+      "1 red bell pepper, sliced",
+      "4 cloves garlic, minced",
+      "1 tsp fresh ginger, grated",
+      "¼ cup low-sodium soy sauce",
+      "2 tbsp honey",
+      "1 tbsp rice vinegar",
+      "¼ cup water",
+      "1 tbsp oil",
+      "2 cups cooked rice"
+    ],
+    steps: [
+      { t: "Toss the chicken with 1½ tbsp cornstarch and a pinch of salt." },
+      { t: "Whisk soy sauce, honey, vinegar, water, garlic, ginger and the rest of the cornstarch." },
+      { t: "Sear the chicken in hot oil in a single layer until golden and cooked through. Remove it.", min: 6 },
+      { t: "Add the broccoli, pepper and a splash of water. Cover and steam until bright green.", min: 3 },
+      { t: "Return the chicken, pour in the sauce and stir until it thickens.", min: 2 },
+      { t: "Serve over ½ cup rice per person." }
+    ],
+    tip: "Makes 4 boxes. It keeps 4 days in the fridge, so you're covered for lunches."
+  },
+  {
+    id: "gochujang-chicken", name: "Gochujang Chicken Rice Bowl", origin: "Korean", cuisine: ["asian"],
+    time: 20, serves: 3, cal: 510, pro: 45, carb: 46, fat: 14, spice: 2, tags: ["rice", "meal prep"],
+    colors: ["#f4efe3", "#c4402b", "#7bc95a", "#5a2f3a"],
+    video: { id: "Z713RdoGB7Q", title: "Korean Gochujang Chicken for a High Protein and Easy Meal", channel: "Fit Munchies", len: "2:09" },
+    ingredients: [
+      "1½ lb boneless skinless chicken thighs (or breast)",
+      "2 tbsp gochujang",
+      "1 tbsp low-sodium soy sauce",
+      "1 tbsp honey",
+      "1 tsp sesame oil",
+      "2 cloves garlic, grated",
+      "1 tsp rice vinegar",
+      "2 cups cooked rice",
+      "1 cucumber, sliced",
+      "Green onion and sesame seeds"
+    ],
+    steps: [
+      { t: "Mix gochujang, soy sauce, honey, sesame oil, garlic and vinegar. Coat the chicken in half of it." },
+      { t: "Cook the chicken in a hot non-stick pan until charred on the outside.", min: 5 },
+      { t: "Flip and cook the other side until cooked through.", min: 5 },
+      { t: "Brush on the rest of the sauce for the last minute, then rest and slice.", min: 1 },
+      { t: "Pile into bowls with rice and cucumber and top with green onion and sesame." }
+    ],
+    tip: "Breast instead of thigh drops about 60 calories and adds a few grams of protein per bowl."
+  },
+  {
+    id: "peanut-noodles", name: "Thai Peanut Chicken Noodles", origin: "Thai-inspired", cuisine: ["asian"],
+    time: 15, serves: 3, cal: 560, pro: 43, carb: 56, fat: 17, spice: 1, tags: ["noodles"],
+    colors: ["#e8c98a", "#d8a46a", "#7a4fb0", "#3a4a3a"],
+    video: { id: "hEugqDy8wgM", title: "12 Minute Thai Chicken Peanut Noodles", channel: "RecipeTin Eats", len: "1:47" },
+    ingredients: [
+      "6 oz rice noodles or whole-wheat spaghetti",
+      "1 lb chicken breast, thinly sliced",
+      "3 tbsp natural peanut butter",
+      "2 tbsp low-sodium soy sauce",
+      "1 tbsp lime juice",
+      "1 tbsp sriracha",
+      "1 tsp honey",
+      "¼ cup hot water",
+      "2 cups shredded purple cabbage and carrot",
+      "Cilantro and 1 tbsp crushed peanuts"
+    ],
+    steps: [
+      { t: "Cook the noodles according to the package, then drain and rinse.", min: 6 },
+      { t: "Whisk peanut butter, soy sauce, lime, sriracha, honey and hot water until smooth." },
+      { t: "Stir-fry the chicken in a hot pan with a little oil until cooked through.", min: 4 },
+      { t: "Toss the noodles, chicken, cabbage and carrot with the sauce." },
+      { t: "Top with cilantro and crushed peanuts." }
+    ],
+    tip: "Use 3 tbsp powdered peanut butter mixed with water instead of regular to cut about 120 calories."
+  },
+  {
+    id: "korean-beef-tacos", name: "Korean Beef Tacos", origin: "Korean-Mexican fusion", cuisine: ["fusion"],
+    time: 25, serves: 4, cal: 470, pro: 35, carb: 40, fat: 18, spice: 1, tags: ["tacos"],
+    colors: ["#e8c98a", "#6e3a22", "#c4402b", "#2e3f55"],
+    video: { id: "rAxAzHaowyA", title: "Korean Beef Tacos", channel: "Marion's Kitchen (Marion Grasby)", len: "6:49" },
+    ingredients: [
+      "1 lb flank or sirloin steak, sliced very thin",
+      "3 tbsp low-sodium soy sauce",
+      "½ Asian pear or apple, grated",
+      "2 cloves garlic, grated",
+      "1 tsp ginger, grated",
+      "1 tsp sesame oil",
+      "1 tbsp honey",
+      "8 small corn tortillas",
+      "2 cups shredded cabbage",
+      "½ cup kimchi, chopped",
+      "½ cup plain Greek yogurt plus 1 tsp gochujang and a squeeze of lime",
+      "Cilantro and lime wedges"
+    ],
+    steps: [
+      { t: "Mix soy sauce, pear, garlic, ginger, sesame oil and honey. Marinate the beef while you prep the rest.", min: 10 },
+      { t: "Toss the cabbage with the kimchi and a squeeze of lime for a quick slaw." },
+      { t: "Stir the gochujang into the Greek yogurt to make the crema." },
+      { t: "Sear the beef in a very hot pan in batches so it caramelizes.", min: 3 },
+      { t: "Warm the tortillas and fill them with beef, slaw, crema and cilantro." }
+    ],
+    tip: "Greek yogurt crema adds protein where sour cream or mayo would add fat."
+  },
+  {
+    id: "chicken-burrito-bowl", name: "Chicken Burrito Bowl", origin: "Mexican-style", cuisine: ["mexican"],
+    time: 25, serves: 4, cal: 560, pro: 49, carb: 58, fat: 14, spice: 1, tags: ["rice", "meal prep", "beans"],
+    colors: ["#f4efe3", "#c77a3a", "#2e2a2a", "#3d5a3a"],
+    video: { id: "IehX_6FHTNw", title: "Weekday Meal-Prep Chicken Burrito Bowls", channel: "Tasty", len: "1:03" },
+    ingredients: [
+      "1½ lb chicken breast",
+      "1 tbsp chili powder",
+      "1 tsp cumin",
+      "1 tsp garlic powder",
+      "½ tsp salt",
+      "2 limes",
+      "2 cups cooked brown rice mixed with chopped cilantro",
+      "1 can (15 oz) black beans, rinsed",
+      "1 cup corn",
+      "1 cup pico de gallo",
+      "2 cups chopped romaine",
+      "½ cup plain Greek yogurt (as sour cream)",
+      "1 avocado, sliced"
+    ],
+    steps: [
+      { t: "Rub the chicken with chili powder, cumin, garlic powder, salt and the juice of 1 lime." },
+      { t: "Cook in a hot pan or grill pan until it reaches 165°F inside.", min: 12 },
+      { t: "Rest the chicken, then slice it.", min: 5 },
+      { t: "Warm the beans and corn together and squeeze the second lime over the rice." },
+      { t: "Build bowls: romaine, rice, beans and corn, chicken, pico, a spoon of yogurt and avocado." }
+    ],
+    tip: "Highest-protein dinner here. Pack 4 bowls and keep the avocado separate until you eat."
+  },
+  {
+    id: "shrimp-tacos", name: "Spicy Shrimp Tacos with Lime Slaw", origin: "Mexican-style", cuisine: ["mexican"],
+    time: 20, serves: 3, cal: 400, pro: 36, carb: 38, fat: 11, spice: 2, tags: ["seafood", "tacos"],
+    colors: ["#e8c98a", "#f4895d", "#8fd05a", "#5a3a2a"],
+    video: { id: "-WhhvwDvOFg", title: "Spicy Shrimp Tacos with Creamy Sriracha Sauce and Cilantro Lime Slaw", channel: "Gimme Delicious", len: "1:06" },
+    ingredients: [
+      "1 lb large shrimp, peeled",
+      "1 tsp chili powder",
+      "½ tsp smoked paprika",
+      "½ tsp cumin",
+      "½ tsp garlic powder",
+      "1 tbsp olive oil",
+      "2 cups shredded cabbage",
+      "¼ cup cilantro, chopped",
+      "2 limes",
+      "⅓ cup plain Greek yogurt plus 1 tbsp sriracha",
+      "6 small corn tortillas"
+    ],
+    steps: [
+      { t: "Toss the cabbage and cilantro with the juice of 1 lime and a pinch of salt. Let it sit." },
+      { t: "Stir the sriracha into the yogurt with a squeeze of lime." },
+      { t: "Toss the shrimp with the spices and a pinch of salt." },
+      { t: "Sear in hot oil until pink and curled, flipping once.", min: 3 },
+      { t: "Warm the tortillas, then add slaw, shrimp and a drizzle of sriracha yogurt." }
+    ],
+    tip: "Shrimp is almost pure protein. Two tacos and extra slaw make a filling plate under 400 calories."
+  },
+  {
+    id: "sheet-pan-fajitas", name: "Sheet Pan Chicken Fajitas", origin: "Tex-Mex", cuisine: ["mexican"],
+    time: 30, serves: 4, cal: 430, pro: 44, carb: 34, fat: 12, spice: 1, tags: ["sheet pan", "tacos", "meal prep"],
+    colors: ["#e8c98a", "#d9a45a", "#d6302a", "#4a3a2a"],
+    video: { id: "NQA7vQk3RNk", title: "Sheet Pan Chicken Fajitas", channel: "The Stay At Home Chef", len: "2:54" },
+    ingredients: [
+      "1½ lb chicken breast, cut in strips",
+      "3 bell peppers (mixed colors), sliced",
+      "1 onion, sliced",
+      "1 tbsp olive oil",
+      "2 tsp chili powder",
+      "1 tsp cumin",
+      "1 tsp smoked paprika",
+      "½ tsp garlic powder",
+      "½ tsp oregano",
+      "½ tsp salt",
+      "1 lime",
+      "8 small flour or corn tortillas (or lettuce cups)",
+      "Salsa and Greek yogurt to serve"
+    ],
+    steps: [
+      { t: "Heat the oven to 425°F." },
+      { t: "Toss the chicken, peppers and onion with the oil and all the spices right on the sheet pan." },
+      { t: "Spread everything into one layer and roast until the chicken is cooked and the peppers char at the edges.", min: 22 },
+      { t: "Squeeze the lime over the pan." },
+      { t: "Serve in warm tortillas with salsa and Greek yogurt." }
+    ],
+    tip: "Only one pan to wash. Use lettuce cups instead of tortillas to drop to about 330 calories."
+  },
+  {
+    id: "cod-fish-tacos", name: "Healthy Cod Fish Tacos", origin: "Baja-style", cuisine: ["mexican"],
+    time: 20, serves: 4, cal: 360, pro: 31, carb: 36, fat: 10, spice: 0, tags: ["seafood", "tacos"],
+    colors: ["#e8c98a", "#f6f0e2", "#a3d45f", "#2f4a5a"],
+    video: { id: "F3kZi-33494", title: "Healthy Cod Fish Taco Recipe", channel: "Skinnytaste", len: "0:58" },
+    ingredients: [
+      "1¼ lb cod fillets",
+      "1 tsp chili powder",
+      "½ tsp cumin",
+      "½ tsp garlic powder",
+      "½ tsp salt",
+      "Olive oil spray",
+      "8 small corn tortillas",
+      "2 cups shredded cabbage",
+      "½ avocado mashed with ¼ cup Greek yogurt and lime",
+      "Quick-pickled red onion (optional)",
+      "Cilantro and lime wedges"
+    ],
+    steps: [
+      { t: "Pat the cod dry and season both sides with the spices and salt." },
+      { t: "Spray a non-stick pan and cook the cod without moving it.", min: 3 },
+      { t: "Flip carefully and cook until it flakes easily.", min: 3 },
+      { t: "Mash the avocado with yogurt and lime into a crema." },
+      { t: "Flake the fish into warm tortillas with cabbage, crema, onion and cilantro." }
+    ],
+    tip: "Cod is one of the leanest proteins around. Make it 3 tacos if your target is 40 g or more."
+  }
+];
+
+const GOALS = {
+  lean:     { cal: 500, pro: 40 },
+  maintain: { cal: 650, pro: 40 },
+  build:    { cal: 800, pro: 50 }
+};
+const CUISINES = [
+  { id: "all", label: "All" },
+  { id: "asian", label: "Asian", color: "#5fa894" },
+  { id: "mexican", label: "Mexican", color: "#f5b42a" },
+  { id: "fusion", label: "Fusion", color: "#f06a45" }
+];
+const FLAGS = [
+  { id: "quick", label: "20 min or less", test: r => r.time <= 20 },
+  { id: "spicy", label: "Spicy", test: r => r.spice >= 1 },
+  { id: "seafood", label: "Seafood", test: r => r.tags.includes("seafood") },
+  { id: "tacos", label: "Tacos", test: r => r.tags.includes("tacos") },
+  { id: "fit", label: "Fits my target", test: r => fitOf(r).ok },
+  { id: "saved", label: "Saved", test: r => state.favs.has(r.id) }
+];
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+/* =========================================================
+   State + storage
+   ========================================================= */
+const STORE_KEY = "wok-comal-v1";
+const state = {
+  cuisine: "all", flags: new Set(), q: "", sort: "fit",
+  goal: "maintain", cal: 650, pro: 40,
+  favs: new Set(), week: Array(7).fill(null), ytOk: false
+};
+function load() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (d.goal && (GOALS[d.goal] || d.goal === "custom")) state.goal = d.goal;
+    if (Number.isFinite(d.cal)) state.cal = d.cal;
+    if (Number.isFinite(d.pro)) state.pro = d.pro;
+    if (Array.isArray(d.favs)) state.favs = new Set(d.favs.filter(id => byId(id)));
+    if (Array.isArray(d.week) && d.week.length === 7) state.week = d.week.map(id => (id && byId(id)) ? id : null);
+  } catch (e) { /* storage unavailable: run with defaults */ }
+}
+function save() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      goal: state.goal, cal: state.cal, pro: state.pro, favs: [...state.favs], week: state.week
+    }));
+  } catch (e) { /* ignore */ }
+}
+
+/* =========================================================
+   Helpers
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function byId(id) { return RECIPES.find(r => r.id === id); }
+function seeded(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return function () { h += 0x6D2B79F5; let t = h; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+function fitOf(r) {
+  const calOk = r.cal <= state.cal;
+  const proOk = r.pro >= Math.round(state.pro * 0.85);
+  if (calOk && proOk) return { ok: true, text: "Fits your target" };
+  if (!calOk) return { ok: false, text: (r.cal - state.cal) + " cal over" };
+  return { ok: false, text: (state.pro - r.pro) + "g short on protein" };
+}
+let toastTimer;
+function toast(msg) {
+  const el = $("#toast");
+  el.textContent = msg; el.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), 2400);
+}
+const ICON = {
+  heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9z"/></svg>',
+  heartFill: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9z"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>',
+  close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  clock: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  flame: '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 1-3.5S9 11 10.5 11C10.5 7 12 2 12 2z"/></svg>'
+};
+
+/* Top-down plate illustration made from the dish's own colors. */
+function plateHTML(r) {
+  const [base, main, garnish] = r.colors;
+  const rnd = seeded(r.id);
+  let h = '<span class="base" style="background:' + base + '"></span>';
+  for (let i = 0; i < 11; i++) {
+    const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * 24;
+    const s = 9 + rnd() * 9;
+    h += '<span class="bit" style="left:' + (50 + Math.cos(a) * d).toFixed(1) + '%;top:' + (50 + Math.sin(a) * d).toFixed(1) + '%;width:' + s.toFixed(1) + '%;height:' + (s * (0.7 + rnd() * 0.4)).toFixed(1) + '%;background:' + main + ';rotate:' + Math.round(rnd() * 180) + 'deg"></span>';
+  }
+  for (let i = 0; i < 18; i++) {
+    const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * 30;
+    const s = 2.4 + rnd() * 2.6;
+    h += '<span class="dot" style="left:' + (50 + Math.cos(a) * d).toFixed(1) + '%;top:' + (50 + Math.sin(a) * d).toFixed(1) + '%;width:' + s.toFixed(1) + '%;height:' + s.toFixed(1) + '%;background:' + garnish + '"></span>';
+  }
+  return '<div class="plate" aria-hidden="true">' + h + '</div>';
+}
+function cuisineLabel(r) {
+  return r.cuisine[0] === "fusion" ? "Fusion" : r.cuisine[0] === "asian" ? "Asian" : "Mexican";
+}
+const ytThumb = (id, q) => "https://i.ytimg.com/vi/" + id + "/" + (q || "hqdefault") + ".jpg";
+const ytWatch = id => "https://www.youtube.com/watch?v=" + id;
+const tiktokSearch = r => "https://www.tiktok.com/search?q=" + encodeURIComponent(r.name + " recipe");
+const ytShorts = r => "https://www.youtube.com/results?search_query=" + encodeURIComponent(r.name + " recipe #shorts");
+
+/* =========================================================
+   Rendering: filters, target, grid
+   ========================================================= */
+function filtered() {
+  const q = state.q.trim().toLowerCase();
+  let list = RECIPES.filter(r => {
+    if (state.cuisine !== "all" && !r.cuisine.includes(state.cuisine)) return false;
+    for (const f of FLAGS) if (state.flags.has(f.id) && !f.test(r)) return false;
+    if (q) {
+      const hay = (r.name + " " + r.origin + " " + r.tags.join(" ") + " " + r.ingredients.join(" ")).toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  const by = {
+    fit: (a, b) => (fitOf(b).ok - fitOf(a).ok) || (b.pro / b.cal - a.pro / a.cal),
+    protein: (a, b) => b.pro - a.pro,
+    cal: (a, b) => a.cal - b.cal,
+    time: (a, b) => a.time - b.time || b.pro - a.pro
+  }[state.sort];
+  return list.sort(by);
+}
+
+function renderChips() {
+  $("#cuisine-chips").innerHTML = CUISINES.map(c =>
+    '<button class="chip" type="button" data-cuisine="' + c.id + '" aria-pressed="' + (state.cuisine === c.id) + '">' +
+    (c.color ? '<span class="dot" style="background:' + c.color + '"></span>' : "") + esc(c.label) + '</button>').join("");
+  $("#flag-chips").innerHTML = FLAGS.map(f =>
+    '<button class="chip" type="button" data-flag="' + f.id + '" aria-pressed="' + state.flags.has(f.id) + '">' + esc(f.label) +
+    (f.id === "saved" && state.favs.size ? ' <span class="num">' + state.favs.size + '</span>' : "") + '</button>').join("");
+}
+
+function renderTarget() {
+  document.querySelectorAll("#goal-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.goal === state.goal)));
+  $("#cal-input").value = state.cal;
+  $("#pro-input").value = state.pro;
+  const fits = RECIPES.filter(r => fitOf(r).ok);
+  const best = RECIPES.slice().sort((a, b) => (b.pro / b.cal) - (a.pro / a.cal))[0];
+  $("#target-summary").innerHTML =
+    '<span><strong>' + fits.length + ' of ' + RECIPES.length + '</strong> dinners fit ' + state.cal + ' cal and about ' + state.pro + 'g protein.</span>' +
+    '<span style="color:var(--muted)">Most protein per calorie: ' + esc(best.name) + ' (' + best.pro + 'g in ' + best.cal + ' cal).</span>';
+  const fastest = Math.min(...RECIPES.map(r => r.time));
+  const avgPro = Math.round(RECIPES.reduce((s, r) => s + r.pro, 0) / RECIPES.length);
+  $("#hero-facts").innerHTML = '<span><b>' + fastest + ' min</b> fastest dinner</span><span><b>' + avgPro + 'g</b> average protein</span><span><b>12</b> cook-along videos</span>';
+}
+
+function renderGrid() {
+  const list = filtered();
+  const grid = $("#grid");
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty"><strong>No dinners match all of these filters.</strong><span>Try removing a filter or two.</span><button class="btn btn-small" type="button" data-action="clear">Clear filters</button></div>';
+    return;
+  }
+  grid.innerHTML = list.map(r => {
+    const fit = fitOf(r);
+    const pct = Math.min(100, Math.round(r.pro / state.pro * 100));
+    const fav = state.favs.has(r.id);
+    const media = state.ytOk
+      ? '<img src="' + ytThumb(r.video.id) + '" alt="" loading="lazy">'
+      : plateHTML(r);
+    return '<article class="card" data-id="' + r.id + '">' +
+      '<button class="card-media" type="button" data-open="' + r.id + '" style="--band:' + r.colors[3] + '" aria-label="Open ' + esc(r.name) + '">' + media +
+        '<span class="media-chip">' + ICON.clock + r.time + ' min</span>' +
+        (r.spice ? '<span class="media-chip right" title="Spice level">' + ICON.flame.repeat(r.spice) + '</span>' : "") +
+      '</button>' +
+      '<div class="card-body">' +
+        '<div class="kicker">' + esc(cuisineLabel(r)) + ' · ' + esc(r.origin) + '</div>' +
+        '<h3><button class="card-title" type="button" data-open="' + r.id + '">' + esc(r.name) + '</button></h3>' +
+        '<div class="macros">' +
+          '<div class="macro"><b>' + r.cal + '</b><span>cal</span></div>' +
+          '<div class="macro pro"><b>' + r.pro + 'g</b><span>protein</span></div>' +
+          '<div class="macro"><b>' + r.carb + 'g</b><span>carbs</span></div>' +
+          '<div class="macro"><b>' + r.fat + 'g</b><span>fat</span></div>' +
+        '</div>' +
+        '<div class="meter" title="' + pct + '% of your protein target"><i style="width:' + pct + '%"></i></div>' +
+        '<div class="card-foot"><span class="fit ' + (fit.ok ? "fit-ok" : "fit-warn") + '">' + esc(fit.text) + '</span>' +
+          '<button class="icon-btn" type="button" data-fav="' + r.id + '" aria-pressed="' + fav + '" aria-label="' + (fav ? "Remove from saved" : "Save recipe") + '">' + (fav ? ICON.heartFill : ICON.heart) + '</button>' +
+        '</div>' +
+      '</div>' +
+    '</article>';
+  }).join("");
+}
+
+function renderAll() { renderChips(); renderTarget(); renderGrid(); renderWeekCount(); }
+
+/* =========================================================
+   Cook sheet (video on top, recipe below)
+   ========================================================= */
+let openId = null, lastFocus = null, wakeLock = null;
+
+function videoHTML(r) {
+  const meta = '<div class="video-meta"><div><b>' + esc(r.video.title) + '</b><small>' + esc(r.video.channel) + '</small></div><span class="num">' + esc(r.video.len) + '</span></div>';
+  if (state.ytOk) {
+    return '<button class="video" type="button" data-play="' + r.video.id + '" style="--band:' + r.colors[3] + '" aria-label="Play video: ' + esc(r.video.title) + '">' +
+      '<img src="' + ytThumb(r.video.id, "hqdefault") + '" alt="">' +
+      '<span class="video-shade"></span><span class="play">' + ICON.play + '</span>' + meta + '</button>';
+  }
+  return '<a class="video" href="' + ytWatch(r.video.id) + '" target="_blank" rel="noopener" style="--band:' + r.colors[3] + '" aria-label="Watch on YouTube: ' + esc(r.video.title) + '">' +
+    plateHTML(r) + '<span class="video-shade"></span><span class="play">' + ICON.play + '</span>' + meta + '</a>';
+}
+
+function openRecipe(id, opts) {
+  const r = byId(id);
+  if (!r) return;
+  openId = id;
+  if (!opts || !opts.keepFocus) lastFocus = document.activeElement;
+  const fav = state.favs.has(r.id);
+  const fit = fitOf(r);
+  const sheet = $("#sheet");
+  sheet.innerHTML =
+    '<div class="sheet-head">' +
+      '<div><div class="kicker">' + esc(cuisineLabel(r)) + ' · ' + esc(r.origin) + ' · <span class="' + (fit.ok ? "fit-ok" : "fit-warn") + '">' + esc(fit.text) + '</span></div>' +
+      '<h2 id="sheet-title">' + esc(r.name) + '</h2></div>' +
+      '<button class="icon-btn" type="button" data-action="close" aria-label="Close recipe">' + ICON.close + '</button>' +
+    '</div>' +
+    '<div class="sheet-body">' +
+      '<div style="display:grid;gap:12px">' + videoHTML(r) +
+        '<div class="watch-row">' +
+          '<a class="btn btn-small" href="' + ytWatch(r.video.id) + '" target="_blank" rel="noopener">Watch on YouTube</a>' +
+          '<a class="btn btn-small" href="' + tiktokSearch(r) + '" target="_blank" rel="noopener">Find it on TikTok</a>' +
+          '<a class="btn btn-small" href="' + ytShorts(r) + '" target="_blank" rel="noopener">More short videos</a>' +
+        '</div>' +
+        '<p class="credit">Video by ' + esc(r.video.channel) + '. The recipe below is a lighter version written for this page, so amounts can differ a little from the video.</p>' +
+      '</div>' +
+      '<div class="sheet-stats">' +
+        '<div class="stat"><b>' + r.time + '</b><span>minutes</span></div>' +
+        '<div class="stat"><b>' + r.serves + '</b><span>servings</span></div>' +
+        '<div class="stat"><b>' + r.cal + '</b><span>cal / serving</span></div>' +
+        '<div class="stat pro"><b>' + r.pro + 'g</b><span>protein</span></div>' +
+        '<div class="stat"><b>' + r.carb + 'g</b><span>carbs</span></div>' +
+        '<div class="stat"><b>' + r.fat + 'g</b><span>fat</span></div>' +
+      '</div>' +
+      '<div class="recipe-cols">' +
+        '<div><h3>Ingredients <small>' + r.ingredients.length + ' items</small></h3><ul class="ing">' +
+          r.ingredients.map((ing, i) => '<li><label><input type="checkbox" id="ing-' + r.id + '-' + i + '"><span>' + esc(ing) + '</span></label></li>').join("") +
+        '</ul></div>' +
+        '<div><h3>Steps <small>tap a timer while you cook</small></h3><ol class="steps">' +
+          r.steps.map((s, i) => '<li><div><p>' + esc(s.t) + '</p>' +
+            (s.min ? '<button class="timer-btn" type="button" data-timer="' + r.id + '|' + i + '|' + s.min + '">' + ICON.clock + 'Start ' + s.min + ' min timer</button>' : "") +
+          '</div></li>').join("") +
+        '</ol></div>' +
+      '</div>' +
+      '<div class="tip"><b>Fitness tip.</b> ' + esc(r.tip) + '</div>' +
+      '<div class="sheet-tools">' +
+        '<label class="toggle"><input type="checkbox" id="wake-toggle"' + (wakeLock ? " checked" : "") + '> Keep screen on while cooking</label>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+          '<button class="btn btn-small" type="button" data-fav="' + r.id + '" aria-pressed="' + fav + '">' + (fav ? "Saved" : "Save") + '</button>' +
+          '<button class="btn btn-small btn-primary" type="button" data-addweek="' + r.id + '">Add to this week</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  $("#sheet-wrap").hidden = false;
+  document.body.style.overflow = "hidden";
+  $("#sheet-wrap").scrollTop = 0;
+  if (!opts || !opts.keepFocus) sheet.querySelector('[data-action="close"]').focus();
+  try { if (location.hash !== "#" + id) history.replaceState(null, "", "#" + id); } catch (e) { /* ignore */ }
+}
+function closeRecipe() {
+  $("#sheet-wrap").hidden = true;
+  $("#sheet").innerHTML = "";
+  document.body.style.overflow = "";
+  openId = null;
+  try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* ignore */ }
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+async function setWake(on) {
+  try {
+    if (on && "wakeLock" in navigator) {
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", () => { wakeLock = null; });
+      toast("Screen will stay on");
+    } else if (!on && wakeLock) { await wakeLock.release(); wakeLock = null; }
+    else if (on) { toast("This browser can't keep the screen on"); const t = $("#wake-toggle"); if (t) t.checked = false; }
+  } catch (e) { toast("This browser can't keep the screen on"); const t = $("#wake-toggle"); if (t) t.checked = false; }
+}
+
+/* =========================================================
+   Timers
+   ========================================================= */
+const timers = new Map();
+let audioCtx = null;
+function beep() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.25, 0.5].forEach(off => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = "sine"; o.frequency.value = 880;
+      g.gain.setValueAtTime(0.0001, audioCtx.currentTime + off);
+      g.gain.exponentialRampToValueAtTime(0.25, audioCtx.currentTime + off + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + off + 0.2);
+      o.connect(g).connect(audioCtx.destination); o.start(audioCtx.currentTime + off); o.stop(audioCtx.currentTime + off + 0.22);
+    });
+  } catch (e) { /* no audio */ }
+  try { navigator.vibrate && navigator.vibrate([200, 100, 200]); } catch (e) { /* ignore */ }
+}
+function startTimer(key) {
+  const [id, idx, min] = key.split("|");
+  const r = byId(id);
+  try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { /* ignore */ }
+  timers.set(key, { end: Date.now() + Number(min) * 60000, label: r.name + " · step " + (Number(idx) + 1), done: false });
+  renderTimers();
+  toast(min + " minute timer started");
+}
+function fmt(ms) { const s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); }
+function renderTimers() {
+  const box = $("#timers");
+  box.innerHTML = [...timers.entries()].map(([k, t]) =>
+    '<div class="timer' + (t.done ? " done" : "") + '"><span class="t-name">' + esc(t.label) + '</span><span class="num" data-tnum="' + esc(k) + '">' + (t.done ? "Done" : fmt(t.end - Date.now())) + '</span>' +
+    '<button type="button" data-tstop="' + esc(k) + '">' + (t.done ? "OK" : "Stop") + '</button></div>').join("");
+}
+setInterval(() => {
+  if (!timers.size) return;
+  let changed = false;
+  timers.forEach((t, k) => {
+    if (!t.done && Date.now() >= t.end) { t.done = true; changed = true; beep(); toast(t.label + " is done"); }
+    const el = document.querySelector('[data-tnum="' + CSS.escape(k) + '"]');
+    if (el && !t.done) el.textContent = fmt(t.end - Date.now());
+  });
+  if (changed) renderTimers();
+}, 250);
+
+/* =========================================================
+   Week plan + shopping list
+   ========================================================= */
+function renderWeekCount() { $("#week-count").textContent = state.week.filter(Boolean).length; }
+function addToWeek(id) {
+  const i = state.week.indexOf(null);
+  if (i === -1) { toast("Your week is full. Remove a day first."); return; }
+  state.week[i] = id; save(); renderWeekCount();
+  toast(byId(id).name + " added to " + DAYS[i]);
+  if (!$("#drawer-wrap").hidden) renderDrawer();
+}
+function shoppingText() {
+  const lines = [];
+  state.week.forEach((id, i) => {
+    if (!id) return;
+    const r = byId(id);
+    lines.push(DAYS[i] + " · " + r.name + " (serves " + r.serves + ")");
+    r.ingredients.forEach(x => lines.push("  [ ] " + x));
+    lines.push("");
+  });
+  return lines.join("\n").trim();
+}
+function renderDrawer() {
+  const planned = state.week.filter(Boolean).map(byId);
+  const avg = k => planned.length ? Math.round(planned.reduce((s, r) => s + r[k], 0) / planned.length) : 0;
+  $("#drawer-body").innerHTML =
+    '<p style="margin:0;color:var(--muted);font-size:14px">Add dinners from any recipe with "Add to this week". They fill the next open day.</p>' +
+    '<ul class="days">' + DAYS.map((d, i) => {
+      const r = state.week[i] && byId(state.week[i]);
+      return '<li class="day"><span class="day-name">' + d + '</span>' +
+        (r ? '<button class="day-recipe" type="button" data-open="' + r.id + '">' + esc(r.name) + '<br><span class="num">' + r.cal + ' cal · ' + r.pro + 'g protein · ' + r.time + ' min</span></button>' +
+             '<button class="icon-btn" type="button" data-unplan="' + i + '" aria-label="Remove ' + esc(r.name) + ' from ' + d + '">' + ICON.close + '</button>'
+           : '<span class="day-empty">Open</span><span></span>') +
+      '</li>';
+    }).join("") + '</ul>' +
+    '<div class="week-sum">' +
+      '<div class="stat"><b>' + planned.length + '</b><span>dinners planned</span></div>' +
+      '<div class="stat pro"><b>' + avg("pro") + 'g</b><span>avg protein</span></div>' +
+      '<div class="stat"><b>' + avg("cal") + '</b><span>avg calories</span></div>' +
+    '</div>' +
+    '<div style="display:grid;gap:8px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="font-size:18px">Shopping list</h3>' +
+      '<button class="btn btn-small" type="button" data-action="copy"' + (planned.length ? "" : " disabled") + '>Copy list</button></div>' +
+      '<textarea class="shop" id="shop-text" readonly aria-label="Shopping list">' + esc(planned.length ? shoppingText() : "Your list shows up here once you plan a dinner.") + '</textarea>' +
+      (planned.length ? '<button class="btn btn-small" type="button" data-action="clearweek">Clear the week</button>' : "") +
+    '</div>';
+}
+function openDrawer() { lastFocus = document.activeElement; renderDrawer(); $("#drawer-wrap").hidden = false; $("#drawer-close").focus(); }
+function closeDrawer() { $("#drawer-wrap").hidden = true; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+
+/* =========================================================
+   Events
+   ========================================================= */
+function toggleFav(id) {
+  if (state.favs.has(id)) { state.favs.delete(id); toast("Removed from saved"); }
+  else { state.favs.add(id); toast("Saved"); }
+  save(); renderChips(); renderGrid();
+  if (openId === id) openRecipe(id, { keepFocus: true });
+}
+function setCuisine(c) { state.cuisine = c; renderChips(); renderGrid(); }
+function setOnlyFlag(f) { state.cuisine = "all"; state.flags = new Set([f]); renderChips(); renderGrid(); }
+function revealGrid() {
+  const g = $("#recipes"), rect = g.getBoundingClientRect();
+  if (rect.top > window.innerHeight * 0.75) g.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("button, a");
+  if (!t) {
+    if (e.target === $("#sheet-wrap")) closeRecipe();
+    if (e.target === $("#drawer-wrap")) closeDrawer();
+    return;
+  }
+  const d = t.dataset;
+  if (d.cuisine) setCuisine(d.cuisine);
+  else if (d.flag) { state.flags.has(d.flag) ? state.flags.delete(d.flag) : state.flags.add(d.flag); renderChips(); renderGrid(); }
+  else if (d.open) { if (!$("#drawer-wrap").hidden) closeDrawer(); openRecipe(d.open); }
+  else if (d.fav) toggleFav(d.fav);
+  else if (d.addweek) addToWeek(d.addweek);
+  else if (d.unplan) { state.week[Number(d.unplan)] = null; save(); renderWeekCount(); renderDrawer(); }
+  else if (d.timer) startTimer(d.timer);
+  else if (d.tstop) { timers.delete(d.tstop); renderTimers(); }
+  else if (d.goal) {
+    state.goal = d.goal; state.cal = GOALS[d.goal].cal; state.pro = GOALS[d.goal].pro; save(); renderAll();
+  }
+  else if (d.play) {
+    const box = t; const vid = d.play;
+    const f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + vid + "?autoplay=1&rel=0&playsinline=1";
+    f.title = "Recipe video"; f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen"; f.allowFullscreen = true;
+    f.referrerPolicy = "strict-origin-when-cross-origin";
+    const holder = document.createElement("div"); holder.className = "video"; holder.appendChild(f);
+    box.replaceWith(holder);
+  }
+  else if (d.action === "close") closeRecipe();
+  else if (d.action === "clear") { state.cuisine = "all"; state.flags.clear(); state.q = ""; $("#search").value = ""; renderChips(); renderGrid(); }
+  else if (d.action === "copy") {
+    const ta = $("#shop-text");
+    const done = () => toast("Shopping list copied");
+    const fallback = () => { ta.focus(); ta.select(); toast("List selected. Press copy on your keyboard."); };
+    try { navigator.clipboard.writeText(ta.value).then(done, fallback); } catch (err) { fallback(); }
+  }
+  else if (d.action === "clearweek") { state.week = Array(7).fill(null); save(); renderWeekCount(); renderDrawer(); }
+});
+document.addEventListener("change", e => {
+  if (e.target.id === "wake-toggle") setWake(e.target.checked);
+});
+$("#search").addEventListener("input", e => { state.q = e.target.value; renderGrid(); });
+$("#sort").addEventListener("change", e => { state.sort = e.target.value; renderGrid(); });
+function onTargetInput() {
+  const c = Number($("#cal-input").value), p = Number($("#pro-input").value);
+  if (Number.isFinite(c) && c >= 200) state.cal = Math.round(c);
+  if (Number.isFinite(p) && p >= 5) state.pro = Math.round(p);
+  state.goal = Object.keys(GOALS).find(k => GOALS[k].cal === state.cal && GOALS[k].pro === state.pro) || "custom";
+  document.querySelectorAll("#goal-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.goal === state.goal)));
+  save(); renderChips(); renderGrid();
+  const fits = RECIPES.filter(r => fitOf(r).ok).length;
+  const best = RECIPES.slice().sort((a, b) => (b.pro / b.cal) - (a.pro / a.cal))[0];
+  $("#target-summary").innerHTML = '<span><strong>' + fits + ' of ' + RECIPES.length + '</strong> dinners fit ' + state.cal + ' cal and about ' + state.pro + 'g protein.</span><span style="color:var(--muted)">Most protein per calorie: ' + esc(best.name) + ' (' + best.pro + 'g in ' + best.cal + ' cal).</span>';
+}
+$("#cal-input").addEventListener("input", onTargetInput);
+$("#pro-input").addEventListener("input", onTargetInput);
+$("#week-btn").addEventListener("click", openDrawer);
+$("#drawer-close").addEventListener("click", closeDrawer);
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    if (!$("#drawer-wrap").hidden) closeDrawer();
+    else if (!$("#sheet-wrap").hidden) closeRecipe();
+  }
+});
+window.addEventListener("hashchange", () => {
+  const id = location.hash.slice(1);
+  if (byId(id) && openId !== id) openRecipe(id);
+});
+$("#theme-btn").addEventListener("click", () => {
+  const root = document.documentElement;
+  const cur = root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+  root.setAttribute("data-theme", cur === "dark" ? "light" : "dark");
+});
+$("#pick-btn").addEventListener("click", () => {
+  let pool = filtered();
+  const fitting = pool.filter(r => fitOf(r).ok);
+  if (fitting.length) pool = fitting;
+  if (!pool.length) pool = RECIPES;
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  const delay = scene && !reduceMotion ? 1100 : 0;
+  if (scene) scene.whirl();
+  $("#pick-btn").disabled = true;
+  setTimeout(() => { $("#pick-btn").disabled = false; openRecipe(pick.id); toast("Tonight: " + pick.name); }, delay);
+});
+
+/* Probe whether YouTube images can load here. If they can, show real thumbnails
+   and play videos inline; if not, keep the plate art and open YouTube in a new tab. */
+function probeYouTube() {
+  const img = new Image();
+  let settled = false;
+  const finish = ok => {
+    if (settled) return; settled = true;
+    if (ok && !state.ytOk) { state.ytOk = true; renderGrid(); if (openId) openRecipe(openId, { keepFocus: true }); }
+  };
+  img.onload = () => finish(img.naturalWidth > 0);
+  img.onerror = () => finish(false);
+  setTimeout(() => finish(false), 5000);
+  img.src = ytThumb(RECIPES[0].video.id, "default");
+}
+
+/* =========================================================
+   Three.js hero: floating low-poly ingredients
+   ========================================================= */
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let scene = null;
+
+function initScene() {
+  const canvas = $("#scene"), stage = $("#stage"), hint = $("#stage-hint");
+  const fallback = () => {
+    canvas.hidden = true;
+    const f = document.createElement("div"); f.className = "stage-fallback"; f.innerHTML = plateHTML(RECIPES[0]);
+    stage.insertBefore(f, hint); hint.textContent = "Pick a cuisine below to filter";
+    return null;
+  };
+  if (!window.THREE) return fallback();
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
+  catch (e) { return fallback(); }
+  if (!renderer.getContext()) return fallback();
+  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+  renderer.setClearColor(0x000000, 0);
+
+  const sc = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+  camera.position.set(0, 0.3, 15);
+  sc.add(new THREE.HemisphereLight(0xfff4e0, 0x3a2850, 0.9));
+  const key = new THREE.DirectionalLight(0xffffff, 0.95); key.position.set(4, 7, 8); sc.add(key);
+  const warm = new THREE.PointLight(0xf5b42a, 0.9, 30); warm.position.set(-6, -3, 5); sc.add(warm);
+
+  const world = new THREE.Group(); sc.add(world);
+  const items = [];
+  const mat = (color, o) => new THREE.MeshStandardMaterial(Object.assign({ color, roughness: 0.62, metalness: 0, flatShading: true }, o || {}));
+  function canvasTex(w, h, draw) {
+    const c = document.createElement("canvas"); c.width = w; c.height = h;
+    draw(c.getContext("2d"), w, h);
+    const t = new THREE.CanvasTexture(c); t.anisotropy = 4; return t;
+  }
+  function add(obj, pos, scale, info) {
+    obj.position.set(pos[0], pos[1], pos[2]);
+    obj.scale.setScalar(scale);
+    obj.userData = Object.assign({ base: obj.position.clone(), baseScale: scale, phase: Math.random() * 6.28, spinY: 0.25, hover: 0, pop: 0 }, info);
+    world.add(obj); items.push(obj);
+    return obj;
+  }
+
+  /* Bowl of rice with beef and scallions, plus chopsticks */
+  (function () {
+    const g = new THREE.Group();
+    const prof = [[0, -0.78], [0.62, -0.78], [0.66, -0.66], [0.92, -0.5], [1.22, -0.24], [1.46, 0.08], [1.6, 0.42], [1.55, 0.49], [1.44, 0.36], [1.2, 0.03], [0.9, -0.27], [0.5, -0.5], [0, -0.56]].map(p => new THREE.Vector2(p[0], p[1]));
+    g.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 40), mat(0x5fa894, { side: THREE.DoubleSide, roughness: 0.4 })));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.575, 0.05, 6, 56), mat(0xf5b42a, { roughness: 0.3 }));
+    ring.rotation.x = Math.PI / 2; ring.position.y = 0.45; g.add(ring);
+    const rice = new THREE.Mesh(new THREE.SphereGeometry(1.4, 22, 10, 0, Math.PI * 2, 0, Math.PI / 2), mat(0xf6f1e4));
+    rice.scale.y = 0.32; rice.position.y = 0.3; g.add(rice);
+    const rnd = seeded("bowl");
+    const beefGeo = new THREE.IcosahedronGeometry(0.17, 0), beefMat = mat(0x7a3f24);
+    const onionGeo = new THREE.TorusGeometry(0.085, 0.032, 5, 10), onionMat = mat(0x6cbf45);
+    const sesameGeo = new THREE.SphereGeometry(0.04, 5, 4), sesameMat = mat(0xf2d48a);
+    for (let i = 0; i < 26; i++) {
+      const r = Math.sqrt(rnd()) * 1.05, a = rnd() * Math.PI * 2;
+      const y = 0.3 + 0.32 * Math.sqrt(Math.max(0, 1.96 - r * r)) + 0.04;
+      const kind = i < 13 ? 0 : i < 20 ? 1 : 2;
+      const m = new THREE.Mesh(kind === 0 ? beefGeo : kind === 1 ? onionGeo : sesameGeo, kind === 0 ? beefMat : kind === 1 ? onionMat : sesameMat);
+      m.position.set(Math.cos(a) * r, y, Math.sin(a) * r);
+      m.rotation.set(kind === 1 ? Math.PI / 2 : rnd() * 3, rnd() * 3, 0);
+      g.add(m);
+    }
+    const stickMat = mat(0xc89a5b, { roughness: 0.5 });
+    [-0.12, 0.14].forEach((z, i) => {
+      const s = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.06, 3.6, 7), stickMat);
+      s.rotation.z = Math.PI / 2 - 0.18 + i * 0.05; s.rotation.y = 0.35 + i * 0.12;
+      s.position.set(0.5, 0.95 + i * 0.06, z);
+      g.add(s);
+    });
+    g.rotation.x = 0.55;
+    add(g, [0.3, -0.5, 0], 1.12, { name: "Rice bowl", hint: "Rice bowl → Asian dinners", act: () => { setCuisine("asian"); toast("Showing Asian dinners"); }, spinY: 0.18, tiltX: 0.55 });
+  })();
+
+  /* Chili pepper */
+  (function () {
+    const g = new THREE.Group();
+    const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(-0.95, 0.55, 0), new THREE.Vector3(-0.35, 0.2, 0.05), new THREE.Vector3(0.25, -0.05, 0), new THREE.Vector3(0.75, -0.45, -0.05), new THREE.Vector3(1.0, -1.05, 0)]);
+    const segs = 48, rad = 12;
+    const geo = new THREE.TubeGeometry(curve, segs, 0.3, rad, false);
+    const p = geo.attributes.position, v = new THREE.Vector3(), c = new THREE.Vector3();
+    for (let i = 0; i < p.count; i++) {
+      const s = Math.floor(i / (rad + 1)), u = s / segs;
+      curve.getPointAt(u, c);
+      v.fromBufferAttribute(p, i).sub(c);
+      let k = Math.max(0.06, Math.pow(1 - u, 0.6));
+      if (u < 0.06) k *= 0.7 + u * 5;
+      v.multiplyScalar(k).add(c);
+      p.setXYZ(i, v.x, v.y, v.z);
+    }
+    geo.computeVertexNormals();
+    g.add(new THREE.Mesh(geo, mat(0xd6302a, { roughness: 0.28, flatShading: false })));
+    const cap = new THREE.Mesh(new THREE.ConeGeometry(0.26, 0.22, 8), mat(0x3f7d2a));
+    cap.position.set(-1.0, 0.6, 0); cap.rotation.z = 2.1; g.add(cap);
+    const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.07, 0.55, 6), mat(0x4f8f32));
+    stem.position.set(-1.2, 0.82, 0); stem.rotation.z = 0.9; g.add(stem);
+    add(g, [-2.7, 2.25, 0.6], 0.95, { name: "Chili", hint: "Chili → spicy dinners", act: () => { setOnlyFlag("spicy"); toast("Showing spicy dinners"); }, spinY: 0.35 });
+  })();
+
+  /* Lime wheel */
+  function limeTex() {
+    return canvasTex(256, 256, (g, w) => {
+      const c = w / 2;
+      g.fillStyle = "#4c9628"; g.beginPath(); g.arc(c, c, c, 0, 7); g.fill();
+      g.fillStyle = "#eaf2c4"; g.beginPath(); g.arc(c, c, c - 12, 0, 7); g.fill();
+      const n = 10;
+      for (let i = 0; i < n; i++) {
+        const a0 = i / n * Math.PI * 2 + 0.05, a1 = (i + 1) / n * Math.PI * 2 - 0.05;
+        g.fillStyle = i % 2 ? "#b6dc5a" : "#a6d24c";
+        g.beginPath(); g.moveTo(c + Math.cos((a0 + a1) / 2) * 12, c + Math.sin((a0 + a1) / 2) * 12); g.arc(c, c, c - 22, a0, a1); g.closePath(); g.fill();
+      }
+      g.fillStyle = "rgba(240,250,200,.45)";
+      for (let i = 0; i < 70; i++) { const a = Math.random() * 7, r = 20 + Math.random() * (c - 46); g.beginPath(); g.ellipse(c + Math.cos(a) * r, c + Math.sin(a) * r, 5, 2.4, a, 0, 7); g.fill(); }
+      g.fillStyle = "#eaf2c4"; g.beginPath(); g.arc(c, c, 10, 0, 7); g.fill();
+    });
+  }
+  (function () {
+    const top = new THREE.MeshStandardMaterial({ map: limeTex(), roughness: 0.45 });
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.95, 0.24, 40), [mat(0x4c9628, { flatShading: false }), top, top]);
+    m.rotation.x = 1.2; m.rotation.z = 0.3;
+    add(m, [2.75, 2.15, -0.4], 1, { name: "Lime", hint: "Lime → Mexican dinners", act: () => { setCuisine("mexican"); toast("Showing Mexican dinners"); }, spinY: 0.4, tiltX: 1.2 });
+  })();
+
+  /* Tortilla */
+  (function () {
+    const tex = canvasTex(256, 256, (g, w) => {
+      const c = w / 2;
+      g.fillStyle = "#ecd096"; g.beginPath(); g.arc(c, c, c, 0, 7); g.fill();
+      for (let i = 0; i < 90; i++) {
+        const a = Math.random() * 7, r = Math.random() * (c - 6), s = 2 + Math.random() * 9;
+        g.fillStyle = "rgba(" + (120 + Math.random() * 40 | 0) + "," + (70 + Math.random() * 30 | 0) + ",30," + (0.15 + Math.random() * 0.45).toFixed(2) + ")";
+        g.beginPath(); g.ellipse(c + Math.cos(a) * r, c + Math.sin(a) * r, s, s * 0.7, a, 0, 7); g.fill();
+      }
+    });
+    const top = new THREE.MeshStandardMaterial({ map: tex, color: 0xc9b38a, roughness: 0.9 });
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(1.45, 1.45, 0.07, 44), [mat(0xd9b475), top, top]);
+    m.rotation.x = 1.05; m.rotation.z = -0.4;
+    add(m, [-2.9, -2.55, -1.4], 1, { name: "Tortilla", hint: "Tortilla → tacos", act: () => { setOnlyFlag("tacos"); toast("Showing tacos"); }, spinY: 0.22, tiltX: 1.05 });
+  })();
+
+  /* Shrimp */
+  (function () {
+    const g = new THREE.Group();
+    const tex = canvasTex(256, 32, (c, w, h) => {
+      c.fillStyle = "#f28a5e"; c.fillRect(0, 0, w, h);
+      c.fillStyle = "#ffc2a0"; for (let x = 0; x < w; x += 32) c.fillRect(x, 0, 9, h);
+    });
+    tex.wrapS = THREE.RepeatWrapping;
+    const body = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.24, 12, 30, Math.PI * 1.45), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.4 }));
+    g.add(body);
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.26, 12, 10), mat(0xf28a5e, { flatShading: false, roughness: 0.4 }));
+    head.position.set(0.55, 0, 0); g.add(head);
+    const end = Math.PI * 1.45;
+    const tailMat = mat(0xe0603a);
+    [-0.35, 0.35].forEach(sp => {
+      const t = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.55, 6), tailMat);
+      t.scale.z = 0.35;
+      t.position.set(Math.cos(end) * 0.55 + 0.18, Math.sin(end) * 0.55 - 0.06, 0);
+      t.rotation.z = end + Math.PI + sp;
+      g.add(t);
+    });
+    add(g, [2.85, -2.15, 1.0], 1.15, { name: "Shrimp", hint: "Shrimp → seafood dinners", act: () => { setOnlyFlag("seafood"); toast("Showing seafood dinners"); }, spinY: 0.45 });
+  })();
+
+  /* Broccoli */
+  (function () {
+    const g = new THREE.Group();
+    const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.24, 0.9, 7), mat(0x9bc46a));
+    stem.position.y = -0.45; g.add(stem);
+    const flor = mat(0x2f7a35);
+    [[0, 0.25, 0, 0.42], [0.36, 0.1, 0.1, 0.32], [-0.36, 0.1, 0.05, 0.32], [0.1, 0.12, 0.36, 0.3], [-0.1, 0.1, -0.36, 0.3], [0.2, 0.44, -0.1, 0.28], [-0.2, 0.42, 0.16, 0.28]].forEach(f => {
+      const m = new THREE.Mesh(new THREE.IcosahedronGeometry(f[3], 1), flor); m.position.set(f[0], f[1], f[2]); g.add(m);
+    });
+    add(g, [-3.5, 0.15, -1.2], 1.05, { name: "Broccoli", hint: "Broccoli → dinners that fit your target", act: () => { setOnlyFlag("fit"); toast("Showing dinners that fit your target"); }, spinY: 0.3 });
+  })();
+
+  /* Sesame, rice and chili-flake particles */
+  const pCount = 260;
+  const pGeo = new THREE.BufferGeometry();
+  const pPos = new Float32Array(pCount * 3), pCol = new Float32Array(pCount * 3);
+  const palette = [new THREE.Color(0xf6f1e4), new THREE.Color(0x2a2230), new THREE.Color(0xf5b42a), new THREE.Color(0xd6302a), new THREE.Color(0x9ed35e)];
+  for (let i = 0; i < pCount; i++) {
+    pPos[i * 3] = (Math.random() - 0.5) * 12; pPos[i * 3 + 1] = (Math.random() - 0.5) * 8; pPos[i * 3 + 2] = (Math.random() - 0.5) * 6 - 1;
+    const col = palette[i % palette.length]; pCol[i * 3] = col.r; pCol[i * 3 + 1] = col.g; pCol[i * 3 + 2] = col.b;
+  }
+  pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
+  pGeo.setAttribute("color", new THREE.BufferAttribute(pCol, 3));
+  const points = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.075, vertexColors: true, transparent: true, opacity: 0.85 }));
+  world.add(points);
+
+  /* Sizing */
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.position.z = camera.aspect < 1.25 ? 15 * (1.25 / camera.aspect) * 0.92 : 15;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(stage); else window.addEventListener("resize", resize);
+
+  /* Pointer: drag to spin, hover to highlight, tap to filter */
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  let dragging = false, downX = 0, downY = 0, lastX = 0, moved = 0, vel = 0, rotY = 0, hovered = null, parX = 0, parY = 0, whirlT = 0;
+  function pick(ev) {
+    const r = canvas.getBoundingClientRect();
+    ndc.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ndc, camera);
+    const hit = ray.intersectObjects(items, true)[0];
+    if (!hit) return null;
+    let o = hit.object; while (o && !items.includes(o)) o = o.parent;
+    return o;
+  }
+  canvas.addEventListener("pointerdown", ev => { dragging = true; moved = 0; downX = lastX = ev.clientX; downY = ev.clientY; });
+  canvas.addEventListener("pointermove", ev => {
+    const r = canvas.getBoundingClientRect();
+    parX = ((ev.clientX - r.left) / r.width - 0.5); parY = ((ev.clientY - r.top) / r.height - 0.5);
+    if (dragging) {
+      const dx = ev.clientX - lastX; lastX = ev.clientX;
+      moved = Math.max(moved, Math.abs(ev.clientX - downX) + Math.abs(ev.clientY - downY));
+      if (moved > 6) { vel = dx * 0.006; rotY += vel; canvas.classList.add("is-drag"); }
+    }
+    if (ev.pointerType === "mouse") {
+      const h = pick(ev);
+      if (h !== hovered) {
+        hovered = h;
+        canvas.classList.toggle("is-hover", !!h);
+        hint.textContent = h ? h.userData.hint : "Drag to spin · tap an ingredient to filter";
+        hint.classList.toggle("on", !!h);
+      }
+    }
+  });
+  const endDrag = ev => {
+    if (!dragging) return;
+    dragging = false; canvas.classList.remove("is-drag");
+    if (moved <= 6 && ev.type === "pointerup") {
+      const h = pick(ev);
+      if (h) {
+        h.userData.pop = 1;
+        hint.textContent = h.userData.hint; hint.classList.add("on");
+        h.userData.act(); revealGrid();
+      }
+    }
+  };
+  canvas.addEventListener("pointerup", endDrag);
+  canvas.addEventListener("pointercancel", endDrag);
+  canvas.addEventListener("pointerleave", ev => {
+    endDrag(ev); parX = parY = 0;
+    if (hovered) { hovered = null; canvas.classList.remove("is-hover"); hint.textContent = "Drag to spin · tap an ingredient to filter"; hint.classList.remove("on"); }
+  });
+
+  /* Loop, paused while off screen or tab hidden */
+  let visible = true, running = false, last = performance.now(), time = 0;
+  if (window.IntersectionObserver) new IntersectionObserver(es => { visible = es[0].isIntersecting; kick(); }).observe(stage);
+  document.addEventListener("visibilitychange", kick);
+  function kick() { if (!running && visible && !document.hidden) { running = true; last = performance.now(); requestAnimationFrame(frame); } }
+  function frame(now) {
+    if (!visible || document.hidden) { running = false; return; }
+    const dt = Math.min(0.05, (now - last) / 1000); last = now; time += dt;
+    const motion = reduceMotion ? 0 : 1;
+    if (whirlT > 0) { whirlT = Math.max(0, whirlT - dt); vel = Math.max(vel, 0.22 * (whirlT / 1.1)); }
+    if (!dragging) { rotY += vel; vel *= 0.95; }
+    world.rotation.y += (rotY + parX * 0.35 * motion - world.rotation.y) * 0.08;
+    world.rotation.x += (parY * 0.18 * motion - world.rotation.x) * 0.08;
+    items.forEach(o => {
+      const u = o.userData;
+      o.position.y = u.base.y + Math.sin(time * 0.9 + u.phase) * 0.2 * motion;
+      o.rotation.y += dt * u.spinY * motion;
+      u.hover += ((o === hovered ? 1 : 0) - u.hover) * 0.15;
+      u.pop = Math.max(0, u.pop - dt * 2.2);
+      const s = u.baseScale * (1 + u.hover * 0.1 + Math.sin(u.pop * Math.PI) * 0.25);
+      o.scale.setScalar(s);
+    });
+    points.rotation.y += dt * 0.03 * motion;
+    points.position.y = Math.sin(time * 0.4) * 0.15 * motion;
+    renderer.render(sc, camera);
+    requestAnimationFrame(frame);
+  }
+  kick();
+  return { whirl() { whirlT = 1.1; vel = 0.22; items.forEach(o => { o.userData.pop = 1; }); kick(); } };
+}
+
+/* =========================================================
+   Boot
+   ========================================================= */
+load();
+if (state.goal !== "custom" && GOALS[state.goal] && !localStorageHas()) { state.cal = GOALS[state.goal].cal; state.pro = GOALS[state.goal].pro; }
+function localStorageHas() { try { return !!localStorage.getItem(STORE_KEY); } catch (e) { return false; } }
+$("#sort").value = state.sort;
+renderAll();
+try { scene = initScene(); } catch (e) { scene = null; }
+probeYouTube();
+const startId = location.hash.slice(1);
+if (byId(startId)) openRecipe(startId);
+})();
+</script>
+</body>
+</html>
